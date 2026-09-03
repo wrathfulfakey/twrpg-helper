@@ -1,6 +1,6 @@
 # TWRPG Toolkit
 
-A static, fan-made toolkit for **The Warrior RPG (TWRPG) v0.76a** — build planner, item codex, and a worked hero guide. Everything was datamined directly from the map (`twrpgv0.76a_eng.w3x`): items, stats, abilities, crafting recipes, and drop tables.
+A static, fan-made toolkit for **TWRPG (TWRPG) v0.76a** — build planner, item codex, and a worked hero guide. Everything was datamined directly from the map (`twrpgv0.76a_eng.w3x`): items, stats, abilities, crafting recipes, and drop tables.
 
 No backend, no database, no build step. Just static HTML files.
 

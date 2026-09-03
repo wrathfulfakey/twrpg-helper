@@ -1,108 +1,348 @@
 <title>TWRPG Toolkit</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Spectral:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Spectral:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+/>
 <style>
-:root{
-  --bg:#efe9e0;--panel:#faf6ef;--panel2:#f2ece1;
-  --ink:#241d2b;--ink-soft:#5d5468;--ink-faint:#8a8095;
-  --line:#d8cebf;--line-strong:#c3b6a2;
-  --blood:#b01330;--blood-soft:#c94a5f;
-  --arcana:#7a45c9;--alteia:#2f9a45;--gnosis:#c1122f;--nept:#1c8f97;
-  --shadow:0 1px 2px rgba(40,28,50,.08),0 10px 30px rgba(40,28,50,.07);
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0c0a11;--panel:#171220;--panel2:#1d1729;
-  --ink:#ece7f2;--ink-soft:#a89fb8;--ink-faint:#6f6683;
-  --line:#2a2338;--line-strong:#3a3150;
-  --blood:#e8324f;--blood-soft:#ff6d82;
-  --arcana:#a877ff;--alteia:#79e089;--gnosis:#f0304f;--nept:#68d3d3;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 16px 44px rgba(0,0,0,.5);
-}}
-:root[data-theme="dark"]{
-  --bg:#0c0a11;--panel:#171220;--panel2:#1d1729;
-  --ink:#ece7f2;--ink-soft:#a89fb8;--ink-faint:#6f6683;
-  --line:#2a2338;--line-strong:#3a3150;
-  --blood:#e8324f;--blood-soft:#ff6d82;
-  --arcana:#a877ff;--alteia:#79e089;--gnosis:#f0304f;--nept:#68d3d3;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 16px 44px rgba(0,0,0,.5);
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Spectral,Georgia,serif;line-height:1.55;
-  background-image:radial-gradient(130% 80% at 50% -20%,color-mix(in srgb,var(--blood) 12%,transparent),transparent 60%);background-attachment:fixed;
-  min-height:100vh;display:flex;flex-direction:column}
-.topnav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:4px;background:color-mix(in srgb,var(--panel) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 clamp(12px,3vw,22px);height:46px;flex-wrap:nowrap;overflow-x:auto}
-.topnav .brand{font-family:Cinzel,serif;font-weight:700;font-size:15px;color:var(--ink);text-decoration:none;margin-right:8px;white-space:nowrap}
-.topnav .brand .a{color:var(--blood)}
-.topnav a.nl{font-family:"IBM Plex Mono",monospace;font-size:12.5px;letter-spacing:.02em;color:var(--ink-soft);text-decoration:none;padding:6px 11px;border-radius:8px;white-space:nowrap}
-.topnav a.nl:hover{color:var(--ink);background:color-mix(in srgb,var(--ink) 7%,transparent)}
-.topnav a.nl[aria-current=page]{color:var(--blood);background:color-mix(in srgb,var(--blood) 12%,transparent)}
-.topnav .navsp{flex:1;min-width:6px}
-.topnav .navtg{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink-soft);background:none;border:1px solid var(--line-strong);border-radius:999px;padding:4px 10px;cursor:pointer;flex:none}
-.topnav .navtg:hover{color:var(--ink);border-color:var(--blood-soft)}
-.topnav a.nl:focus-visible,.topnav .navtg:focus-visible,.topnav .brand:focus-visible{outline:2px solid var(--blood);outline-offset:2px;border-radius:6px}
-@media(max-width:560px){.topnav .brand .full{display:none}.topnav a.nl{padding:6px 8px;font-size:11.5px}}
-.wrap{max-width:980px;margin:0 auto;padding:clamp(34px,7vw,72px) clamp(16px,4vw,30px) 60px;width:100%}
-.eyebrow{font-family:"IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.26em;font-size:11px;color:var(--ink-faint)}
-h1{font-family:Cinzel,serif;font-weight:700;font-size:clamp(38px,7vw,70px);line-height:.98;margin:.18em 0 .2em;
-  text-shadow:0 0 34px color-mix(in srgb,var(--blood) 30%,transparent)}
-h1 .a{color:var(--blood)}
-.lead{color:var(--ink-soft);font-style:italic;font-size:clamp(16px,2.4vw,20px);max-width:60ch;margin:0 0 40px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
-.card{display:flex;flex-direction:column;gap:9px;background:var(--panel);border:1px solid var(--line);border-radius:16px;
-  padding:20px 20px 18px;text-decoration:none;color:inherit;box-shadow:var(--shadow);border-top:3px solid var(--ac);
-  transition:transform .16s,border-color .16s}
-.card:hover{transform:translateY(-3px);border-color:var(--ac)}
-.card .ico{font-size:25px;line-height:1}
-.card h2{font-family:Cinzel,serif;font-weight:600;font-size:19px;margin:2px 0 0;color:var(--ink)}
-.card p{margin:0;color:var(--ink-soft);font-size:13.5px;flex:1}
-.card .go{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.06em;color:var(--ac);margin-top:6px}
-.meta{margin-top:38px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-faint);line-height:1.8}
-.meta b{color:var(--ink-soft)}
-footer{margin-top:auto;padding:22px 0;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-faint)}
+  :root {
+    --bg: #efe9e0;
+    --panel: #faf6ef;
+    --panel2: #f2ece1;
+    --ink: #241d2b;
+    --ink-soft: #5d5468;
+    --ink-faint: #8a8095;
+    --line: #d8cebf;
+    --line-strong: #c3b6a2;
+    --blood: #b01330;
+    --blood-soft: #c94a5f;
+    --arcana: #7a45c9;
+    --alteia: #2f9a45;
+    --gnosis: #c1122f;
+    --nept: #1c8f97;
+    --shadow:
+      0 1px 2px rgba(40, 28, 50, 0.08), 0 10px 30px rgba(40, 28, 50, 0.07);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0c0a11;
+      --panel: #171220;
+      --panel2: #1d1729;
+      --ink: #ece7f2;
+      --ink-soft: #a89fb8;
+      --ink-faint: #6f6683;
+      --line: #2a2338;
+      --line-strong: #3a3150;
+      --blood: #e8324f;
+      --blood-soft: #ff6d82;
+      --arcana: #a877ff;
+      --alteia: #79e089;
+      --gnosis: #f0304f;
+      --nept: #68d3d3;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 16px 44px rgba(0, 0, 0, 0.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0c0a11;
+    --panel: #171220;
+    --panel2: #1d1729;
+    --ink: #ece7f2;
+    --ink-soft: #a89fb8;
+    --ink-faint: #6f6683;
+    --line: #2a2338;
+    --line-strong: #3a3150;
+    --blood: #e8324f;
+    --blood-soft: #ff6d82;
+    --arcana: #a877ff;
+    --alteia: #79e089;
+    --gnosis: #f0304f;
+    --nept: #68d3d3;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 16px 44px rgba(0, 0, 0, 0.5);
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Spectral, Georgia, serif;
+    line-height: 1.55;
+    background-image: radial-gradient(
+      130% 80% at 50% -20%,
+      color-mix(in srgb, var(--blood) 12%, transparent),
+      transparent 60%
+    );
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .topnav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: color-mix(in srgb, var(--panel) 86%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+    padding: 0 clamp(12px, 3vw, 22px);
+    height: 46px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+  .topnav .brand {
+    font-family: Cinzel, serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--ink);
+    text-decoration: none;
+    margin-right: 8px;
+    white-space: nowrap;
+  }
+  .topnav .brand .a {
+    color: var(--blood);
+  }
+  .topnav a.nl {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 6px 11px;
+    border-radius: 8px;
+    white-space: nowrap;
+  }
+  .topnav a.nl:hover {
+    color: var(--ink);
+    background: color-mix(in srgb, var(--ink) 7%, transparent);
+  }
+  .topnav a.nl[aria-current="page"] {
+    color: var(--blood);
+    background: color-mix(in srgb, var(--blood) 12%, transparent);
+  }
+  .topnav .navsp {
+    flex: 1;
+    min-width: 6px;
+  }
+  .topnav .navtg {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    color: var(--ink-soft);
+    background: none;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 4px 10px;
+    cursor: pointer;
+    flex: none;
+  }
+  .topnav .navtg:hover {
+    color: var(--ink);
+    border-color: var(--blood-soft);
+  }
+  .topnav a.nl:focus-visible,
+  .topnav .navtg:focus-visible,
+  .topnav .brand:focus-visible {
+    outline: 2px solid var(--blood);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  @media (max-width: 560px) {
+    .topnav .brand .full {
+      display: none;
+    }
+    .topnav a.nl {
+      padding: 6px 8px;
+      font-size: 11.5px;
+    }
+  }
+  .wrap {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: clamp(34px, 7vw, 72px) clamp(16px, 4vw, 30px) 60px;
+    width: 100%;
+  }
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.26em;
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+  h1 {
+    font-family: Cinzel, serif;
+    font-weight: 700;
+    font-size: clamp(38px, 7vw, 70px);
+    line-height: 0.98;
+    margin: 0.18em 0 0.2em;
+    text-shadow: 0 0 34px color-mix(in srgb, var(--blood) 30%, transparent);
+  }
+  h1 .a {
+    color: var(--blood);
+  }
+  .lead {
+    color: var(--ink-soft);
+    font-style: italic;
+    font-size: clamp(16px, 2.4vw, 20px);
+    max-width: 60ch;
+    margin: 0 0 40px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 20px 20px 18px;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: var(--shadow);
+    border-top: 3px solid var(--ac);
+    transition:
+      transform 0.16s,
+      border-color 0.16s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: var(--ac);
+  }
+  .card .ico {
+    font-size: 25px;
+    line-height: 1;
+  }
+  .card h2 {
+    font-family: Cinzel, serif;
+    font-weight: 600;
+    font-size: 19px;
+    margin: 2px 0 0;
+    color: var(--ink);
+  }
+  .card p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    flex: 1;
+  }
+  .card .go {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--ac);
+    margin-top: 6px;
+  }
+  .meta {
+    margin-top: 38px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    color: var(--ink-faint);
+    line-height: 1.8;
+  }
+  .meta b {
+    color: var(--ink-soft);
+  }
+  footer {
+    margin-top: auto;
+    padding: 22px 0;
+    text-align: center;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
 </style>
 
-<nav class="topnav"><a class="brand" href="index.html"><span class="a">⚔</span> <span class="full">TWRPG</span></a><a class="nl" href="index.html" aria-current="page">Home</a><a class="nl" href="builder.html">Build Maker</a><a class="nl" href="codex.html">Item Codex</a><a class="nl" href="boss.html">Boss Drops</a><a class="nl" href="characters.html">Characters</a><span class="navsp"></span><button class="navtg" data-navtheme aria-label="Toggle theme">◐</button></nav>
+<nav class="topnav">
+  <a class="brand" href="index.html"
+    ><span class="a">⚔</span> <span class="full">TWRPG</span></a
+  ><a class="nl" href="index.html" aria-current="page">Home</a
+  ><a class="nl" href="builder.html">Build Maker</a
+  ><a class="nl" href="codex.html">Item Codex</a
+  ><a class="nl" href="boss.html">Boss Drops</a
+  ><a class="nl" href="characters.html">Characters</a><span class="navsp"></span
+  ><button class="navtg" data-navtheme aria-label="Toggle theme">◐</button>
+</nav>
 <div class="wrap">
-  <div class="eyebrow">The Warrior RPG · v0.76a · fan toolkit</div>
+  <div class="eyebrow">TWRPG · v0.76a · fan toolkit</div>
   <h1><span class="a">TWRPG</span> Toolkit</h1>
-  <p class="lead">Everything datamined straight from the map: every item, recipe, drop rate and boss — wired into tools for planning and sharing hero builds. No account, no server.</p>
+  <p class="lead">
+    Everything datamined straight from the map: every item, recipe, drop rate
+    and boss — wired into tools for planning and sharing hero builds. No
+    account, no server.
+  </p>
 
   <div class="grid">
-    <a class="card" href="builder.html" style="--ac:var(--blood)">
+    <a class="card" href="builder.html" style="--ac: var(--blood)">
       <span class="ico">⚒️</span>
       <h2>Build Maker</h2>
-      <p>Pick any of the 32 heroes, fill five gear slots with grade-filtered items, watch the combined stats, and share the whole build inside a single link.</p>
+      <p>
+        Pick any of the 32 heroes, fill five gear slots with grade-filtered
+        items, watch the combined stats, and share the whole build inside a
+        single link.
+      </p>
       <span class="go">Open the planner ›</span>
     </a>
-    <a class="card" href="codex.html" style="--ac:var(--arcana)">
+    <a class="card" href="codex.html" style="--ac: var(--arcana)">
       <span class="ico">📜</span>
       <h2>Item Codex</h2>
-      <p>All 501 epic items across Deltirama → Arcana. Stats, recipes, drop mobs and rates, and a click-through crafting tree for every piece.</p>
+      <p>
+        All 501 epic items across Deltirama → Arcana. Stats, recipes, drop mobs
+        and rates, and a click-through crafting tree for every piece.
+      </p>
       <span class="go">Browse items ›</span>
     </a>
-    <a class="card" href="boss.html" style="--ac:var(--nept)">
+    <a class="card" href="boss.html" style="--ac: var(--nept)">
       <span class="ico">👹</span>
       <h2>Boss Drops</h2>
-      <p>Every farmable creature and its loot table — per-kill drop rates, grade tier, and search by boss or item to find exactly what drops where.</p>
+      <p>
+        Every farmable creature and its loot table — per-kill drop rates, grade
+        tier, and search by boss or item to find exactly what drops where.
+      </p>
       <span class="go">See loot tables ›</span>
     </a>
-    <a class="card" href="characters.html" style="--ac:var(--alteia)">
+    <a class="card" href="characters.html" style="--ac: var(--alteia)">
       <span class="ico">⚔️</span>
       <h2>Characters</h2>
-      <p>All 37 heroes: full skill kit, a suggested combo flow, chain/combo mechanics, and the specialty items unique to each character.</p>
+      <p>
+        All 37 heroes: full skill kit, a suggested combo flow, chain/combo
+        mechanics, and the specialty items unique to each character.
+      </p>
       <span class="go">Open ›</span>
     </a>
   </div>
 
   <div class="meta">
-    <div><b>Data source:</b> parsed from <span>twrpgv0.76a_eng.w3x</span> — items, abilities, recipes and drop tables.</div>
-    <div><b>Sharing:</b> builds are encoded in the URL and saved in your browser — nothing is uploaded anywhere.</div>
-    <div><b>Note:</b> unofficial fan project, not affiliated with the map's authors.</div>
+    <div>
+      <b>Data source:</b> parsed from <span>twrpgv0.76a_eng.w3x</span> — items,
+      abilities, recipes and drop tables.
+    </div>
+    <div>
+      <b>Sharing:</b> builds are encoded in the URL and saved in your browser —
+      nothing is uploaded anywhere.
+    </div>
+    <div>
+      <b>Note:</b> unofficial fan project, not affiliated with the map's
+      authors.
+    </div>
   </div>
 </div>
 <footer>Static site · hosted on GitHub Pages</footer>
 
 <script>
-document.querySelector("[data-navtheme]").addEventListener("click",function(){var c=document.documentElement.getAttribute("data-theme");var d=c?c==="dark":matchMedia("(prefers-color-scheme:dark)").matches;document.documentElement.setAttribute("data-theme",d?"light":"dark");});
+  document
+    .querySelector("[data-navtheme]")
+    .addEventListener("click", function () {
+      var c = document.documentElement.getAttribute("data-theme");
+      var d = c
+        ? c === "dark"
+        : matchMedia("(prefers-color-scheme:dark)").matches;
+      document.documentElement.setAttribute("data-theme", d ? "light" : "dark");
+    });
 </script>
