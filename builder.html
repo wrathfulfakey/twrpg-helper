@@ -119,6 +119,18 @@ select,input[type=text]{font-family:Spectral,serif;font-size:15px;background:var
 .bosses{display:flex;flex-wrap:wrap;gap:5px}
 .bchip{display:inline-flex;align-items:center;gap:5px;font-family:"IBM Plex Mono",monospace;font-size:11px;padding:2px 8px 2px 6px;border-radius:999px;background:var(--chip);border:1px solid color-mix(in srgb,var(--bc) 40%,var(--line))}
 .bchip i{width:7px;height:7px;border-radius:50%;background:var(--bc)} .bchip b{color:var(--bc)} .bchip .c{color:var(--ink-faint)}
+button.bchip{cursor:pointer;transition:box-shadow .12s,border-color .12s}
+button.bchip:hover{box-shadow:0 0 0 1px var(--bc);border-color:var(--bc)}
+button.bchip::after{content:"›";color:var(--ink-faint);font-family:"IBM Plex Mono",monospace;margin-left:1px}
+.farmgrp{margin-bottom:15px}
+.farmgrp .fi{display:flex;align-items:center;gap:8px;font-family:Cinzel,serif;font-weight:600;font-size:14.5px;color:var(--ink);margin-bottom:6px;background:none;border:0;padding:0;cursor:pointer;width:100%;text-align:left}
+.farmgrp .fi:hover .fn{color:var(--blood)}
+.farmgrp .fi .slot{font-family:"IBM Plex Mono",monospace;font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);border:1px solid var(--line-strong);border-radius:4px;padding:1px 6px}
+.matrow{display:flex;align-items:center;gap:9px;padding:4px 0 4px 6px;font-size:13.5px;cursor:pointer;color:var(--ink);background:none;border:0;width:100%;text-align:left;font-family:Spectral,serif}
+.matrow:hover .mn2{color:var(--blood);text-decoration:underline}
+.matrow .mdot{width:8px;height:8px;border-radius:50%;background:var(--bc);flex:none}
+.matrow .mn2{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.matrow .mq{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-soft);flex:none}
 
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);font-family:"IBM Plex Mono",monospace;font-size:13px;padding:10px 16px;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.4);z-index:80;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
@@ -259,6 +271,11 @@ button.comp{cursor:pointer} button.comp:hover .cn{color:var(--blood);text-decora
   <div class="savedwrap" id="savedList"></div>
 </div></div>
 
+<div class="overlay" id="farm" hidden><div class="modal narrow">
+  <div class="mtop"><span class="mt" id="farmTitle">Farming</span><button class="mclose" id="farmClose" aria-label="Close">×</button></div>
+  <div class="mbody" id="farmBody"></div>
+</div></div>
+
 <div class="toast" id="toast"></div>
 
 <script type="application/json" id="heroes">[{"id":"H001","name":"Swordsman","primary":"AGI","weapons":["Shared","Melee"],"desc":"Melee damage dealer. Focused on casting skills, but it weaves auto-attacks in between skill casts."},{"id":"H004","name":"Assassin","primary":"AGI","weapons":["Shared","Melee"],"desc":"Melee damage dealer. Focused on casting skills. Has stealth abilities."},{"id":"H01H","name":"Thunderer","primary":"AGI","weapons":["Shared","Melee"],"desc":"Melee damage dealer. Focused on auto-attacks."},{"id":"H000","name":"Knight","primary":"STR","weapons":["Shared","Melee"],"desc":"Melee all-rounder class. Quite tanky.Has supportive abilities such as moving/breaking monsters or providing shields to allies."},{"id":"H003","name":"Paladin","primary":"STR","weapons":["Shared","Melee","Staff"],"desc":"Melee damage dealer. Focused on casting skills. Has good mobility and support for allies."},{"id":"H008","name":"Soul Weaver","primary":"INT","weapons":["Shared","Staff"],"desc":"Supporter. Focused on debuffs and utility skills."},{"id":"H00H","name":"Berserker","primary":"STR","weapons":["Shared","Melee"],"desc":"Melee damage dealer. Focused on auto attacks. Instead of MP, she uses HP to cast skills."},{"id":"H007","name":"Priest","primary":"INT","weapons":["Shared","Staff"],"desc":"Supporter. Focused on healing skills. Excels in large parties."},{"id":"H009","name":"Elementalist","primary":"INT","weapons":["Shared","Staff"],"desc":"Ranged damage dealer & support. Focused on summons."},{"id":"Hmkg","name":"Dark Knight","primary":"STR","weapons":["Shared","Melee","Staff"],"desc":"Melee damage dealer & Support. Focused on skill casts. Split into STR or INT build."},{"id":"H00J","name":"Warlock","primary":"INT","weapons":["Shared","Staff"],"desc":"Ranged damage dealer. Good at burst damage. Can transform into a demon."},{"id":"Hblm","name":"Lancer","primary":"STR","weapons":["Shared","Melee"],"desc":"Melee damage dealer. Focused on skill casts. Provides a bit of offensive support."},{"id":"H01I","name":"Alchemist","primary":"INT","weapons":["Shared","Staff"],"desc":"Ranged damage dealer. Focused on casting skills. Requires more control compared to other characters, and skill combos are long."},{"id":"H00E","name":"Martial Artist","primary":"AGI","weapons":["Shared","Melee"],"desc":"Melee damage dealer. Focused HEAVILY on auto attacks, and has almost no skill casts. Playstyle is simple compared to most other characters."},{"id":"H005","name":"Mage (Fire)","primary":"INT","weapons":["Shared","Staff"],"desc":""},{"id":"H002","name":"Mage (Water)","primary":"INT","weapons":["Shared","Staff"],"desc":""},{"id":"H006","name":"Mage (Arcane)","primary":"INT","weapons":["Shared","Staff"],"desc":""},{"id":"H01N","name":"Mage (Wind)","primary":"INT","weapons":["Shared","Staff"],"desc":""},{"id":"H021","name":"Mage (Lightning)","primary":"INT","weapons":["Shared","Melee","Staff"],"desc":""},{"id":"H015","name":"Sniper","primary":"AGI","weapons":["Shared","Bow"],"desc":"Long-range damage dealer. Has good mobility."},{"id":"H00Z","name":"Bow Master","primary":"AGI","weapons":["Shared","Bow"],"desc":"Ranged damage dealer. Provides some support for allies."},{"id":"H01V","name":"Crusader","primary":"STR","weapons":["Shared","Melee"],"desc":"Melee damage dealer. Focused on casting skills. Has good survivability and offensive support for allies."},{"id":"H00K","name":"Shooter","primary":"AGI","weapons":["Shared","Gun"],"desc":"Ranged damage dealer. If setup around INT-based items/stats, can also be utilized as a healer that excels in small parties."},{"id":"H02M","name":"Blood Weaver","primary":"INT","weapons":["Shared","Melee","Staff"],"desc":"Melee damage dealer. Uses a good mix of auto attacks and skill casts. Uses HP as resource to cast skills. Has excellent mobility."},{"id":"H04Q","name":"Merchant","primary":"STR","weapons":["Shared","Melee"],"desc":"Supporter. Excels in adventurous parties where deaths are frequent."},{"id":"H04R","name":"Sword Enchanter","primary":"AGI","weapons":["Shared","Melee"],"desc":"Melee damage dealer. Focused on auto-attacks. Playstyle is simple compared to most other characters."},{"id":"H04S","name":"Reaper","primary":"AGI","weapons":["Shared","Melee"],"desc":"Melee damage dealer. Focused on skill casts. Skill combos are more complex compared to other characters."},{"id":"H05B","name":"Gunner","primary":"AGI","weapons":["Shared","Gun"],"desc":"Ranged damage dealer. Uses a good mix of auto attacks and skill casts."},{"id":"H05T","name":"Phantom Blade","primary":"AGI","weapons":["Shared","Melee"],"desc":"Ranged damage dealer. Focused on skill casts. Requires constant input of keys; not recommended if you have a bad wrist."},{"id":"H065","name":"Hermit","primary":"AGI","weapons":["Shared","Melee","Staff"],"desc":"Supporter. Focused on healing skills."},{"id":"H066","name":"Witch","primary":"INT","weapons":["Shared","Staff"],"desc":"Supporter. Focused on utility skills."},{"id":"H076","name":"Fighter","primary":"STR","weapons":["Shared","Melee"],"desc":"Melee damage dealer. Focused on skill casts, and relies heavily on combos. Requires constant input of keys; not recommended if you have a bad wrist."}]</script>
@@ -344,8 +361,8 @@ function renderTotals(){
   // farm tally across chosen items
   const farm={};for(const c of codes)for(const b of N[c].bosses||[])farm[b.boss]=(farm[b.boss]||0)+b.count;
   const BO=['Deltirama','Neptinos','Gnosis','Alteia','Arcana'];
-  const farmStr=BO.filter(b=>farm[b]).map(b=>`<span class="bchip" style="--bc:var(${BVAR[b]})"><i></i><b>${b}</b><span class="c">×${farm[b]}</span></span>`).join('');
-  el.innerHTML=`<h2>Totals · ${codes.length}/5</h2>${rows}`+(farmStr?`<div class="tfarm"><div class="h">Materials to farm</div><div class="bosses">${farmStr}</div></div>`:'');
+  const farmStr=BO.filter(b=>farm[b]).map(b=>`<button class="bchip" data-farm="${b}" title="See materials from ${b}" style="--bc:var(${BVAR[b]})"><i></i><b>${b}</b><span class="c">×${farm[b]}</span></button>`).join('');
+  el.innerHTML=`<h2>Totals · ${codes.length}/5</h2>${rows}`+(farmStr?`<div class="tfarm"><div class="h">Materials to farm — click a boss</div><div class="bosses">${farmStr}</div></div>`:'');
 }
 function render(){renderHero();renderSlots();renderTotals();refreshLoadSel();}
 
@@ -407,12 +424,34 @@ rOv.addEventListener('click',e=>{if(e.target===rOv)closeRecipe();const cb=e.targ
 
 // global delegated clicks
 document.addEventListener('click',e=>{
+  const fm=e.target.closest('[data-farm]');if(fm){openFarm(fm.dataset.farm);return;}
   const rec=e.target.closest('[data-recipe]');if(rec){openRecipe(rec.dataset.recipe);return;}
   const dc=e.target.closest('[data-code]');if(dc&&!rOv.hidden){openRecipe(dc.dataset.code);return;}
   const pk=e.target.closest('[data-slot]');if(pk){openChooser(pk.dataset.slot);return;}
   const cl=e.target.closest('[data-clear]');if(cl){state.slots[cl.dataset.clear]=null;render();pushHash();return;}
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!rOv.hidden)closeRecipe();else if(!chooser.hidden)closeChooser();else if(!heroOv.hidden)closeHero();else if(!savedOv.hidden)closeSaved();}});
+
+// ---------- farm breakdown popup ----------
+const farmOv=document.getElementById('farm');
+function leaves(code,mult,acc){const n=N[code];if(n&&n.recipe&&n.recipe.length){for(const c of n.recipe)leaves(c.code,mult*(c.qty||1),acc);}else{acc[code]=(acc[code]||0)+mult;}return acc;}
+function openFarm(boss){
+  const codes=SLOTS.map(s=>state.slots[s]).filter(Boolean);
+  let html='',total=0;
+  for(const ic of codes){
+    const lv=leaves(ic,1,{});
+    const mats=Object.entries(lv).map(([mc,q])=>({mc,q,name:N[mc].name,drop:N[mc].drop})).filter(m=>m.drop===boss).sort((a,b)=>b.q-a.q||a.name.localeCompare(b.name));
+    if(!mats.length)continue;
+    const it=N[ic];
+    html+=`<div class="farmgrp"><button class="fi" data-code="${ic}"><span class="fn">${esc(it.name)}</span><span class="slot">${esc(it.slot||'')}</span></button>${mats.map(m=>{total+=m.q;return `<button class="matrow" data-code="${m.mc}" style="--bc:var(${BVAR[boss]})"><span class="mdot"></span><span class="mn2">${esc(m.name)}</span><span class="mq">×${m.q}</span></button>`;}).join('')}</div>`;
+  }
+  document.getElementById('farmTitle').innerHTML=`<span style="color:var(${BVAR[boss]})">${esc(boss)}</span> — ${total} material${total===1?'':'s'} for this build`;
+  document.getElementById('farmBody').innerHTML=html||`<div class="chnone">No materials from ${esc(boss)} in this build.</div>`;
+  farmOv.hidden=false;document.body.style.overflow='hidden';
+}
+function closeFarm(){farmOv.hidden=true;if(rOv.hidden&&chooser.hidden&&heroOv.hidden&&savedOv.hidden)document.body.style.overflow='';}
+document.getElementById('farmClose').addEventListener('click',closeFarm);
+farmOv.addEventListener('click',e=>{if(e.target===farmOv){closeFarm();return;}const dc=e.target.closest('[data-code]');if(dc){closeFarm();openRecipe(dc.dataset.code);}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!rOv.hidden)closeRecipe();else if(!farmOv.hidden)closeFarm();else if(!chooser.hidden)closeChooser();else if(!heroOv.hidden)closeHero();else if(!savedOv.hidden)closeSaved();}});
 
 document.getElementById('buildName').addEventListener('input',e=>{state.name=e.target.value;pushHash();});
 
