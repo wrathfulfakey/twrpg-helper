@@ -12,7 +12,7 @@ No backend, no database, no build step. Just static HTML files.
 | `builder.html` | **Build Maker** — pick any of the 32 heroes, fill 5 gear slots (grade-filtered, weapon-type aware), see combined stats + farm list, name it, save locally, and share via link. |
 | `boss.html` | **Boss Drops** — every creature's loot table with per-kill rates and tier; search by boss or item. |
 | `codex.html` | **Item Codex** — all 501 epic items across Deltirama → Arcana, with stats, recipes, drop mobs + rates, and a click-through crafting tree. |
-| `combos.html` | **Hero Combos** — pick any of the 32 heroes to see its full skill kit and a suggested ability flow. |
+| `characters.html` | **Characters** — all 37 heroes: skill kit, suggested combo, chain/combo mechanics, and specialty items. |
 
 ## How sharing works (no database)
 
