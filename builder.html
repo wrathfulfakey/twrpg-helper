@@ -9,6 +9,7 @@
   --line:#d8cebf;--line-strong:#c3b6a2;
   --blood:#b01330;--blood-soft:#c94a5f;
   --delt:#8a5fc4;--nept:#1c8f97;--gnosis:#c1122f;--alteia:#2f9a45;--arcana:#7a45c9;
+  --str:#c6353f;--agi:#2f8f4e;--int:#5563d8;
   --good:#2f9a45;
   --shadow:0 1px 2px rgba(40,28,50,.08),0 8px 24px rgba(40,28,50,.06);
   --chip:#efe7da;--overlay:rgba(36,25,40,.42);--barbg:rgba(250,246,239,.9);
@@ -18,7 +19,7 @@
   --ink:#ece7f2;--ink-soft:#a89fb8;--ink-faint:#6f6683;
   --line:#2a2338;--line-strong:#3a3150;
   --blood:#e8324f;--blood-soft:#ff6d82;
-  --delt:#c39be1;--nept:#68d3d3;--gnosis:#f0304f;--alteia:#79e089;--arcana:#a877ff;--good:#79e089;
+  --delt:#c39be1;--nept:#68d3d3;--gnosis:#f0304f;--alteia:#79e089;--arcana:#a877ff;--str:#f0656f;--agi:#6fd88a;--int:#9aa6ff;--good:#79e089;
   --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 40px rgba(0,0,0,.45);
   --chip:#221b30;--overlay:rgba(3,2,6,.66);--barbg:rgba(15,12,21,.9);
 }}
@@ -27,7 +28,7 @@
   --ink:#ece7f2;--ink-soft:#a89fb8;--ink-faint:#6f6683;
   --line:#2a2338;--line-strong:#3a3150;
   --blood:#e8324f;--blood-soft:#ff6d82;
-  --delt:#c39be1;--nept:#68d3d3;--gnosis:#f0304f;--alteia:#79e089;--arcana:#a877ff;--good:#79e089;
+  --delt:#c39be1;--nept:#68d3d3;--gnosis:#f0304f;--alteia:#79e089;--arcana:#a877ff;--str:#f0656f;--agi:#6fd88a;--int:#9aa6ff;--good:#79e089;
   --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 40px rgba(0,0,0,.45);
   --chip:#221b30;--overlay:rgba(3,2,6,.66);--barbg:rgba(15,12,21,.9);
 }
@@ -170,12 +171,17 @@ select,input[type=text]{font-family:Spectral,serif;font-size:15px;background:var
 .comp .tag{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:1px 5px;border-radius:4px;border:1px solid var(--line-strong);color:var(--ink-faint);flex:none;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 button.comp{cursor:pointer} button.comp:hover .cn{color:var(--blood);text-decoration:underline} button.comp.craft .tag{color:var(--arcana);border-color:color-mix(in srgb,var(--arcana) 50%,var(--line))} button.comp::after{content:"›";color:var(--ink-faint);font-family:"IBM Plex Mono",monospace}
 .comp.leaf{cursor:default}
-.hpick{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px}
+.hpick{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:14px;overflow:auto}
 @media(max-width:520px){.hpick{grid-template-columns:1fr}}
-.hopt{text-align:left;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}
-.hopt:hover{border-color:var(--blood-soft)}
-.hopt .hn{font-family:Cinzel,serif;font-weight:600;font-size:15px}
-.hopt .hm{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.hopt{position:relative;text-align:left;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--ac);border-radius:11px;padding:11px 13px;cursor:pointer;transition:transform .12s,border-color .12s,background .12s}
+.hopt:hover{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 8%,var(--panel));transform:translateY(-1px)}
+.hopt.sel{background:color-mix(in srgb,var(--ac) 14%,var(--panel));border-color:var(--ac)}
+.hopt.sel::after{content:"✓";position:absolute;right:11px;top:10px;color:var(--ac);font-family:"IBM Plex Mono",monospace;font-size:12px}
+.hopt .hn{font-family:Cinzel,serif;font-weight:600;font-size:15px;color:var(--ink);display:flex;align-items:center;gap:7px}
+.hopt:hover .hn{color:var(--ac)}
+.hopt .attr{font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:600;letter-spacing:.06em;color:#fff;background:var(--ac);border-radius:5px;padding:2px 6px}
+.hopt .hw{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--ink-faint);margin-top:6px;letter-spacing:.02em}
+.hopt .hw b{color:var(--ink-soft);font-weight:500}
 
 .topnav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:4px;background:color-mix(in srgb,var(--panel) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 clamp(12px,3vw,22px);height:46px;flex-wrap:nowrap;overflow-x:auto}
 .topnav .brand{font-family:Cinzel,serif;font-weight:700;font-size:15px;color:var(--ink);text-decoration:none;margin-right:8px;white-space:nowrap}
@@ -275,8 +281,9 @@ let state={hero:HEROES[0].id,name:'',slots:{Weapon:null,Headwear:null,Armor:null
 
 // hero picker modal
 const heroOv=document.getElementById('hero'),heroPick=document.getElementById('heroPick');
-heroPick.innerHTML=HEROES.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(h=>`<button class="hopt" data-hero="${h.id}"><div class="hn">${esc(h.name)}</div><div class="hm">${h.primary||'?'} · ${h.weapons.join(' / ')}</div></button>`).join('');
-function openHero(){heroOv.hidden=false;document.body.style.overflow='hidden';const cur=heroPick.querySelector('[data-hero="'+state.hero+'"]');if(cur)cur.scrollIntoView({block:'nearest'});}
+const ATTRCOL={STR:'--str',AGI:'--agi',INT:'--int'};
+function renderHeroPick(){heroPick.innerHTML=HEROES.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(h=>`<button class="hopt${h.id===state.hero?' sel':''}" data-hero="${h.id}" style="--ac:var(${ATTRCOL[h.primary]||'--ink-soft'})"><div class="hn">${esc(h.name)}<span class="attr">${h.primary||'?'}</span></div><div class="hw">${h.weapons.map(w=>'<b>'+esc(w)+'</b>').join(' · ')}</div></button>`).join('');}
+function openHero(){renderHeroPick();heroOv.hidden=false;document.body.style.overflow='hidden';const cur=heroPick.querySelector('[data-hero="'+state.hero+'"]');if(cur)cur.scrollIntoView({block:'nearest'});}
 function closeHero(){heroOv.hidden=true;if(chooser.hidden&&rOv.hidden)document.body.style.overflow='';}
 document.getElementById('heroClose').addEventListener('click',closeHero);
 heroOv.addEventListener('click',e=>{if(e.target===heroOv){closeHero();return;}const b=e.target.closest('[data-hero]');if(b){state.hero=b.dataset.hero;const w=new Set(HById[state.hero].weapons);const wc=state.slots.Weapon;if(wc&&N[wc].wtype&&!w.has(N[wc].wtype))state.slots.Weapon=null;closeHero();render();pushHash();}});
