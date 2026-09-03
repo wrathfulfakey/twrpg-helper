@@ -366,7 +366,7 @@ function renderChooser(){
   const list=document.getElementById('chList');
   list.innerHTML=ids.length?ids.map(c=>{const n=N[c];const stats=(n.stats||[]).slice(0,4).map(miniChip).join('');
     const sel=state.slots[chSlot]===c?' sel':'';
-    return `<div class="crowwrap${sel}" style="--gc:var(${GVAR[n.grade]})"><button class="crow" data-choose="${c}"><span class="cn"><span class="nm">${esc(n.name)}</span><span class="wt">${esc(n.grade||'')}</span>${n.wtype?`<span class="wt type">${esc(n.wtype)}</span>`:''}</span>${stats?`<span class="cs">${stats}</span>`:''}</button><button class="ri" data-recipe="${c}" title="View recipe"><span class="ic">⚒</span>recipe</button></div>`;
+    return `<div class="crowwrap${sel}" style="--gc:var(${GVAR[n.grade]})"><div class="crow" role="button" tabindex="0" data-choose="${c}"><span class="cn"><span class="nm">${esc(n.name)}</span><span class="wt">${esc(n.grade||'')}</span>${n.wtype?`<span class="wt type">${esc(n.wtype)}</span>`:''}</span>${stats?`<span class="cs">${stats}</span>`:''}</div><button class="ri" data-recipe="${c}" title="View recipe"><span class="ic">⚒</span>recipe</button></div>`;
   }).join(''):`<div class="chnone">${searching?`No ${chSlot.toLowerCase()} matches “${esc(chQ)}”.`:`No ${chSlot.toLowerCase()} items at ${chGrade} for this hero.`}</div>`;
 }
 function openChooser(slot){chSlot=slot;chQ='';document.getElementById('chSearch').value='';
@@ -379,6 +379,7 @@ document.getElementById('chSearch').addEventListener('input',e=>{chQ=e.target.va
 document.getElementById('chClose').addEventListener('click',closeChooser);
 chooser.addEventListener('click',e=>{if(e.target===chooser)closeChooser();
   const ch=e.target.closest('[data-choose]');if(ch){state.slots[chSlot]=ch.dataset.choose;closeChooser();render();pushHash();return;}});
+chooser.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){const ch=e.target.closest('[data-choose]');if(ch){e.preventDefault();state.slots[chSlot]=ch.dataset.choose;closeChooser();render();pushHash();}}});
 
 // ---------- recipe drill-down ----------
 const rOv=document.getElementById('recipe'),rBody=document.getElementById('rBody'),rCr=document.getElementById('rCrumbs');
