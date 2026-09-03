@@ -134,22 +134,32 @@ select,input[type=text]{font-family:Spectral,serif;font-size:15px;background:var
 .crumb{background:none;border:0;color:var(--ink-faint);cursor:pointer;font:inherit;padding:2px 3px} .crumb:hover{color:var(--blood)} .crumb.cur{color:var(--ink)} .crumbsep{opacity:.5}
 .mclose{flex:none;background:none;border:1px solid var(--line-strong);color:var(--ink-soft);border-radius:8px;width:28px;height:28px;cursor:pointer;font-size:15px}
 .mclose:hover{color:var(--ink);border-color:var(--blood-soft)}
-.chbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 15px;border-bottom:1px solid var(--line)}
-.chbar input{flex:1;min-width:120px}
-.gtab{display:inline-flex;align-items:center;gap:6px;font-family:Cinzel,serif;font-weight:600;font-size:13px;color:var(--ink-faint);background:none;border:0;border-bottom:2px solid transparent;padding:4px 9px 6px;cursor:pointer;margin-bottom:-11px}
+.chbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px 14px}
+.chbar.search{border-bottom:1px solid var(--line)}
+.chsearch{position:relative;flex:1;min-width:150px;display:flex;align-items:center}
+.chsearch::before{content:"⌕";position:absolute;left:11px;color:var(--ink-faint);font-size:16px;pointer-events:none}
+.chbar input{flex:1;min-width:120px;font-family:Spectral,serif;font-size:14px;background:var(--panel2);border:1px solid var(--line-strong);border-radius:10px;padding:9px 12px 9px 32px;color:var(--ink)}
+.chbar input::placeholder{color:var(--ink-faint)}
+.chtabs{display:flex;gap:2px;flex-wrap:wrap;padding:9px 14px 0;border-bottom:1px solid var(--line)}
+.gtab{display:inline-flex;align-items:center;gap:6px;font-family:Cinzel,serif;font-weight:600;font-size:13px;color:var(--ink-faint);background:none;border:0;border-bottom:2px solid transparent;padding:4px 10px 8px;cursor:pointer;margin-bottom:-1px}
 .gtab .d{width:7px;height:7px;border-radius:50%;background:var(--tc);opacity:.45}
-.gtab[aria-selected=true]{color:var(--tc);border-bottom-color:var(--tc)} .gtab[aria-selected=true] .d{opacity:1}
-.chlist{overflow:auto;padding:10px 12px}
-.crow{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;border-radius:9px;padding:9px 10px;cursor:pointer;color:var(--ink);border-left:3px solid var(--gc)}
-.crow:hover{background:var(--panel2)}
-.crow .cinfo{flex:1;min-width:0}
-.crow .cn{font-family:Cinzel,serif;font-weight:600;font-size:14px}
-.crow:hover .cn{color:var(--blood)}
-.crow .cs{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}
-.crow .wt{font-family:"IBM Plex Mono",monospace;font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--gc);border:1px solid var(--gc);border-radius:4px;padding:1px 5px}
-.crow .ri{flex:none;font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-faint);border:1px solid var(--line-strong);border-radius:6px;padding:3px 7px}
-.crow .ri:hover{color:var(--arcana);border-color:var(--arcana)}
-.chnone{padding:24px;text-align:center;color:var(--ink-faint);font-style:italic}
+.gtab[aria-selected=true]{color:var(--tc);border-bottom-color:var(--tc)} .gtab[aria-selected=true] .d{opacity:1;box-shadow:0 0 7px var(--tc)}
+.gtab:hover{color:var(--ink)}
+.chlist{overflow:auto;padding:12px;display:flex;flex-direction:column;gap:7px}
+.crowwrap{display:flex;align-items:stretch;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gc);border-radius:10px;overflow:hidden;transition:border-color .12s,box-shadow .12s}
+.crowwrap:hover{border-color:var(--gc);box-shadow:0 3px 14px color-mix(in srgb,var(--gc) 16%,transparent)}
+.crowwrap.sel{background:color-mix(in srgb,var(--gc) 12%,var(--panel));border-color:var(--gc)}
+.crow{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;text-align:left;background:none;border:0;padding:10px 13px;cursor:pointer;color:var(--ink)}
+.crow .cn{font-family:Cinzel,serif;font-weight:600;font-size:14.5px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;line-height:1.15}
+.crowwrap:hover .cn .nm{color:var(--blood)}
+.crow .wt{font-family:"IBM Plex Mono",monospace;font-size:8.5px;text-transform:uppercase;letter-spacing:.05em;padding:1px 6px;border-radius:5px;border:1px solid var(--gc);color:var(--gc);white-space:nowrap}
+.crow .wt.type{border-color:var(--line-strong);color:var(--ink-faint)}
+.crow .cs{display:flex;flex-wrap:wrap;gap:4px}
+.ri{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:none;border:0;border-left:1px solid var(--line);color:var(--ink-faint);padding:0 15px;cursor:pointer;font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase}
+.ri .ic{font-size:15px;line-height:1}
+.ri:hover{color:var(--arcana);background:color-mix(in srgb,var(--arcana) 10%,transparent)}
+.chnone{padding:28px;text-align:center;color:var(--ink-faint);font-style:italic}
+#heroCount,#chCount{white-space:nowrap}
 /* recipe modal body */
 .mbody{padding:16px 16px 18px;overflow:auto}
 .mhead{display:flex;align-items:flex-start;gap:10px;justify-content:space-between}
@@ -228,8 +238,8 @@ button.comp{cursor:pointer} button.comp:hover .cn{color:var(--blood);text-decora
 
 <div class="overlay" id="chooser" hidden><div class="modal">
   <div class="mtop"><span class="mt" id="chTitle">Choose item</span><button class="mclose" id="chClose" aria-label="Close">×</button></div>
-  <div class="chbar"><span id="chTabs" style="display:flex;gap:2px;flex-wrap:wrap"></span></div>
-  <div class="chbar" style="border-top:0"><input type="search" id="chSearch" placeholder="Search all grades by name…" autocomplete="off"><span class="mono" id="chCount" style="font-size:11px;color:var(--ink-faint)"></span></div>
+  <div class="chbar search"><span class="chsearch"><input type="search" id="chSearch" placeholder="Search all grades by name…" autocomplete="off"></span><span class="mono" id="chCount" style="font-size:11px;color:var(--ink-faint)"></span></div>
+  <div class="chtabs" id="chTabs"></div>
   <div class="chlist" id="chList"></div>
 </div></div>
 
@@ -240,6 +250,7 @@ button.comp{cursor:pointer} button.comp:hover .cn{color:var(--blood);text-decora
 
 <div class="overlay" id="hero" hidden><div class="modal">
   <div class="mtop"><span class="mt">Choose hero</span><button class="mclose" id="heroClose" aria-label="Close">×</button></div>
+  <div class="chbar search"><span class="chsearch"><input type="search" id="heroSearch" placeholder="Search hero name…" autocomplete="off"></span><span class="mono" id="heroCount" style="font-size:11px;color:var(--ink-faint)"></span></div>
   <div class="hpick" id="heroPick"></div>
 </div></div>
 
@@ -282,8 +293,11 @@ let state={hero:HEROES[0].id,name:'',slots:{Weapon:null,Headwear:null,Armor:null
 // hero picker modal
 const heroOv=document.getElementById('hero'),heroPick=document.getElementById('heroPick');
 const ATTRCOL={STR:'--str',AGI:'--agi',INT:'--int'};
-function renderHeroPick(){heroPick.innerHTML=HEROES.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(h=>`<button class="hopt${h.id===state.hero?' sel':''}" data-hero="${h.id}" style="--ac:var(${ATTRCOL[h.primary]||'--ink-soft'})"><div class="hn">${esc(h.name)}<span class="attr">${h.primary||'?'}</span></div><div class="hw">${h.weapons.map(w=>'<b>'+esc(w)+'</b>').join(' · ')}</div></button>`).join('');}
-function openHero(){renderHeroPick();heroOv.hidden=false;document.body.style.overflow='hidden';const cur=heroPick.querySelector('[data-hero="'+state.hero+'"]');if(cur)cur.scrollIntoView({block:'nearest'});}
+function renderHeroPick(q){q=(q||'').toLowerCase();const list=HEROES.slice().sort((a,b)=>a.name.localeCompare(b.name)).filter(h=>!q||h.name.toLowerCase().includes(q));
+  document.getElementById('heroCount').textContent=list.length+' heroes';
+  heroPick.innerHTML=list.length?list.map(h=>`<button class="hopt${h.id===state.hero?' sel':''}" data-hero="${h.id}" style="--ac:var(${ATTRCOL[h.primary]||'--ink-soft'})"><div class="hn">${esc(h.name)}<span class="attr">${h.primary||'?'}</span></div><div class="hw">${h.weapons.map(w=>'<b>'+esc(w)+'</b>').join(' · ')}</div></button>`).join(''):`<div class="chnone" style="grid-column:1/-1">No hero matches “${esc(q)}”.</div>`;}
+function openHero(){document.getElementById('heroSearch').value='';renderHeroPick('');heroOv.hidden=false;document.body.style.overflow='hidden';const cur=heroPick.querySelector('[data-hero="'+state.hero+'"]');if(cur)cur.scrollIntoView({block:'nearest'});}
+document.getElementById('heroSearch').addEventListener('input',e=>renderHeroPick(e.target.value));
 function closeHero(){heroOv.hidden=true;if(chooser.hidden&&rOv.hidden)document.body.style.overflow='';}
 document.getElementById('heroClose').addEventListener('click',closeHero);
 heroOv.addEventListener('click',e=>{if(e.target===heroOv){closeHero();return;}const b=e.target.closest('[data-hero]');if(b){state.hero=b.dataset.hero;const w=new Set(HById[state.hero].weapons);const wc=state.slots.Weapon;if(wc&&N[wc].wtype&&!w.has(N[wc].wtype))state.slots.Weapon=null;closeHero();render();pushHash();}});
@@ -351,8 +365,8 @@ function renderChooser(){
   document.getElementById('chCount').textContent=searching?`${ids.length} across all grades`:`${ids.length} items`;
   const list=document.getElementById('chList');
   list.innerHTML=ids.length?ids.map(c=>{const n=N[c];const stats=(n.stats||[]).slice(0,4).map(miniChip).join('');
-    const gtag=`<span class="wt">${esc(n.grade||'')}</span>`;
-    return `<div style="display:flex;align-items:stretch;gap:6px"><button class="crow" data-choose="${c}" style="--gc:var(${GVAR[n.grade]})"><span class="cinfo"><span class="cn">${esc(n.name)} ${gtag}${n.wtype?` <span class="wt" style="opacity:.65">${esc(n.wtype)}</span>`:''}</span><span class="cs">${stats}</span></span></button><button class="ri" data-recipe="${c}" title="View recipe">recipe</button></div>`;
+    const sel=state.slots[chSlot]===c?' sel':'';
+    return `<div class="crowwrap${sel}" style="--gc:var(${GVAR[n.grade]})"><button class="crow" data-choose="${c}"><span class="cn"><span class="nm">${esc(n.name)}</span><span class="wt">${esc(n.grade||'')}</span>${n.wtype?`<span class="wt type">${esc(n.wtype)}</span>`:''}</span>${stats?`<span class="cs">${stats}</span>`:''}</button><button class="ri" data-recipe="${c}" title="View recipe"><span class="ic">⚒</span>recipe</button></div>`;
   }).join(''):`<div class="chnone">${searching?`No ${chSlot.toLowerCase()} matches “${esc(chQ)}”.`:`No ${chSlot.toLowerCase()} items at ${chGrade} for this hero.`}</div>`;
 }
 function openChooser(slot){chSlot=slot;chQ='';document.getElementById('chSearch').value='';
