@@ -13,7 +13,6 @@ No backend, no database, no build step. Just static HTML files.
 | `boss.html` | **Boss Drops** — every creature's loot table with per-kill rates and tier; search by boss or item. |
 | `codex.html` | **Item Codex** — all 501 epic items across Deltirama → Arcana, with stats, recipes, drop mobs + rates, and a click-through crafting tree. |
 | `combos.html` | **Hero Combos** — pick any of the 32 heroes to see its full skill kit and a suggested ability flow. |
-| `blood-weaver.html` | **Blood Weaver Sheet** — best-in-slot builds per tier (Gnosis / Alteia / Arcana) with combos, as an example of the analysis. |
 
 ## How sharing works (no database)
 
