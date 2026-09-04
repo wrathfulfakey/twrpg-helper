@@ -124,8 +124,12 @@ button.bchip{cursor:pointer;transition:box-shadow .12s,border-color .12s}
 button.bchip:hover{box-shadow:0 0 0 1px var(--bc);border-color:var(--bc)}
 button.bchip::after{content:"›";color:var(--ink-faint);font-family:"IBM Plex Mono",monospace;margin-left:1px}
 .farmgrp{margin-bottom:15px}
-.farmtot{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:10px 12px;margin-bottom:16px}
-.farmtot .h{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px}
+.farmtot{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:4px 12px 8px;margin-bottom:16px}
+.farmtot>summary{cursor:pointer;list-style:none;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);padding:7px 0}
+.farmtot>summary::-webkit-details-marker{display:none}
+.farmtot>summary::before{content:'▾ '}
+.farmtot:not([open])>summary::before{content:'▸ '}
+.farmtot>summary:hover{color:var(--ink)}
 .farmtot .matrow{padding-left:0}
 .farmtot .mq{font-weight:700;color:var(--ink)}
 .farmgrp .fi{display:flex;align-items:center;gap:8px;font-family:Cinzel,serif;font-weight:600;font-size:14.5px;color:var(--ink);margin-bottom:6px;background:none;border:0;padding:0;cursor:pointer;width:100%;text-align:left}
@@ -481,7 +485,8 @@ function openFarm(boss){
   }
   document.getElementById('farmTitle').innerHTML=`<span style="color:var(${BVAR[boss]})">${esc(boss)}</span> — ${total} material${total===1?'':'s'} for this build`;
   const tot=Object.entries(sum).sort((a,b)=>b[1]-a[1]||N[a[0]].name.localeCompare(N[b[0]].name));
-  const totHTML=tot.length?`<div class="farmtot"><div class="h">Total materials needed — every item in this build combined</div>${tot.map(([mc,q])=>`<button class="matrow tot" data-code="${mc}" style="--bc:var(${BVAR[boss]})">${icon(N[mc].ic,N[mc].name,'sm')}<span class="mdot"></span><span class="mn2">${esc(N[mc].name)}</span><span class="mq">×${q}</span></button>`).join('')}</div>`:'';
+  const totQty=tot.reduce((a,t)=>a+t[1],0);
+  const totHTML=tot.length?`<details class="farmtot" open><summary>Total materials needed — ${totQty} drop${totQty===1?'':'s'} across ${tot.length} material${tot.length===1?'':'s'}</summary>${tot.map(([mc,q])=>`<button class="matrow tot" data-code="${mc}" style="--bc:var(${BVAR[boss]})">${icon(N[mc].ic,N[mc].name,'sm')}<span class="mdot"></span><span class="mn2">${esc(N[mc].name)}</span><span class="mq">×${q}</span></button>`).join('')}</details>`:'';
   document.getElementById('farmBody').innerHTML=(totHTML+html)||`<div class="chnone">No materials from ${esc(boss)} in this build.</div>`;
   farmOv.hidden=false;document.body.style.overflow='hidden';
 }
@@ -516,20 +521,28 @@ function closeSaved(){savedOv.hidden=true;if(chooser.hidden&&rOv.hidden&&heroOv.
 document.getElementById('savedBtn').addEventListener('click',()=>{renderSaved();savedOv.hidden=false;document.body.style.overflow='hidden';});
 document.getElementById('savedClose').addEventListener('click',closeSaved);
 savedOv.addEventListener('click',e=>{if(e.target===savedOv){closeSaved();return;}
-  const l=e.target.closest('[data-load]');if(l){const b=getSaves()[+l.dataset.load];if(b){state={hero:b.hero,name:b.name,slots:{Weapon:null,Headwear:null,Armor:null,Wings:null,Accessory:null,...b.slots}};document.getElementById('buildName').value=state.name;closeSaved();render();pushHash();}return;}
+  const l=e.target.closest('[data-load]');if(l){const b=getSaves()[+l.dataset.load];if(b){state={hero:b.hero,name:b.name,slots:{Weapon:null,Headwear:null,Armor:null,Wings:null,Accessory:null,...b.slots}};document.getElementById('buildName').value=state.name;closeSaved();render();pushHash();markSaved();}return;}
   const d=e.target.closest('[data-del]');if(d){const s=getSaves();s.splice(+d.dataset.del,1);setSaves(s);renderSaved();refreshLoadSel();toast('Deleted');}});
 document.getElementById('saveBtn').addEventListener('click',()=>{const saves=getSaves();const name=(state.name||'').trim()||'Untitled';
   const rec={name,hero:state.hero,slots:{...state.slots},ts:Date.now()};
   const idx=saves.findIndex(b=>b.name===name&&b.hero===state.hero);
-  if(idx>=0)saves[idx]=rec;else saves.push(rec);setSaves(saves);refreshLoadSel();toast('Saved “'+name+'” on this device');});
-document.getElementById('newBtn').addEventListener('click',()=>{state={hero:state.hero,name:'',slots:{Weapon:null,Headwear:null,Armor:null,Wings:null,Accessory:null}};document.getElementById('buildName').value='';render();pushHash();});
+  if(idx>=0)saves[idx]=rec;else saves.push(rec);setSaves(saves);refreshLoadSel();markSaved();toast('Saved “'+name+'” on this device');});
+document.getElementById('newBtn').addEventListener('click',()=>{state={hero:state.hero,name:'',slots:{Weapon:null,Headwear:null,Armor:null,Wings:null,Accessory:null}};document.getElementById('buildName').value='';render();pushHash();markSaved();});
 
 // hero modal (unused button kept minimal) + toast
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2600);}
 document.getElementById('tg').addEventListener('click',()=>{const cur=document.documentElement.getAttribute('data-theme');const dark=cur?cur==='dark':matchMedia('(prefers-color-scheme:dark)').matches;document.documentElement.setAttribute('data-theme',dark?'light':'dark');});
 
+// ---------- unsaved-changes guard ----------
+const snap=()=>JSON.stringify({h:state.hero,n:(state.name||'').trim(),s:state.slots});
+let savedSnap=snap();
+function markSaved(){savedSnap=snap();}
+function isDirty(){return SLOTS.some(s=>state.slots[s])&&snap()!==savedSnap;}
+window.addEventListener('beforeunload',e=>{if(!isDirty())return;e.preventDefault();e.returnValue='';});
+
 // init
 loadFromHash();
 render();
+markSaved();
 </script>
 <script>document.querySelector("[data-navtheme]").addEventListener("click",function(){var c=document.documentElement.getAttribute("data-theme");var d=c?c==="dark":matchMedia("(prefers-color-scheme:dark)").matches;document.documentElement.setAttribute("data-theme",d?"light":"dark");});</script>

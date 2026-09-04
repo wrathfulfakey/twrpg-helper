@@ -151,7 +151,7 @@ button.comp.craft .tag{color:var(--arcana);border-color:color-mix(in srgb,var(--
 button.comp::after{content:"›";color:var(--ink-faint);font-family:"IBM Plex Mono",monospace}
 .comp.leaf{cursor:default}
 .bosses{display:flex;flex-wrap:wrap;gap:6px}
-.tally{margin-top:12px;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:4px 12px 8px}
+.tally{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:4px 12px 8px}
 .tally>summary{cursor:pointer;list-style:none;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);padding:7px 0}
 .tally>summary::-webkit-details-marker{display:none}
 .tally>summary::before{content:'▾ ';color:var(--ink-faint)}
@@ -352,19 +352,16 @@ function renderModal(){
   if(eff)h+=`<div class="msec"><div class="h">Effects</div>${eff}</div>`;
   else{const fx=fx2(n);if(fx.length)h+=`<div class="msec"><div class="h">Effects</div><div class="fx">${fx.map(f=>`<span>${esc(f)}</span>`).join('')}</div></div>`;}
   {const _c=stack[stack.length-1];const _sp=(typeof SPEC!=="undefined")&&SPEC[_c];if(_sp&&_sp.length)h+=`<div class="msec"><div class="h">Hero specialty</div>${_sp.map(s=>`<div class="msrc" style="--bc:var(--arcana)">Specialty for <b>${esc(s.hero)}</b> — <b style="color:var(--ink)">${esc(s.spec)}</b>: ${esc(s.desc)}</div>`).join('')}</div>`;}
+  const tally=Object.entries(leafTally(stack[stack.length-1],1,{}))
+    .sort((a,b)=>b[1]-a[1]||N[a[0]].name.localeCompare(N[b[0]].name));
+  const totQty=tally.reduce((a,t)=>a+t[1],0);
+  if(tally.length>1)h+=`<div class="msec"><details class="tally" open><summary>Total materials needed — ${totQty} drop${totQty===1?'':'s'} across ${tally.length} material${tally.length===1?'':'s'}</summary>${tally.map(([mc,q])=>{const m=N[mc];const bc=(m.drop&&BVAR[m.drop])||'--ink-faint';
+    return `<button class="comp" data-code="${mc}" style="--bc:var(${bc})">${icon(m.ic,m.name,'sm')}<i style="background:var(${bc})"></i><span class="cn">${esc(m.name)}</span><span class="q">×${q}</span>${m.drop?`<span class="tag" style="color:var(${bc});border-color:color-mix(in srgb,var(${bc}) 45%,var(--line))">${esc(m.drop)}</span>`:''}</button>`;}).join('')}</details></div>`;
   if(n.alt&&n.alt.length)h+=`<div class="msec"><div class="h">Also obtainable — exchange / purchase</div>${n.alt.map(c=>`<div class="comp leaf">${icon(null,c.name,'sm')}<i style="background:var(--ink-faint)"></i><span class="cn">${esc(c.name)}</span><span class="q">${c.qty>1?'×'+c.qty:''}</span><span class="tag">exchange</span></div>`).join('')}</div>`;
   if(n.recipe&&n.recipe.length)h+=`<div class="msec"><div class="h">Recipe — click a craftable part to expand</div>${n.recipe.map(comp).join('')}</div>`;
   else if(!n.mat&&!(n.alt&&n.alt.length))h+=`<div class="msec"><div class="h">Recipe</div><div class="comp leaf"><i style="background:var(--ink-faint)"></i><span class="cn">No recipe — acquired directly.</span></div></div>`;
   if(n.usedIn&&n.usedIn.length)h+=`<div class="msec"><div class="h">Used to craft — click to open</div>${n.usedIn.map(u=>`<button class="comp craft" data-code="${u.code}">${icon(N[u.code]&&N[u.code].ic,u.name,'sm')}<i style="background:var(--arcana)"></i><span class="cn">${esc(u.name)}</span><span class="q"></span><span class="tag">recipe</span></button>`).join('')}</div>`;
-  if(n.bosses&&n.bosses.length){
-    h+=`<div class="msec"><div class="h">Full craft tree — materials by grade</div><div class="bosses">${n.bosses.map(bossChip).join('')}</div>`;
-    const tally=Object.entries(leafTally(stack[stack.length-1],1,{}))
-      .sort((a,b)=>b[1]-a[1]||N[a[0]].name.localeCompare(N[b[0]].name));
-    const totQty=tally.reduce((a,t)=>a+t[1],0);
-    if(tally.length)h+=`<details class="tally" open><summary>Total materials needed — ${totQty} drop${totQty===1?'':'s'} across ${tally.length} material${tally.length===1?'':'s'}</summary>${tally.map(([mc,q])=>{const m=N[mc];const bc=(m.drop&&BVAR[m.drop])||'--ink-faint';
-      return `<button class="comp" data-code="${mc}" style="--bc:var(${bc})">${icon(m.ic,m.name,'sm')}<i style="background:var(${bc})"></i><span class="cn">${esc(m.name)}</span><span class="q">×${q}</span>${m.drop?`<span class="tag" style="color:var(${bc});border-color:color-mix(in srgb,var(${bc}) 45%,var(--line))">${esc(m.drop)}</span>`:''}</button>`;}).join('')}</details>`;
-    h+=`</div>`;
-  }
+  if(n.bosses&&n.bosses.length)h+=`<div class="msec"><div class="h">Full craft tree — materials by grade</div><div class="bosses">${n.bosses.map(bossChip).join('')}</div></div>`;
   mbody.innerHTML=h;
   crumbs.innerHTML=stack.map((c,i)=>{const last=i===stack.length-1;return `<button class="crumb${last?' cur':''}" data-idx="${i}">${esc(N[c].name)}</button>`+(last?'':`<span class="crumbsep">›</span>`);}).join('');
   mbody.scrollTop=0;
