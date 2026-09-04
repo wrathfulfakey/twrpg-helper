@@ -133,6 +133,7 @@ button.bchip::after{content:"›";color:var(--ink-faint);font-family:"IBM Plex M
 .farmtot>summary:hover{color:var(--ink)}
 .farmtot .matrow{padding-left:0}
 .farmtot .mq{font-weight:700;color:var(--ink)}
+.matrow .gtag{flex:none;font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--gc);border:1px solid color-mix(in srgb,var(--gc) 45%,var(--line));border-radius:4px;padding:1px 5px}
 .farmgrp .fi{display:flex;align-items:center;gap:8px;font-family:Cinzel,serif;font-weight:600;font-size:14.5px;color:var(--ink);margin-bottom:6px;background:none;border:0;padding:0;cursor:pointer;width:100%;text-align:left}
 .farmgrp .fi:hover .fn{color:var(--blood)}
 .farmgrp .fi .slot{font-family:"IBM Plex Mono",monospace;font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);border:1px solid var(--line-strong);border-radius:4px;padding:1px 6px}
@@ -403,7 +404,7 @@ function renderTotals(){
   // farm tally across chosen items
   const farm={};for(const c of codes)for(const b of N[c].bosses||[])farm[b.boss]=(farm[b.boss]||0)+b.count;
   const BO=['Deltirama','Neptinos','Gnosis','Alteia','Arcana'];
-  const farmStr=BO.filter(b=>farm[b]).map(b=>`<button class="bchip" data-farm="${b}" title="See ${b} materials" style="--bc:var(${BVAR[b]})"><i></i><b>${b}</b><span class="c">×${farm[b]}</span></button>`).join('');
+  const farmStr=BO.filter(b=>farm[b]).map(b=>`<button class="bchip" data-farm="${b}" title="See everything this build needs" style="--bc:var(${BVAR[b]})"><i></i><b>${b}</b><span class="c">×${farm[b]}</span></button>`).join('');
   el.innerHTML=`<h2>Totals · ${codes.length}/5</h2>${rows}`+(farmStr?`<div class="tfarm"><div class="h">Materials to farm — click a grade</div><div class="bosses">${farmStr}</div></div>`:'');
 }
 function render(){renderHero();renderSlots();renderTotals();refreshLoadSel();}
@@ -486,23 +487,30 @@ document.addEventListener('click',e=>{
 // ---------- farm breakdown popup ----------
 const farmOv=document.getElementById('farm');
 function leaves(code,mult,acc){const n=N[code];if(n&&n.recipe&&n.recipe.length){for(const c of n.recipe)leaves(c.code,mult*(c.qty||1),acc);}else{acc[code]=(acc[code]||0)+mult;}return acc;}
-function openFarm(boss){
+function openFarm(grade){
   const codes=SLOTS.map(s=>state.slots[s]).filter(Boolean);
+  const GORD=['Deltirama','Neptinos','Gnosis','Alteia','Arcana'];
+  const grank=d=>{const i=GORD.indexOf(d);return i<0?GORD.length:i;};
+  const gvar=d=>BVAR[d]||'--ink-faint';
+  const matRow=(mc,q,cls)=>{const m=N[mc];const bc=gvar(m.drop);
+    return `<button class="matrow${cls||''}" data-code="${mc}" style="--bc:var(${bc})">${icon(m.ic,m.name,'sm')}<span class="mdot"></span><span class="mn2">${esc(m.name)}</span><span class="mq">×${q}</span>${m.drop?`<span class="gtag" style="--gc:var(${bc})">${esc(m.drop)}</span>`:''}</button>`;};
   let html='',total=0;const sum={};
   for(const ic of codes){
     const lv=leaves(ic,1,{});
-    const mats=Object.entries(lv).map(([mc,q])=>({mc,q,name:N[mc].name,drop:N[mc].drop})).filter(m=>m.drop===boss).sort((a,b)=>b.q-a.q||a.name.localeCompare(b.name));
+    const mats=Object.entries(lv).map(([mc,q])=>({mc,q,name:N[mc].name,drop:N[mc].drop}))
+      .sort((a,b)=>grank(a.drop)-grank(b.drop)||b.q-a.q||a.name.localeCompare(b.name));
     if(!mats.length)continue;
     const it=N[ic];
-    html+=`<div class="farmgrp"><button class="fi" data-code="${ic}">${icon(it.ic,it.name,'sm')}<span class="fn">${esc(it.name)}</span><span class="slot">${esc(it.slot||'')}</span></button>${mats.map(m=>{total+=m.q;sum[m.mc]=(sum[m.mc]||0)+m.q;return `<button class="matrow" data-code="${m.mc}" style="--bc:var(${BVAR[boss]})">${icon(N[m.mc].ic,m.name,'sm')}<span class="mdot"></span><span class="mn2">${esc(m.name)}</span><span class="mq">×${m.q}</span></button>`;}).join('')}</div>`;
+    html+=`<div class="farmgrp"><button class="fi" data-code="${ic}">${icon(it.ic,it.name,'sm')}<span class="fn">${esc(it.name)}</span><span class="slot">${esc(it.slot||'')}</span></button>${mats.map(m=>{total+=m.q;sum[m.mc]=(sum[m.mc]||0)+m.q;return matRow(m.mc,m.q);}).join('')}</div>`;
   }
-  document.getElementById('farmTitle').innerHTML=`<span style="color:var(${BVAR[boss]})">${esc(boss)}</span> — ${total} material${total===1?'':'s'} for this build`;
-  const tot=Object.entries(sum).sort((a,b)=>b[1]-a[1]||N[a[0]].name.localeCompare(N[b[0]].name));
+  const tot=Object.entries(sum).sort((a,b)=>grank(N[a[0]].drop)-grank(N[b[0]].drop)||b[1]-a[1]||N[a[0]].name.localeCompare(N[b[0]].name));
   const totQty=tot.reduce((a,t)=>a+t[1],0);
-  const totHTML=tot.length?`<details class="farmtot"${matchMedia('(min-width:761px)').matches?' open':''}><summary>Total materials needed — ${totQty} drop${totQty===1?'':'s'} across ${tot.length} material${tot.length===1?'':'s'}</summary>${tot.map(([mc,q])=>`<button class="matrow tot" data-code="${mc}" style="--bc:var(${BVAR[boss]})">${icon(N[mc].ic,N[mc].name,'sm')}<span class="mdot"></span><span class="mn2">${esc(N[mc].name)}</span><span class="mq">×${q}</span></button>`).join('')}</details>`:'';
+  document.getElementById('farmTitle').innerHTML=`Everything to farm — ${totQty} drop${totQty===1?'':'s'} across ${tot.length} material${tot.length===1?'':'s'}`;
+  const totHTML=tot.length?`<details class="farmtot"${matchMedia('(min-width:761px)').matches?' open':''}><summary>Total materials needed — all grades, weakest first</summary>${tot.map(([mc,q])=>matRow(mc,q,' tot')).join('')}</details>`:'';
   const bodyHTML=totHTML&&html?`<div class="cols"><div>${totHTML}</div><div>${html}</div></div>`:(totHTML+html);
-  document.getElementById('farmBody').innerHTML=bodyHTML||`<div class="chnone">No materials from ${esc(boss)} in this build.</div>`;
+  document.getElementById('farmBody').innerHTML=bodyHTML||`<div class="chnone">Nothing to farm — fill a slot first.</div>`;
   farmOv.hidden=false;document.body.style.overflow='hidden';
+  if(grade){const r=document.querySelector(`#farmBody .matrow[style*="${BVAR[grade]}"]`);if(r)r.scrollIntoView({block:'center'});}
 }
 function closeFarm(){farmOv.hidden=true;if(rOv.hidden&&chooser.hidden&&heroOv.hidden&&savedOv.hidden)document.body.style.overflow='';}
 document.getElementById('farmClose').addEventListener('click',closeFarm);
