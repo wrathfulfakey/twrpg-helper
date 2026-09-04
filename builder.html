@@ -499,7 +499,7 @@ function openFarm(boss){
   document.getElementById('farmTitle').innerHTML=`<span style="color:var(${BVAR[boss]})">${esc(boss)}</span> — ${total} material${total===1?'':'s'} for this build`;
   const tot=Object.entries(sum).sort((a,b)=>b[1]-a[1]||N[a[0]].name.localeCompare(N[b[0]].name));
   const totQty=tot.reduce((a,t)=>a+t[1],0);
-  const totHTML=tot.length?`<details class="farmtot"><summary>Total materials needed — ${totQty} drop${totQty===1?'':'s'} across ${tot.length} material${tot.length===1?'':'s'}</summary>${tot.map(([mc,q])=>`<button class="matrow tot" data-code="${mc}" style="--bc:var(${BVAR[boss]})">${icon(N[mc].ic,N[mc].name,'sm')}<span class="mdot"></span><span class="mn2">${esc(N[mc].name)}</span><span class="mq">×${q}</span></button>`).join('')}</details>`:'';
+  const totHTML=tot.length?`<details class="farmtot"${matchMedia('(min-width:761px)').matches?' open':''}><summary>Total materials needed — ${totQty} drop${totQty===1?'':'s'} across ${tot.length} material${tot.length===1?'':'s'}</summary>${tot.map(([mc,q])=>`<button class="matrow tot" data-code="${mc}" style="--bc:var(${BVAR[boss]})">${icon(N[mc].ic,N[mc].name,'sm')}<span class="mdot"></span><span class="mn2">${esc(N[mc].name)}</span><span class="mq">×${q}</span></button>`).join('')}</details>`:'';
   const bodyHTML=totHTML&&html?`<div class="cols"><div>${totHTML}</div><div>${html}</div></div>`:(totHTML+html);
   document.getElementById('farmBody').innerHTML=bodyHTML||`<div class="chnone">No materials from ${esc(boss)} in this build.</div>`;
   farmOv.hidden=false;document.body.style.overflow='hidden';
