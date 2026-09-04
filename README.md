@@ -1,6 +1,6 @@
 # TWRPG Toolkit
 
-A static, fan-made toolkit for **TWRPG (TWRPG) v0.76a** — build planner, item codex, and a worked hero guide. Everything was datamined directly from the map (`twrpgv0.76a_eng.w3x`): items, stats, abilities, crafting recipes, and drop tables.
+A static, fan-made toolkit for **TWRPG (TWRPG) v0.76a** — build planner, item codex, boss guides, and hero reference. Everything was datamined directly from the map (`twrpgv0.76a_eng.w3x`): items, stats, abilities, crafting recipes, and drop tables.
 
 No backend, no database, no build step. Just static HTML files.
 
@@ -8,11 +8,12 @@ No backend, no database, no build step. Just static HTML files.
 
 | File | What it is |
 |------|-----------|
-| `index.html` | Landing page linking the four tools. |
+| `index.html` | Landing page linking the five tools. |
 | `builder.html` | **Build Maker** — pick any of the 32 heroes, fill 5 gear slots (grade-filtered, weapon-type aware), see combined stats + farm list, name it, save locally, and share via link. |
 | `boss.html` | **Boss Drops** — every creature's loot table with per-kill rates and tier; search by boss or item. |
 | `codex.html` | **Item Codex** — all 501 epic items across Deltirama → Arcana, with stats, recipes, drop mobs + rates, and a click-through crafting tree. |
-| `characters.html` | **Characters** — all 37 heroes: skill kit, suggested combo, chain/combo mechanics, and specialty items. |
+| `guides.html` | **Boss Guides** — phase-by-phase writeups for the 5 Arcana and 5 Alteia bosses, with mechanic GIFs, a searchable list and a per-boss drop table. Images live in `public/guides/`. |
+| `characters.html` | **Characters** — all 37 heroes: skill kit, chain/combo mechanics, awakenings, and specialty items. |
 
 ## How sharing works (no database)
 
