@@ -1,0 +1,283 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TWRPG Credits</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Spectral:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#efe9e0;--bg2:#e6ded1;--panel:#faf6ef;--panel2:#f2ece1;
+  --ink:#241d2b;--ink-soft:#5d5468;--ink-faint:#8a8095;
+  --line:#d8cebf;--line-strong:#c3b6a2;
+  --blood:#b01330;--blood-soft:#c94a5f;
+  --arcana:#7a45c9;--alteia:#2f9a45;
+  --warn:#b01330;--tipc:#1c8f97;--tok:#a8791b;
+  --shadow:0 1px 2px rgba(40,28,50,.08),0 8px 24px rgba(40,28,50,.06);
+  --chip:#efe7da;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0c0a11;--bg2:#0f0c15;--panel:#171220;--panel2:#1d1729;
+  --ink:#ece7f2;--ink-soft:#a89fb8;--ink-faint:#6f6683;
+  --line:#2a2338;--line-strong:#3a3150;
+  --blood:#e8324f;--blood-soft:#ff6d82;
+  --arcana:#a877ff;--alteia:#79e089;
+  --warn:#e8324f;--tipc:#68d3d3;--tok:#e0a92a;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 40px rgba(0,0,0,.45);
+  --chip:#221b30;
+}}
+:root[data-theme="dark"]{
+  --bg:#0c0a11;--bg2:#0f0c15;--panel:#171220;--panel2:#1d1729;
+  --ink:#ece7f2;--ink-soft:#a89fb8;--ink-faint:#6f6683;
+  --line:#2a2338;--line-strong:#3a3150;
+  --blood:#e8324f;--blood-soft:#ff6d82;
+  --arcana:#a877ff;--alteia:#79e089;
+  --warn:#e8324f;--tipc:#68d3d3;--tok:#e0a92a;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 40px rgba(0,0,0,.45);
+  --chip:#221b30;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Spectral,Georgia,serif;line-height:1.55;
+  background-image:radial-gradient(120% 70% at 50% -10%,color-mix(in srgb,var(--blood) 8%,transparent),transparent 55%);background-attachment:fixed}
+.wrap{max-width:1080px;margin:0 auto;padding:clamp(18px,4vw,40px) clamp(14px,3vw,28px) 80px}
+h1,h2,h3{font-family:Cinzel,serif;font-weight:600;letter-spacing:.01em}
+.eyebrow{font-family:"IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.22em;font-size:11px;color:var(--ink-faint)}
+.mono{font-family:"IBM Plex Mono",monospace}
+a{color:var(--blood-soft)}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:20px}
+.title h1{font-size:clamp(28px,5vw,46px);margin:.12em 0 .1em;line-height:1;color:var(--ink);text-shadow:0 0 24px color-mix(in srgb,var(--blood) 22%,transparent)}
+.title h1 .accent{color:var(--blood)}
+.title .sub{color:var(--ink-soft);font-style:italic;font-size:15px;max-width:64ch}
+button:focus-visible,input:focus-visible,[data-boss]:focus-visible{outline:2px solid var(--blood);outline-offset:2px;border-radius:8px}
+
+.note{display:flex;gap:12px;align-items:flex-start;background:color-mix(in srgb,var(--alteia) 9%,var(--panel));border:1px solid color-mix(in srgb,var(--alteia) 35%,var(--line));border-radius:13px;padding:13px 16px;margin-bottom:22px}
+.note .ic{font-size:20px;line-height:1.2;flex:none}
+.note p{margin:0;font-size:14px;color:var(--ink-soft)}
+.note b{color:var(--ink);font-weight:600}
+.note a{color:var(--alteia)}
+.note .mono{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink)}
+.warnnote{background:color-mix(in srgb,var(--blood) 9%,var(--panel));border-color:color-mix(in srgb,var(--blood) 35%,var(--line))}
+.credits-note{background:color-mix(in srgb,var(--arcana) 7%,var(--panel))}
+
+.searchbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.qwrap{position:relative;flex:1;min-width:200px;max-width:380px;display:flex}
+.qwrap::before{content:"\2315";position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--ink-faint);font-size:16px}
+#q{flex:1;font-family:Spectral,serif;font-size:14px;background:var(--panel2);border:1px solid var(--line-strong);border-radius:10px;padding:9px 12px 9px 32px;color:var(--ink)}
+.count{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-faint);letter-spacing:.04em}
+
+.realm{margin-bottom:28px}
+.realmh{display:flex;align-items:center;gap:10px;margin:0 0 12px}
+.realmh h2{font-size:15px;margin:0;letter-spacing:.05em;color:var(--ac)}
+.realmh .rl{flex:1;height:1px;background:var(--line)}
+.realmh .rc{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;color:var(--ink-faint)}
+.bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.bcard{text-align:left;display:flex;flex-direction:column;gap:8px;background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--ac);border-radius:14px;padding:15px 16px 14px;cursor:pointer;box-shadow:var(--shadow);transition:transform .14s,border-color .14s;color:inherit;font:inherit}
+.bcard:hover{transform:translateY(-2px);border-color:var(--ac)}
+.bcard .bh{display:flex;align-items:center;gap:10px}
+.bcard .bico{font-size:22px;line-height:1;flex:none}
+.bcard .bnm{font-family:Cinzel,serif;font-weight:700;font-size:16.5px;color:var(--ink);line-height:1.2}
+.bcard:hover .bnm{color:var(--ac)}
+.bcard .bsum{margin:0;font-size:13px;color:var(--ink-soft);flex:1}
+.bcard .bmeta{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.pill{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;border-radius:5px;padding:2px 7px;border:1px solid var(--line-strong);color:var(--ink-faint)}
+.pill.r{color:#fff;background:var(--ac);border-color:var(--ac)}
+.bcard .go{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.06em;color:var(--ac)}
+.empty{text-align:center;padding:44px 20px;color:var(--ink-faint);font-style:italic;border:1px dashed var(--line-strong);border-radius:16px}
+
+dialog.gm{width:min(880px,94vw);max-height:90vh;padding:0;border:1px solid var(--line);border-top:3px solid var(--ac);border-radius:16px;background:var(--panel);color:var(--ink);box-shadow:0 20px 70px rgba(0,0,0,.45);overflow:hidden;flex-direction:column}
+dialog.gm[open]{display:flex}
+dialog.gm::backdrop{background:rgba(10,7,16,.62);backdrop-filter:blur(3px)}
+.gmh{display:flex;align-items:flex-start;gap:13px;padding:16px 18px;border-bottom:1px solid var(--line);background:var(--panel2);flex:none}
+.gmh .bico{font-size:30px;line-height:1;flex:none}
+.gmh h2{font-family:Cinzel,serif;font-weight:700;font-size:clamp(19px,3vw,26px);margin:0;color:var(--ink)}
+.gmh .bsum{margin:6px 0 0;font-size:13.5px;color:var(--ink-soft);font-style:italic;max-width:70ch}
+.gmh .bmeta{margin-top:7px;display:flex;gap:6px;flex-wrap:wrap}
+.xbtn{flex:none;margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:15px;line-height:1;color:var(--ink-soft);background:var(--panel);border:1px solid var(--line-strong);border-radius:999px;width:30px;height:30px;cursor:pointer}
+.xbtn:hover{color:var(--ink);border-color:var(--blood-soft)}
+.jump{flex:none;display:flex;gap:6px;overflow-x:auto;padding:9px 18px;border-bottom:1px solid var(--line);background:var(--panel)}
+.jump button{flex:none;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.04em;color:var(--ink-soft);background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:4px 10px;cursor:pointer;white-space:nowrap}
+.jump button:hover{color:var(--ac);border-color:var(--ac)}
+.gmb{flex:1;min-height:0;overflow-y:auto;padding:0 18px 20px;scroll-behavior:smooth}
+.gs{padding:16px 0;border-bottom:1px solid var(--line)}
+.gs:last-child{border-bottom:0}
+.gsh{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:9px}
+.gsh h3{font-family:Cinzel,serif;font-size:17px;margin:0;color:var(--ink)}
+.stag{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--ac);border-radius:5px;padding:2px 7px}
+.gs p{margin:0 0 9px;font-size:14px;color:var(--ink-soft)}
+.gs p b,.gs li b{color:var(--ink);font-weight:600}
+.bl,.bn{margin:0 0 10px;padding-left:20px;font-size:13.5px;color:var(--ink-soft)}
+.bl li,.bn li{margin-bottom:4px}
+.bn li{padding-left:3px}
+.bn li::marker{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-faint)}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:11px}
+.chips span{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.03em;color:var(--ink-soft);background:var(--chip);border:1px solid var(--line);border-radius:6px;padding:2px 7px}
+.cal{border-radius:10px;padding:10px 13px;margin:0 0 11px;font-size:13.5px;display:flex;gap:9px;align-items:flex-start}
+.cal .cl{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;flex:none;padding-top:3px}
+.cal div{flex:1}
+.cal.tip{background:color-mix(in srgb,var(--tipc) 10%,var(--panel2));border:1px solid color-mix(in srgb,var(--tipc) 34%,var(--line));color:var(--ink-soft)}
+.cal.tip .cl{color:var(--tipc)}
+.cal.warn{background:color-mix(in srgb,var(--warn) 10%,var(--panel2));border:1px solid color-mix(in srgb,var(--warn) 34%,var(--line));color:var(--ink-soft)}
+.cal.warn .cl{color:var(--warn)}
+.ab{background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--ac);border-radius:10px;padding:10px 13px;margin-bottom:9px}
+.abh{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:3px}
+.abh .abn{font-family:Cinzel,serif;font-weight:600;font-size:14.5px;color:var(--ac)}
+.abh .cd{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.06em;color:var(--ink-faint);border:1px solid var(--line-strong);border-radius:5px;padding:1px 6px}
+.ab p{margin:0;font-size:13.5px}
+.ab ul{margin:6px 0 0;padding-left:19px;font-size:13px;color:var(--ink-soft)}
+.ab ul li{margin-bottom:3px}
+.gfig{margin:0 0 11px}
+.gfig img{display:block;max-width:100%;height:auto;border:1px solid var(--line);border-radius:9px;background:var(--panel2)}
+.gfig figcaption{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin-top:5px}
+.ab .gfig{margin:8px 0 0}
+.gfig img{cursor:zoom-in}
+dialog.lb{max-width:none;max-height:none;width:100vw;height:100dvh;padding:0;margin:0;border:0;background:transparent;overflow:hidden}
+dialog.lb[open]{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px}
+dialog.lb::backdrop{background:rgba(8,5,12,.88);backdrop-filter:blur(4px)}
+dialog.lb img{max-width:94vw;max-height:84dvh;border-radius:10px;border:1px solid var(--line-strong);background:var(--panel2);cursor:zoom-out;box-shadow:0 24px 80px rgba(0,0,0,.6)}
+dialog.lb .lbcap{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#cfc7db;text-align:center;max-width:92vw}
+dialog.lb .lbhint{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;color:#8e85a0}
+.loot{margin:14px 0 0;border:1px solid var(--line);border-radius:11px;background:var(--panel2);overflow:hidden}
+.loot>summary{cursor:pointer;list-style:none;padding:10px 13px;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint)}
+.loot>summary::-webkit-details-marker{display:none}
+.loot>summary::before{content:"B8 ";color:var(--ac)}
+.loot[open]>summary::before{content:"BE "}
+.loot>summary:hover{color:var(--ink)}
+.ltab{width:100%;border-collapse:collapse;font-size:13px}
+.ltab th{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);text-align:left;font-weight:400;padding:6px 13px;border-top:1px solid var(--line)}
+.ltab td{padding:6px 13px;border-top:1px solid var(--line);color:var(--ink-soft)}
+.ltab td.nm{color:var(--ink)}
+.ltab td.ch{font-family:"IBM Plex Mono",monospace;text-align:right;white-space:nowrap;color:var(--ac)}
+.ltab .gp{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line-strong);border-radius:5px;padding:1px 6px;color:var(--ink-faint)}
+.ltab tr.tk td{background:color-mix(in srgb,var(--tok) 8%,transparent)}
+.tkic{width:18px;height:18px;border-radius:4px;vertical-align:-4px;margin-right:7px;border:1px solid var(--line)}
+.gp.tkp{color:var(--tok);border-color:color-mix(in srgb,var(--tok) 50%,var(--line-strong))}
+.ltab tr.tk td.ch{color:var(--tok)}
+.lootnote{margin:0;padding:8px 13px 11px;font-size:11.5px;color:var(--ink-faint);font-style:italic}
+.srcnote{margin:11px 0 0;font-size:12px;color:var(--ink-faint);line-height:1.55;border-top:1px solid var(--line);padding-top:11px}
+.srcnote a{color:var(--ac)}
+.srcnote .mono{font-family:"IBM Plex Mono",monospace;color:var(--ink-soft)}
+.credit + .srcnote{border-top:0;padding-top:4px}
+.credit{margin:14px 0 0;font-size:12px;color:var(--ink-faint);font-style:italic;border-top:1px solid var(--line);padding-top:11px}
+footer{margin-top:34px;border-top:1px solid var(--line);padding-top:18px;font-size:13px;color:var(--ink-faint);font-style:italic}
+footer .mono{font-style:normal;color:var(--ink-soft)}
+
+.topnav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:4px;background:color-mix(in srgb,var(--panel) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 clamp(12px,3vw,22px);height:46px;flex-wrap:nowrap;overflow-x:auto}
+.topnav .brand{font-family:Cinzel,serif;font-weight:700;font-size:15px;color:var(--ink);text-decoration:none;margin-right:8px;white-space:nowrap}
+.topnav .brand .a{color:var(--blood)}
+.topnav a.nl{font-family:"IBM Plex Mono",monospace;font-size:12.5px;letter-spacing:.02em;color:var(--ink-soft);text-decoration:none;padding:6px 11px;border-radius:8px;white-space:nowrap}
+.topnav a.nl:hover{color:var(--ink);background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.topnav a.nl[aria-current=page]{color:var(--blood);background:color-mix(in srgb,var(--blood) 12%,transparent)}
+.topnav .navsp{flex:1;min-width:6px}
+.topnav .navtg{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink-soft);background:none;border:1px solid var(--line-strong);border-radius:999px;padding:4px 10px;cursor:pointer;flex:none}
+.topnav .navtg:hover{color:var(--ink);border-color:var(--blood-soft)}
+.topnav a.nl:focus-visible,.topnav .navtg:focus-visible,.topnav .brand:focus-visible{outline:2px solid var(--blood);outline-offset:2px;border-radius:6px}
+@media(max-width:560px){.topnav .brand .full{display:none}.topnav a.nl{padding:6px 8px;font-size:11.5px}}
+*{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--ink-faint) 55%,transparent) transparent}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--ink-faint) 50%,transparent);border:3px solid transparent;background-clip:content-box;border-radius:999px}
+::-webkit-scrollbar-thumb:hover{background:color-mix(in srgb,var(--ink-soft) 70%,transparent);border:3px solid transparent;background-clip:content-box}
+::-webkit-scrollbar-corner{background:transparent}
+.ctab{width:100%;border-collapse:collapse;font-size:14px;margin:0}
+.ctab th{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);text-align:left;font-weight:400;padding:8px 14px;border-bottom:1px solid var(--line)}
+.ctab td{padding:9px 14px;border-top:1px solid var(--line);color:var(--ink-soft);vertical-align:top}
+.ctab td.nm a{color:var(--ink);text-decoration:none;font-weight:500}
+.ctab td.nm a:hover{color:var(--blood)}
+.ctab td.who{font-family:"IBM Plex Mono",monospace;color:var(--ac,var(--blood-soft))}
+.ctab td.dt{font-family:"IBM Plex Mono",monospace;white-space:nowrap;color:var(--ink-faint);text-align:right}
+.ctab .bi{margin-right:8px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:26px}
+.card > h2{margin:0;font-size:15px;padding:13px 16px;border-bottom:1px solid var(--line);color:var(--ink);display:flex;align-items:center;gap:9px}
+.card > h2 .rp{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line-strong);border-radius:6px;padding:2px 7px;color:var(--ink-faint);font-weight:400}
+.cardb{padding:14px 16px}
+.cardb p{margin:0 0 10px;font-size:14px;color:var(--ink-soft)}
+.cardb p:last-child{margin-bottom:0}
+.wcard{border-left:3px solid var(--arcana)}
+.wlist{list-style:none;margin:0;padding:0}
+.wlist li{border-top:1px solid var(--line);padding:11px 16px;font-size:14px;color:var(--ink-soft)}
+.wlist li:first-child{border-top:0}
+.wlist .bn{color:var(--ink);font-family:Cinzel,serif;font-size:14px;display:block;margin-bottom:3px}
+.wlist .bn a{color:inherit;text-decoration:none}
+.wlist .bn a:hover{color:var(--blood)}
+.people{display:flex;flex-wrap:wrap;gap:7px;margin:2px 0 0}
+.who-chip{font-family:"IBM Plex Mono",monospace;font-size:12px;background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:3px 10px;color:var(--ink)}
+.who-chip .rl{color:var(--ink-faint)}
+.arcanaC{--ac:var(--arcana)}
+.alteiaC{--ac:var(--alteia)}
+@media(max-width:600px){.ctab td.dt{text-align:left}.ctab th:nth-child(3),.ctab td.dt{font-size:11.5px}}
+</style>
+<nav class="topnav"><a class="brand" href="index.html"><span class="a">&#9876;</span> <span class="full">TWRPG</span></a><a class="nl" href="index.html">Home</a><a class="nl" href="builder.html">Build Maker</a><a class="nl" href="codex.html">Item Codex</a><a class="nl" href="boss.html">Boss Drops</a><a class="nl" href="guides.html">Boss Guides</a><a class="nl" href="characters.html">Characters</a><a class="nl" href="credits.html" aria-current="page">Credits</a><span class="navsp"></span><span class="ai-badge" title="This site was built with AI" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-faint);white-space:nowrap;margin-right:10px">&#129302; Built with AI</span><button class="navtg" data-navtheme aria-label="Toggle theme">&#9680;</button></nav>
+
+<div class="wrap">
+<header>
+  <div class="title">
+    <div class="eyebrow">TWRPG v0.76a &middot; Credits</div>
+    <h1><span class="accent">Credits</span></h1>
+    <div class="sub">None of the boss knowledge on this site is ours. It was written by players, posted in the TWRPG Discord, and copied here with the names attached. This page lists who wrote what.</div>
+  </div>
+</header>
+
+<div class="note warnnote">
+  <span class="ic">&#9888;&#65039;</span>
+  <p><b>Guides may be outdated.</b> Post dates run from 2020 to 2025 and the map keeps changing &mdash; mechanics, numbers and timings in these writeups can be wrong for <span class="mono">v0.76a</span>. Always check the <b>#guides</b> channel on the <a href="https://discord.gg/twrpg" target="_blank" rel="noopener">TWRPG Discord</a> for newer posts.</p>
+</div>
+
+<div class="card">
+  <h2>Where the guides come from</h2>
+  <div class="cardb">
+    <p>Every boss writeup on <a href="guides.html">Boss Guides</a> was taken from the <b>#guides</b> channel on the <a href="https://discord.gg/twrpg" target="_blank" rel="noopener">TWRPG Discord</a> &mdash; <span class="mono">discord.gg/twrpg</span>. We reformatted them for the web; the mechanics, the callouts and the screenshots are the community's work.</p>
+    <p>If one of these is yours and you want it corrected, credited differently, or taken down, say so in the Discord.</p>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Guide posters <span class="rp">Discord</span></h2>
+  <ul class="wlist">
+<li><span class="bn">uhuahaihiuhu9989</span>Gaia, the Earth Goddess</li>
+<li><span class="bn">pikuuhaku</span>Duke Lazarus, Arcane Construct, Styrix</li>
+<li><span class="bn">ntmelly</span>Kamael, the Lightbringer</li>
+<li><span class="bn">notlch</span>Valtora, Ifrit, Nereid, Death Fiend, Underlord Agareth</li>
+  </ul>
+</div>
+
+<div class="card arcanaC"><h2>Arcana bosses <span class="rp">5 guides</span></h2><table class="ctab"><thead><tr><th>Boss</th><th>Posted by</th><th>Guide date</th></tr></thead><tbody>
+<tr><td class="nm"><span class="bi">🩸</span><a href="guides.html#b=lazarus">Duke Lazarus</a></td><td class="who">pikuuhaku</td><td class="dt">26 Jun 2025</td></tr>
+<tr><td class="nm"><span class="bi">🌿</span><a href="guides.html#b=gaia">Gaia, the Earth Goddess</a></td><td class="who">uhuahaihiuhu9989</td><td class="dt">20 Aug 2024</td></tr>
+<tr><td class="nm"><span class="bi">⚙️</span><a href="guides.html#b=construct">Arcane Construct</a></td><td class="who">pikuuhaku</td><td class="dt">26 Jun 2025</td></tr>
+<tr><td class="nm"><span class="bi">⚔️</span><a href="guides.html#b=kamael">Kamael, the Lightbringer</a></td><td class="who">ntmelly</td><td class="dt">23 Jul 2025</td></tr>
+<tr><td class="nm"><span class="bi">🖤</span><a href="guides.html#b=styrix">Styrix, the Harvester of Souls</a></td><td class="who">pikuuhaku</td><td class="dt">26 Apr 2024</td></tr>
+</tbody></table></div>
+<div class="card alteiaC"><h2>Alteia bosses <span class="rp">5 guides</span></h2><table class="ctab"><thead><tr><th>Boss</th><th>Posted by</th><th>Guide date</th></tr></thead><tbody>
+<tr><td class="nm"><span class="bi">👹</span><a href="guides.html#b=agareth">Underlord Agareth</a></td><td class="who">notlch</td><td class="dt">28 May 2020</td></tr>
+<tr><td class="nm"><span class="bi">💀</span><a href="guides.html#b=deathfiend">Death Fiend</a></td><td class="who">notlch</td><td class="dt">13 Oct 2020</td></tr>
+<tr><td class="nm"><span class="bi">🌊</span><a href="guides.html#b=nereid">Nereid</a></td><td class="who">notlch</td><td class="dt">13 Oct 2020</td></tr>
+<tr><td class="nm"><span class="bi">🔥</span><a href="guides.html#b=ifrit">Ifrit</a></td><td class="who">notlch</td><td class="dt">13 Oct 2020</td></tr>
+<tr><td class="nm"><span class="bi">⚡</span><a href="guides.html#b=valtora">Valtora</a></td><td class="who">notlch</td><td class="dt">13 Oct 2020</td></tr>
+</tbody></table></div>
+<div class="card"><h2>Original writeup credits <span class="rp">from the guides themselves</span></h2><ul class="wlist">
+<li><span class="bn"><a href="guides.html#b=kamael">Kamael, the Lightbringer</a></span>Community documentation, with portions translated from the Chinese community guide (thanks to Sunflower/穹妹, the boss Pi team, and Cuan). Version 0.72e2, edited on 0.72f3.</li>
+<li><span class="bn"><a href="guides.html#b=styrix">Styrix, the Harvester of Souls</a></span>Guide by David Dumpling and Darsinki, following version 0.66k.</li>
+<li><span class="bn"><a href="guides.html#b=agareth">Underlord Agareth</a></span>Team uwu — first Agareth kill in the English community. Illusive (owner &amp; editor), ItsMiiHerpADerp (editor), Lch (gifs &amp; editor).</li>
+<li><span class="bn"><a href="guides.html#b=deathfiend">Death Fiend</a></span>AstralNova (original post) and group, FlyingCow, Lissai. Lch (updates &amp; gifs), Illusive (editor).</li>
+<li><span class="bn"><a href="guides.html#b=nereid">Nereid</a></span>Team uwu — first Nereid kill in the English community. Lissai (owner &amp; editor), ItsMiiHerpADerp, Weirman, Lch (gifs &amp; editor).</li>
+<li><span class="bn"><a href="guides.html#b=ifrit">Ifrit</a></span>Team uwu. Illusive (owner &amp; editor), Lch (gifs &amp; editor), Rock Lee (mana bar).</li>
+<li><span class="bn"><a href="guides.html#b=valtora">Valtora</a></span>AstralNova (original post) and group, FlyingCow, Lissai. Lch (updates &amp; gifs).</li>
+</ul></div>
+
+<div class="card">
+  <h2>The rest of the site</h2>
+  <div class="cardb">
+    <p>Item data, drop tables and recipes in the <a href="codex.html">Item Codex</a>, <a href="boss.html">Boss Drops</a> and <a href="builder.html">Build Maker</a> are pulled from the TWRPG map data for <span class="mono">v0.76a</span>. Icons are the game's own.</p>
+    <p>TWRPG (The Warcraft RPG) itself is the work of its map developers and the community around it &mdash; this site is an unofficial fan tool. &#129302; Built with AI.</p>
+  </div>
+</div>
+
+<footer>Credits page for the TWRPG toolkit &mdash; guides from the <b>#guides</b> channel on the <a href="https://discord.gg/twrpg" target="_blank" rel="noopener" style="color:var(--alteia)">TWRPG Discord</a>. All writeups belong to their authors. &#129302; Built with AI.</footer>
+</div>
+
+<script>
+document.querySelector('[data-navtheme]').addEventListener('click',()=>{
+  const c=document.documentElement.getAttribute('data-theme');
+  const d=c?c==='dark':matchMedia('(prefers-color-scheme:dark)').matches;
+  document.documentElement.setAttribute('data-theme',d?'light':'dark');
+});
+</script>
