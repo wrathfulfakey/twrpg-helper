@@ -321,6 +321,10 @@ function leafTally(code,mult,acc){const n=N[code];
   else if(n){acc[code]=(acc[code]||0)+mult;}
   return acc;}
 const bossChip=b=>`<span class="bchip" style="--bc:var(${BVAR[b.boss]})"><i></i><b>${b.boss}</b><span class="c">×${b.count}</span></span>`;
+const GORD=['Deltirama','Neptinos','Gnosis','Alteia','Arcana'];
+const grank=d=>{const i=GORD.indexOf(d);return i<0?GORD.length:i;};
+const byGrade=arr=>arr.slice().sort((a,b)=>{const na=N[a.code]||{},nb=N[b.code]||{};
+  return (a.craft?0:1)-(b.craft?0:1)||grank(na.drop)-grank(nb.drop)||(b.qty||1)-(a.qty||1)||String(a.name).localeCompare(String(b.name));});
 function comp(c){
   const cn=N[c.code];
   const col=c.boss?`var(${BVAR[c.boss]})`:(c.craft?'var(--arcana)':'var(--ink-faint)');
@@ -365,19 +369,17 @@ function renderModal(){
   if(eff)h+=`<div class="msec"><div class="h">Effects</div>${eff}</div>`;
   else{const fx=fx2(n);if(fx.length)h+=`<div class="msec"><div class="h">Effects</div><div class="fx">${fx.map(f=>`<span>${esc(f)}</span>`).join('')}</div></div>`;}
   {const _c=stack[stack.length-1];const _sp=(typeof SPEC!=="undefined")&&SPEC[_c];if(_sp&&_sp.length)h+=`<div class="msec"><div class="h">Hero specialty</div>${_sp.map(s=>`<div class="msrc" style="--bc:var(--arcana)">Specialty for <b>${esc(s.hero)}</b> — <b style="color:var(--ink)">${esc(s.spec)}</b>: ${esc(s.desc)}</div>`).join('')}</div>`;}
-  const GORD=['Deltirama','Neptinos','Gnosis','Alteia','Arcana'];
-  const grank=c=>{const i=GORD.indexOf(N[c].drop);return i<0?GORD.length:i;};
   const tally=Object.entries(leafTally(stack[stack.length-1],1,{}))
-    .sort((a,b)=>grank(a[0])-grank(b[0])||b[1]-a[1]||N[a[0]].name.localeCompare(N[b[0]].name));
+    .sort((a,b)=>grank(N[a[0]].drop)-grank(N[b[0]].drop)||b[1]-a[1]||N[a[0]].name.localeCompare(N[b[0]].name));
   const totQty=tally.reduce((a,t)=>a+t[1],0);
   let colL='',colR='';
   if(tally.length>1)colL+=`<div class="msec"><details class="tally"${matchMedia('(min-width:761px)').matches?' open':''}><summary>Total materials needed — ${totQty} drop${totQty===1?'':'s'} across ${tally.length} material${tally.length===1?'':'s'}</summary>${tally.map(([mc,q])=>{const m=N[mc];const bc=(m.drop&&BVAR[m.drop])||'--ink-faint';
     return `<button class="comp" data-code="${mc}" style="--bc:var(${bc})">${icon(m.ic,m.name,'sm')}<i style="background:var(${bc})"></i><span class="cn">${esc(m.name)}</span><span class="q">×${q}</span>${m.drop?`<span class="tag" style="color:var(${bc});border-color:color-mix(in srgb,var(${bc}) 45%,var(--line))">${esc(m.drop)}</span>`:''}</button>`;}).join('')}</details></div>`;
   if(n.alt&&n.alt.length)colR+=`<div class="msec"><div class="h">Also obtainable — exchange / purchase</div>${n.alt.map(c=>`<div class="comp leaf">${icon(null,c.name,'sm')}<i style="background:var(--ink-faint)"></i><span class="cn">${esc(c.name)}</span><span class="q">${c.qty>1?'×'+c.qty:''}</span><span class="tag">exchange</span></div>`).join('')}</div>`;
-  if(n.recipe&&n.recipe.length)colR+=`<div class="msec"><div class="h">Recipe — click a craftable part to expand</div>${n.recipe.map(comp).join('')}</div>`;
+  if(n.recipe&&n.recipe.length)colR+=`<div class="msec"><div class="h">Recipe — click a craftable part to expand</div>${byGrade(n.recipe).map(comp).join('')}</div>`;
   else if(!n.mat&&!(n.alt&&n.alt.length))colR+=`<div class="msec"><div class="h">Recipe</div><div class="comp leaf"><i style="background:var(--ink-faint)"></i><span class="cn">No recipe — acquired directly.</span></div></div>`;
   h+=colL&&colR?`<div class="cols"><div>${colL}</div><div>${colR}</div></div>`:(colL+colR);
-  if(n.usedIn&&n.usedIn.length)h+=`<div class="msec"><div class="h">Used to craft — click to open</div>${n.usedIn.map(u=>`<button class="comp craft" data-code="${u.code}">${icon(N[u.code]&&N[u.code].ic,u.name,'sm')}<i style="background:var(--arcana)"></i><span class="cn">${esc(u.name)}</span><span class="q"></span><span class="tag">recipe</span></button>`).join('')}</div>`;
+  if(n.usedIn&&n.usedIn.length)h+=`<div class="msec"><div class="h">Used to craft — click to open</div>${n.usedIn.slice().sort((x,y)=>x.name.localeCompare(y.name)).map(u=>`<button class="comp craft" data-code="${u.code}">${icon(N[u.code]&&N[u.code].ic,u.name,'sm')}<i style="background:var(--arcana)"></i><span class="cn">${esc(u.name)}</span><span class="q"></span><span class="tag">recipe</span></button>`).join('')}</div>`;
   if(n.bosses&&n.bosses.length)h+=`<div class="msec"><div class="h">Full craft tree — materials by grade</div><div class="bosses">${n.bosses.map(bossChip).join('')}</div></div>`;
   mbody.innerHTML=h;
   crumbs.innerHTML=stack.map((c,i)=>{const last=i===stack.length-1;return `<button class="crumb${last?' cur':''}" data-idx="${i}">${esc(N[c].name)}</button>`+(last?'':`<span class="crumbsep">›</span>`);}).join('');
