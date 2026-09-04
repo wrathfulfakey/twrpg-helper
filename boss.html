@@ -1,4 +1,5 @@
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>TWRPG Boss Drops</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -102,7 +103,8 @@ footer .mono{font-style:normal;color:var(--ink-soft)}
 .mclose{flex:none;background:none;border:1px solid var(--line-strong);color:var(--ink-soft);border-radius:8px;width:28px;height:28px;cursor:pointer;font-size:15px}
 .mclose:hover{color:var(--ink);border-color:var(--blood-soft)}
 .mbody{padding:18px 18px 20px;max-height:70vh;overflow:auto}
-.mhead{display:flex;align-items:flex-start;gap:11px;justify-content:space-between}
+.mhead{display:flex;align-items:flex-start;gap:11px;justify-content:flex-start}
+.mhead .gpill{margin-left:auto}
 .mhead .mn{font-family:Cinzel,serif;font-weight:700;font-size:22px;line-height:1.1;color:var(--ink)}
 .gpill{flex:none;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:999px;color:var(--gc);border:1px solid var(--gc);white-space:nowrap;margin-top:4px}
 .mmeta{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-faint);margin-top:5px;text-transform:uppercase;letter-spacing:.08em}
@@ -137,6 +139,13 @@ button.comp{cursor:pointer} button.comp:hover .cn{color:var(--blood);text-decora
 .topnav a.nl:focus-visible,.topnav .navtg:focus-visible,.topnav .brand:focus-visible{outline:2px solid var(--blood);outline-offset:2px;border-radius:6px}
 @media(max-width:560px){.topnav .brand .full{display:none}.topnav a.nl{padding:6px 8px;font-size:11.5px}}
 .hbtns{display:none}
+/* scrollbars — themed */
+*{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--ink-faint) 55%,transparent) transparent}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--ink-faint) 50%,transparent);border:3px solid transparent;background-clip:content-box;border-radius:999px}
+::-webkit-scrollbar-thumb:hover{background:color-mix(in srgb,var(--ink-soft) 70%,transparent);border:3px solid transparent;background-clip:content-box}
+::-webkit-scrollbar-corner{background:transparent}
 </style>
 
 <nav class="topnav"><a class="brand" href="index.html"><span class="a">⚔</span> <span class="full">TWRPG</span></a><a class="nl" href="index.html">Home</a><a class="nl" href="builder.html">Build Maker</a><a class="nl" href="codex.html">Item Codex</a><a class="nl" href="boss.html" aria-current="page">Boss Drops</a><a class="nl" href="characters.html">Characters</a><span class="navsp"></span><span class="ai-badge" title="This site was built with AI" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-faint);white-space:nowrap;margin-right:10px">🤖 Built with AI</span><button class="navtg" data-navtheme aria-label="Toggle theme">◐</button></nav>

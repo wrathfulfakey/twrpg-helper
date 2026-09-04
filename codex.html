@@ -1,4 +1,5 @@
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>TWRPG Item Codex</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -111,15 +112,20 @@ footer .mono{font-style:normal;color:var(--ink-soft)}
 /* modal (shared) */
 .overlay{position:fixed;inset:0;background:var(--overlay);backdrop-filter:blur(3px);display:flex;align-items:flex-start;justify-content:center;padding:6vh 16px 16px;z-index:50;overflow:auto}
 .overlay[hidden]{display:none}
-.modal{background:var(--panel);border:1px solid var(--line-strong);border-radius:16px;max-width:460px;width:100%;box-shadow:0 20px 70px rgba(0,0,0,.5);overflow:hidden}
+.modal{background:var(--panel);border:1px solid var(--line-strong);border-radius:16px;max-width:880px;width:100%;box-shadow:0 20px 70px rgba(0,0,0,.5);overflow:hidden}
 .mtop{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--panel2)}
 .crumbs{display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-faint);flex:1;min-width:0}
 .crumb{background:none;border:0;color:var(--ink-faint);cursor:pointer;font:inherit;padding:2px 3px}
 .crumb:hover{color:var(--blood)} .crumb.cur{color:var(--ink)} .crumbsep{opacity:.5}
 .mclose{flex:none;background:none;border:1px solid var(--line-strong);color:var(--ink-soft);border-radius:8px;width:28px;height:28px;cursor:pointer;font-size:15px;line-height:1}
 .mclose:hover{color:var(--ink);border-color:var(--blood-soft)}
-.mbody{padding:18px 18px 20px;max-height:70vh;overflow:auto}
-.mhead{display:flex;align-items:flex-start;gap:10px;justify-content:space-between}
+.mbody{padding:18px 18px 20px;max-height:74vh;overflow:auto}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 22px;align-items:start}
+.cols>div{min-width:0}
+.cols .msec:first-child{margin-top:16px}
+@media(max-width:760px){.cols{grid-template-columns:minmax(0,1fr)}}
+.mhead{display:flex;align-items:flex-start;gap:10px;justify-content:flex-start}
+.mhead .gpill{margin-left:auto}
 .mhead .mn{font-family:Cinzel,serif;font-weight:700;font-size:22px;line-height:1.1;color:var(--ink);text-wrap:balance}
 .gpill{flex:none;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:999px;color:var(--gc);border:1px solid var(--gc);white-space:nowrap;margin-top:4px}
 .mmeta{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-faint);margin-top:5px;text-transform:uppercase;letter-spacing:.08em}
@@ -173,6 +179,13 @@ button.comp::after{content:"›";color:var(--ink-faint);font-family:"IBM Plex Mo
 .topnav a.nl:focus-visible,.topnav .navtg:focus-visible,.topnav .brand:focus-visible{outline:2px solid var(--blood);outline-offset:2px;border-radius:6px}
 @media(max-width:560px){.topnav .brand .full{display:none}.topnav a.nl{padding:6px 8px;font-size:11.5px}}
 .hbtns{display:none}
+/* scrollbars — themed */
+*{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--ink-faint) 55%,transparent) transparent}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--ink-faint) 50%,transparent);border:3px solid transparent;background-clip:content-box;border-radius:999px}
+::-webkit-scrollbar-thumb:hover{background:color-mix(in srgb,var(--ink-soft) 70%,transparent);border:3px solid transparent;background-clip:content-box}
+::-webkit-scrollbar-corner{background:transparent}
 </style>
 
 <nav class="topnav"><a class="brand" href="index.html"><span class="a">⚔</span> <span class="full">TWRPG</span></a><a class="nl" href="index.html">Home</a><a class="nl" href="builder.html">Build Maker</a><a class="nl" href="codex.html" aria-current="page">Item Codex</a><a class="nl" href="boss.html">Boss Drops</a><a class="nl" href="characters.html">Characters</a><span class="navsp"></span><span class="ai-badge" title="This site was built with AI" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-faint);white-space:nowrap;margin-right:10px">🤖 Built with AI</span><button class="navtg" data-navtheme aria-label="Toggle theme">◐</button></nav>
@@ -355,11 +368,13 @@ function renderModal(){
   const tally=Object.entries(leafTally(stack[stack.length-1],1,{}))
     .sort((a,b)=>b[1]-a[1]||N[a[0]].name.localeCompare(N[b[0]].name));
   const totQty=tally.reduce((a,t)=>a+t[1],0);
-  if(tally.length>1)h+=`<div class="msec"><details class="tally" open><summary>Total materials needed — ${totQty} drop${totQty===1?'':'s'} across ${tally.length} material${tally.length===1?'':'s'}</summary>${tally.map(([mc,q])=>{const m=N[mc];const bc=(m.drop&&BVAR[m.drop])||'--ink-faint';
+  let colL='',colR='';
+  if(tally.length>1)colL+=`<div class="msec"><details class="tally"${matchMedia('(min-width:761px)').matches?' open':''}><summary>Total materials needed — ${totQty} drop${totQty===1?'':'s'} across ${tally.length} material${tally.length===1?'':'s'}</summary>${tally.map(([mc,q])=>{const m=N[mc];const bc=(m.drop&&BVAR[m.drop])||'--ink-faint';
     return `<button class="comp" data-code="${mc}" style="--bc:var(${bc})">${icon(m.ic,m.name,'sm')}<i style="background:var(${bc})"></i><span class="cn">${esc(m.name)}</span><span class="q">×${q}</span>${m.drop?`<span class="tag" style="color:var(${bc});border-color:color-mix(in srgb,var(${bc}) 45%,var(--line))">${esc(m.drop)}</span>`:''}</button>`;}).join('')}</details></div>`;
-  if(n.alt&&n.alt.length)h+=`<div class="msec"><div class="h">Also obtainable — exchange / purchase</div>${n.alt.map(c=>`<div class="comp leaf">${icon(null,c.name,'sm')}<i style="background:var(--ink-faint)"></i><span class="cn">${esc(c.name)}</span><span class="q">${c.qty>1?'×'+c.qty:''}</span><span class="tag">exchange</span></div>`).join('')}</div>`;
-  if(n.recipe&&n.recipe.length)h+=`<div class="msec"><div class="h">Recipe — click a craftable part to expand</div>${n.recipe.map(comp).join('')}</div>`;
-  else if(!n.mat&&!(n.alt&&n.alt.length))h+=`<div class="msec"><div class="h">Recipe</div><div class="comp leaf"><i style="background:var(--ink-faint)"></i><span class="cn">No recipe — acquired directly.</span></div></div>`;
+  if(n.alt&&n.alt.length)colR+=`<div class="msec"><div class="h">Also obtainable — exchange / purchase</div>${n.alt.map(c=>`<div class="comp leaf">${icon(null,c.name,'sm')}<i style="background:var(--ink-faint)"></i><span class="cn">${esc(c.name)}</span><span class="q">${c.qty>1?'×'+c.qty:''}</span><span class="tag">exchange</span></div>`).join('')}</div>`;
+  if(n.recipe&&n.recipe.length)colR+=`<div class="msec"><div class="h">Recipe — click a craftable part to expand</div>${n.recipe.map(comp).join('')}</div>`;
+  else if(!n.mat&&!(n.alt&&n.alt.length))colR+=`<div class="msec"><div class="h">Recipe</div><div class="comp leaf"><i style="background:var(--ink-faint)"></i><span class="cn">No recipe — acquired directly.</span></div></div>`;
+  h+=colL&&colR?`<div class="cols"><div>${colL}</div><div>${colR}</div></div>`:(colL+colR);
   if(n.usedIn&&n.usedIn.length)h+=`<div class="msec"><div class="h">Used to craft — click to open</div>${n.usedIn.map(u=>`<button class="comp craft" data-code="${u.code}">${icon(N[u.code]&&N[u.code].ic,u.name,'sm')}<i style="background:var(--arcana)"></i><span class="cn">${esc(u.name)}</span><span class="q"></span><span class="tag">recipe</span></button>`).join('')}</div>`;
   if(n.bosses&&n.bosses.length)h+=`<div class="msec"><div class="h">Full craft tree — materials by grade</div><div class="bosses">${n.bosses.map(bossChip).join('')}</div></div>`;
   mbody.innerHTML=h;
