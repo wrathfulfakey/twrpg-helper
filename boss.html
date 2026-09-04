@@ -278,7 +278,7 @@ let rStack=[];
 const statChip=s=>`<span class="st${statCls(s.key)}"><span class="l">${esc(s.label)}</span><span class="v">${esc(s.val)}</span></span>`;
 const bossChip=b=>`<span class="bchip" style="--bc:var(${BVAR[b.boss]})"><i></i><b>${b.boss}</b><span class="c">×${b.count}</span></span>`;
 function dropLine(n){const hm=n.mobs&&n.mobs.length;if(!(n.drop||hm))return '';const tier=n.drop,bc=(tier&&BVAR[tier])||'--ink-soft';const names=hm?esc(mobsFull(n.mobs)):esc(tier||'');const pre=n.mat?'Base material — drops from':'Direct drop — from';let suf='';if(hm&&tier&&tier!=='Common')suf=` <span style="color:var(--ink-faint)">(${esc(tier)} tier)</span>`;else if(tier==='Common')suf=' mobs';else if(tier)suf=' boss';return `<div class="msrc" style="--bc:var(${bc})">${pre} <b>${names}</b>${suf}.</div>`;}
-const GORD=['Deltirama','Neptinos','Gnosis','Alteia','Arcana'];
+const GORD=['Common','Rare','Magic','Deltirama','Neptinos','Gnosis','Alteia','Arcana'];
 const grank=d=>{const i=GORD.indexOf(d);return i<0?GORD.length:i;};
 const byGrade=arr=>arr.slice().sort((a,b)=>{const na=N[a.code]||{},nb=N[b.code]||{};
   return (a.craft?0:1)-(b.craft?0:1)||grank(na.drop)-grank(nb.drop)||(b.qty||1)-(a.qty||1)||String(a.name).localeCompare(String(b.name));});

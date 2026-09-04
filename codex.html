@@ -321,7 +321,7 @@ function leafTally(code,mult,acc){const n=N[code];
   else if(n){acc[code]=(acc[code]||0)+mult;}
   return acc;}
 const bossChip=b=>`<span class="bchip" style="--bc:var(${BVAR[b.boss]})"><i></i><b>${b.boss}</b><span class="c">×${b.count}</span></span>`;
-const GORD=['Deltirama','Neptinos','Gnosis','Alteia','Arcana'];
+const GORD=['Common','Rare','Magic','Deltirama','Neptinos','Gnosis','Alteia','Arcana'];
 const grank=d=>{const i=GORD.indexOf(d);return i<0?GORD.length:i;};
 const byGrade=arr=>arr.slice().sort((a,b)=>{const na=N[a.code]||{},nb=N[b.code]||{};
   return (a.craft?0:1)-(b.craft?0:1)||grank(na.drop)-grank(nb.drop)||(b.qty||1)-(a.qty||1)||String(a.name).localeCompare(String(b.name));});
