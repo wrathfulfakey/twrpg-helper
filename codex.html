@@ -365,8 +365,10 @@ function renderModal(){
   if(eff)h+=`<div class="msec"><div class="h">Effects</div>${eff}</div>`;
   else{const fx=fx2(n);if(fx.length)h+=`<div class="msec"><div class="h">Effects</div><div class="fx">${fx.map(f=>`<span>${esc(f)}</span>`).join('')}</div></div>`;}
   {const _c=stack[stack.length-1];const _sp=(typeof SPEC!=="undefined")&&SPEC[_c];if(_sp&&_sp.length)h+=`<div class="msec"><div class="h">Hero specialty</div>${_sp.map(s=>`<div class="msrc" style="--bc:var(--arcana)">Specialty for <b>${esc(s.hero)}</b> — <b style="color:var(--ink)">${esc(s.spec)}</b>: ${esc(s.desc)}</div>`).join('')}</div>`;}
+  const GORD=['Deltirama','Neptinos','Gnosis','Alteia','Arcana'];
+  const grank=c=>{const i=GORD.indexOf(N[c].drop);return i<0?GORD.length:i;};
   const tally=Object.entries(leafTally(stack[stack.length-1],1,{}))
-    .sort((a,b)=>b[1]-a[1]||N[a[0]].name.localeCompare(N[b[0]].name));
+    .sort((a,b)=>grank(a[0])-grank(b[0])||b[1]-a[1]||N[a[0]].name.localeCompare(N[b[0]].name));
   const totQty=tally.reduce((a,t)=>a+t[1],0);
   let colL='',colR='';
   if(tally.length>1)colL+=`<div class="msec"><details class="tally"${matchMedia('(min-width:761px)').matches?' open':''}><summary>Total materials needed — ${totQty} drop${totQty===1?'':'s'} across ${tally.length} material${tally.length===1?'':'s'}</summary>${tally.map(([mc,q])=>{const m=N[mc];const bc=(m.drop&&BVAR[m.drop])||'--ink-faint';
