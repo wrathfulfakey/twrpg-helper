@@ -183,7 +183,8 @@ const BUFF=new Set(['SkillDmg%','FinalDmg%','Periodic%','Proc%','Crit%','CritMul
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const ICP='public/icons/';
 function icon(file,label,cls){const l=esc(String(label||'?').trim().charAt(0).toUpperCase()||'?');
-  return `<span class="ic ${cls||''}" data-l="${l}" aria-hidden="true">${file?`<img src="${ICP}${encodeURIComponent(file)}.jpg" alt="" loading="lazy" onerror="this.remove()">`:''}</span>`;}
+  const src=file?ICP+encodeURIComponent(file)+'.jpg':ICP+'unknown.jpg';
+  return `<span class="ic ${cls||''}" data-l="${l}" aria-hidden="true"><img src="${src}" alt="" loading="lazy" onerror="if(this.dataset.f){this.remove();}else{this.dataset.f=1;this.src='${ICP}unknown.jpg';}"></span>`;}
 
 const cleanFx=s=>s.replace(/â´/g,'• ').replace(/\s*\*\s*/g,' — ').replace(/\s+/g,' ').trim();
 const mobLabel=m=>`${m.mob} ${m.chance}%`;
