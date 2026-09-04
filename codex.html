@@ -345,7 +345,7 @@ function renderModal(){
   if(n.recipe&&n.recipe.length)h+=`<div class="msec"><div class="h">Recipe — click a craftable part to expand</div>${n.recipe.map(comp).join('')}</div>`;
   else if(!n.mat&&!(n.alt&&n.alt.length))h+=`<div class="msec"><div class="h">Recipe</div><div class="comp leaf"><i style="background:var(--ink-faint)"></i><span class="cn">No recipe — acquired directly.</span></div></div>`;
   if(n.usedIn&&n.usedIn.length)h+=`<div class="msec"><div class="h">Used to craft — click to open</div>${n.usedIn.map(u=>`<button class="comp craft" data-code="${u.code}">${icon(N[u.code]&&N[u.code].ic,u.name,'sm')}<i style="background:var(--arcana)"></i><span class="cn">${esc(u.name)}</span><span class="q"></span><span class="tag">recipe</span></button>`).join('')}</div>`;
-  if(n.bosses&&n.bosses.length)h+=`<div class="msec"><div class="h">Full craft tree — materials by boss</div><div class="bosses">${n.bosses.map(bossChip).join('')}</div></div>`;
+  if(n.bosses&&n.bosses.length)h+=`<div class="msec"><div class="h">Full craft tree — materials by grade</div><div class="bosses">${n.bosses.map(bossChip).join('')}</div></div>`;
   mbody.innerHTML=h;
   crumbs.innerHTML=stack.map((c,i)=>{const last=i===stack.length-1;return `<button class="crumb${last?' cur':''}" data-idx="${i}">${esc(N[c].name)}</button>`+(last?'':`<span class="crumbsep">›</span>`);}).join('');
   mbody.scrollTop=0;

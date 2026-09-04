@@ -382,8 +382,8 @@ function renderTotals(){
   // farm tally across chosen items
   const farm={};for(const c of codes)for(const b of N[c].bosses||[])farm[b.boss]=(farm[b.boss]||0)+b.count;
   const BO=['Deltirama','Neptinos','Gnosis','Alteia','Arcana'];
-  const farmStr=BO.filter(b=>farm[b]).map(b=>`<button class="bchip" data-farm="${b}" title="See materials from ${b}" style="--bc:var(${BVAR[b]})"><i></i><b>${b}</b><span class="c">×${farm[b]}</span></button>`).join('');
-  el.innerHTML=`<h2>Totals · ${codes.length}/5</h2>${rows}`+(farmStr?`<div class="tfarm"><div class="h">Materials to farm — click a boss</div><div class="bosses">${farmStr}</div></div>`:'');
+  const farmStr=BO.filter(b=>farm[b]).map(b=>`<button class="bchip" data-farm="${b}" title="See ${b} materials" style="--bc:var(${BVAR[b]})"><i></i><b>${b}</b><span class="c">×${farm[b]}</span></button>`).join('');
+  el.innerHTML=`<h2>Totals · ${codes.length}/5</h2>${rows}`+(farmStr?`<div class="tfarm"><div class="h">Materials to farm — click a grade</div><div class="bosses">${farmStr}</div></div>`:'');
 }
 function render(){renderHero();renderSlots();renderTotals();refreshLoadSel();}
 
@@ -443,7 +443,7 @@ function renderRecipe(){const n=N[rStack[rStack.length-1]];if(!n)return;const gc
   if(n.alt&&n.alt.length)h+=`<div class="msec"><div class="h">Also obtainable — exchange / purchase</div>${n.alt.map(c=>`<div class="comp leaf">${icon(null,c.name,'sm')}<i style="background:var(--ink-faint)"></i><span class="cn">${esc(c.name)}</span><span class="q">${c.qty>1?'×'+c.qty:''}</span><span class="tag">exchange</span></div>`).join('')}</div>`;
   if(n.recipe&&n.recipe.length)h+=`<div class="msec"><div class="h">Recipe — click a craftable part to expand</div>${n.recipe.map(comp).join('')}</div>`;
   if(n.usedIn&&n.usedIn.length)h+=`<div class="msec"><div class="h">Used to craft — click to open</div>${n.usedIn.map(u=>`<button class="comp craft" data-code="${u.code}">${icon(N[u.code]&&N[u.code].ic,u.name,'sm')}<i style="background:var(--arcana)"></i><span class="cn">${esc(u.name)}</span><span class="q"></span><span class="tag">recipe</span></button>`).join('')}</div>`;
-  if(n.bosses&&n.bosses.length)h+=`<div class="msec"><div class="h">Full craft tree — materials by boss</div><div class="bosses">${n.bosses.map(bossChip).join('')}</div></div>`;
+  if(n.bosses&&n.bosses.length)h+=`<div class="msec"><div class="h">Full craft tree — materials by grade</div><div class="bosses">${n.bosses.map(bossChip).join('')}</div></div>`;
   rBody.innerHTML=h;
   rCr.innerHTML=rStack.map((c,i)=>{const last=i===rStack.length-1;return `<button class="crumb${last?' cur':''}" data-idx="${i}">${esc(N[c].name)}</button>`+(last?'':`<span class="crumbsep">›</span>`);}).join('');
   rBody.scrollTop=0;
@@ -473,7 +473,7 @@ function openFarm(boss){
     const mats=Object.entries(lv).map(([mc,q])=>({mc,q,name:N[mc].name,drop:N[mc].drop})).filter(m=>m.drop===boss).sort((a,b)=>b.q-a.q||a.name.localeCompare(b.name));
     if(!mats.length)continue;
     const it=N[ic];
-    html+=`<div class="farmgrp"><button class="fi" data-code="${ic}"><span class="fn">${esc(it.name)}</span><span class="slot">${esc(it.slot||'')}</span></button>${mats.map(m=>{total+=m.q;return `<button class="matrow" data-code="${m.mc}" style="--bc:var(${BVAR[boss]})"><span class="mdot"></span><span class="mn2">${esc(m.name)}</span><span class="mq">×${m.q}</span></button>`;}).join('')}</div>`;
+    html+=`<div class="farmgrp"><button class="fi" data-code="${ic}">${icon(it.ic,it.name,'sm')}<span class="fn">${esc(it.name)}</span><span class="slot">${esc(it.slot||'')}</span></button>${mats.map(m=>{total+=m.q;return `<button class="matrow" data-code="${m.mc}" style="--bc:var(${BVAR[boss]})">${icon(N[m.mc].ic,m.name,'sm')}<span class="mdot"></span><span class="mn2">${esc(m.name)}</span><span class="mq">×${m.q}</span></button>`;}).join('')}</div>`;
   }
   document.getElementById('farmTitle').innerHTML=`<span style="color:var(${BVAR[boss]})">${esc(boss)}</span> — ${total} material${total===1?'':'s'} for this build`;
   document.getElementById('farmBody').innerHTML=html||`<div class="chnone">No materials from ${esc(boss)} in this build.</div>`;
