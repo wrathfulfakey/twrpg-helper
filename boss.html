@@ -190,7 +190,7 @@ body{padding-left:206px}
 .tipcard .fx{margin-top:7px}
 </style>
 
-<button class="navtoggle" id="navToggle" aria-label="Open navigation" aria-expanded="false" aria-controls="sidenav">☰ <span>Menu</span></button><aside class="sidenav" id="sidenav" aria-label="Site"><button class="navclose" id="navClose" aria-label="Close navigation">×</button><a class="brand" href="index.html"><span class="a">⚔</span> TWRPG</a><a class="sl" href="index.html">Home</a><div class="sgrp">Plan</div><a class="sl" href="builder.html">Build Maker</a><a class="sl" href="mycharacters.html">My Characters</a><div class="sgrp">Look up</div><a class="sl" href="characters.html">Characters</a><a class="sl" href="codex.html">Item Codex</a><a class="sl" href="guides.html">Boss Guides</a><a class="sl" href="boss.html" aria-current="page">Boss Drops</a><div class="sgrp">About</div><a class="sl" href="changelogs.html">Change Logs</a><a class="sl" href="credits.html">Credits</a><div class="sfoot"><button class="navtg" data-navtheme aria-label="Toggle theme">◐ Theme</button><span class="ai-badge" title="This site was built with AI">🤖 Built with AI</span></div></aside><div class="navscrim" id="navScrim" hidden></div>
+<button class="navtoggle" id="navToggle" aria-label="Open navigation" aria-expanded="false" aria-controls="sidenav">☰ <span>Menu</span></button><aside class="sidenav" id="sidenav" aria-label="Site"><button class="navclose" id="navClose" aria-label="Close navigation">×</button><a class="brand" href="index.html"><span class="a">⚔</span> TWRPG</a><a class="sl" href="index.html">Home</a><div class="sgrp">Start here</div><a class="sl" href="newplayers.html">New Players</a><div class="sgrp">Plan</div><a class="sl" href="builder.html">Build Maker</a><a class="sl" href="mycharacters.html">My Characters</a><div class="sgrp">Look up</div><a class="sl" href="characters.html">Characters</a><a class="sl" href="codex.html">Item Codex</a><a class="sl" href="guides.html">Boss Guides</a><a class="sl" href="boss.html" aria-current="page">Boss Drops</a><div class="sgrp">About</div><a class="sl" href="changelogs.html">Change Logs</a><a class="sl" href="credits.html">Credits</a><div class="sfoot"><button class="navtg" data-navtheme aria-label="Toggle theme">◐ Theme</button><span class="ai-badge" title="This site was built with AI">🤖 Built with AI</span></div></aside><div class="navscrim" id="navScrim" hidden></div>
 <div class="wrap">
 <header>
   <div class="title">
@@ -354,6 +354,17 @@ function apply(){
 apply();
 document.getElementById('tierTabs').addEventListener('click',e=>{const b=e.target.closest('.gtab');if(!b)return;fTier=b.dataset.t;[...document.getElementById('tierTabs').children].forEach(c=>c.setAttribute('aria-selected',c===b));apply();});
 document.getElementById('q').addEventListener('input',e=>{fq=e.target.value.trim().toLowerCase();apply();});
+
+// deep link: #q=<boss or item name> lands here with the search already filled in
+function searchFromHash(){
+  const m=decodeURIComponent(location.hash||'').match(/^#q=(.*)$/);
+  if(!m)return;
+  const el=document.getElementById('q');
+  el.value=m[1];fq=m[1].trim().toLowerCase();apply();
+  el.scrollIntoView({block:'center'});
+}
+window.addEventListener('hashchange',searchFromHash);
+searchFromHash();
 
 // recipe modal (shared)
 const rOv=document.getElementById('recipe'),rBody=document.getElementById('rBody'),rCr=document.getElementById('rCrumbs');

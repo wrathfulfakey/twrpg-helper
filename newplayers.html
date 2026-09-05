@@ -1,0 +1,1604 @@
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>TWRPG for New Players</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Spectral:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+/>
+<style>
+  :root {
+    --bg: #efe9e0;
+    --panel: #faf6ef;
+    --panel2: #f2ece1;
+    --ink: #241d2b;
+    --ink-soft: #5d5468;
+    --ink-faint: #8a8095;
+    --line: #d8cebf;
+    --line-strong: #c3b6a2;
+    --blood: #b01330;
+    --blood-soft: #c94a5f;
+    --arcana: #7a45c9;
+    --alteia: #2f9a45;
+    --gnosis: #c1122f;
+    --nept: #1c8f97;
+    --delt: #8a6a2f;
+    --chip: #efe7da;
+    --shadow:
+      0 1px 2px rgba(40, 28, 50, 0.08), 0 10px 30px rgba(40, 28, 50, 0.07);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0c0a11;
+      --panel: #171220;
+      --panel2: #1d1729;
+      --ink: #ece7f2;
+      --ink-soft: #a89fb8;
+      --ink-faint: #6f6683;
+      --line: #2a2338;
+      --line-strong: #3a3150;
+      --blood: #e8324f;
+      --blood-soft: #ff6d82;
+      --arcana: #a877ff;
+      --alteia: #79e089;
+      --gnosis: #f0304f;
+      --nept: #68d3d3;
+      --delt: #d1a758;
+      --chip: #221b30;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 16px 44px rgba(0, 0, 0, 0.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0c0a11;
+    --panel: #171220;
+    --panel2: #1d1729;
+    --ink: #ece7f2;
+    --ink-soft: #a89fb8;
+    --ink-faint: #6f6683;
+    --line: #2a2338;
+    --line-strong: #3a3150;
+    --blood: #e8324f;
+    --blood-soft: #ff6d82;
+    --arcana: #a877ff;
+    --alteia: #79e089;
+    --gnosis: #f0304f;
+    --nept: #68d3d3;
+    --delt: #d1a758;
+    --chip: #221b30;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 16px 44px rgba(0, 0, 0, 0.5);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Spectral, Georgia, serif;
+    line-height: 1.6;
+    background-image: radial-gradient(
+      130% 80% at 50% -20%,
+      color-mix(in srgb, var(--blood) 12%, transparent),
+      transparent 60%
+    );
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: clamp(28px, 6vw, 60px) clamp(16px, 4vw, 30px) 60px;
+    width: 100%;
+  }
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.26em;
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+  h1 {
+    font-family: Cinzel, serif;
+    font-weight: 700;
+    font-size: clamp(34px, 6.4vw, 60px);
+    line-height: 1;
+    margin: 0.18em 0 0.24em;
+    text-shadow: 0 0 34px color-mix(in srgb, var(--blood) 30%, transparent);
+  }
+  h1 .accent { color: var(--blood); }
+  .sub {
+    color: var(--ink-soft);
+    font-style: italic;
+    font-size: clamp(15px, 2.2vw, 19px);
+    max-width: 62ch;
+    margin: 0 0 26px;
+  }
+  .mono { font-family: "IBM Plex Mono", monospace; font-size: 0.92em; }
+
+  /* ---------- jump chips ---------- */
+  .toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0 0 30px;
+    padding: 14px 15px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+  }
+  .toc .tl {
+    width: 100%;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 3px;
+  }
+  .toc a {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    background: var(--chip);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    padding: 4px 9px;
+  }
+  .toc a:hover { color: var(--ink); border-color: var(--blood-soft); }
+
+  /* ---------- notes ---------- */
+  .note {
+    display: flex;
+    gap: 11px;
+    align-items: flex-start;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--nept);
+    border-radius: 12px;
+    padding: 13px 15px;
+    margin: 0 0 18px;
+  }
+  .note .ic { font-size: 17px; line-height: 1.3; }
+  .note p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+  .note p + p { margin-top: 7px; }
+  .note b { color: var(--ink); font-weight: 600; }
+  .note a { color: var(--nept); }
+  .warnnote {
+    border-left-color: var(--blood);
+    background: color-mix(in srgb, var(--blood) 8%, var(--panel));
+  }
+  .warnnote a { color: var(--blood-soft); }
+  .goodnote { border-left-color: var(--alteia); }
+  .goodnote a { color: var(--alteia); }
+
+  /* ---------- sections & cards ---------- */
+  h2.sect {
+    font-family: Cinzel, serif;
+    font-weight: 600;
+    font-size: clamp(22px, 3.4vw, 30px);
+    margin: 46px 0 6px;
+    scroll-margin-top: 70px;
+    display: flex;
+    align-items: baseline;
+    gap: 11px;
+  }
+  h2.sect .n {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    color: var(--blood);
+    font-weight: 500;
+  }
+  /* numbers count themselves, so a section hidden by the mode tabs doesn't
+     leave a gap in the sequence */
+  .wrap { counter-reset: sec; }
+  h2.sect { counter-increment: sec; }
+  h2.sect .n::before { content: counter(sec, decimal-leading-zero); }
+
+  /* ---------- mode tabs ---------- */
+  .modes {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+    margin: 0 0 22px;
+  }
+  .modes button {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 8px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .modes button:hover { color: var(--ink); border-color: var(--blood-soft); }
+  .modes button[aria-pressed="true"] {
+    color: #fff;
+    background: var(--blood);
+    border-color: var(--blood);
+  }
+  .modes button:focus-visible { outline: 2px solid var(--blood); outline-offset: 2px; }
+  .modes .mh {
+    width: 100%;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 1px;
+  }
+  /* data-mode lists the tabs an element belongs to; anything not listed is hidden.
+     Elements with no data-mode at all show in every tab. */
+  body.mode-exp   [data-mode]:not([data-mode~="exp"])   { display: none !important; }
+  body.mode-new   [data-mode]:not([data-mode~="new"])   { display: none !important; }
+  body.mode-quick [data-mode]:not([data-mode~="quick"]) { display: none !important; }
+  .lede {
+    color: var(--ink-soft);
+    font-size: 15px;
+    margin: 0 0 16px;
+    max-width: 68ch;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 17px 19px;
+    margin: 0 0 15px;
+    box-shadow: var(--shadow);
+  }
+  .card h3 {
+    font-family: Cinzel, serif;
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0 0 8px;
+    color: var(--ink);
+  }
+  .card p { margin: 0 0 10px; font-size: 14.5px; color: var(--ink-soft); }
+  .card p:last-child, .card ul:last-child, .card table:last-child { margin-bottom: 0; }
+  .card b, .card strong { color: var(--ink); font-weight: 600; }
+  .card a { color: var(--blood-soft); }
+  ul.plain { margin: 0 0 10px; padding-left: 20px; font-size: 14.5px; color: var(--ink-soft); }
+  ul.plain li { margin-bottom: 6px; }
+  ul.plain li:last-child { margin-bottom: 0; }
+
+  /* ---------- steps ---------- */
+  ol.steps { list-style: none; counter-reset: s; margin: 0; padding: 0; }
+  ol.steps li {
+    counter-increment: s;
+    position: relative;
+    padding: 0 0 15px 40px;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+  }
+  ol.steps li::before {
+    content: counter(s);
+    position: absolute;
+    left: 0;
+    top: 1px;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    color: var(--blood);
+    border: 1px solid color-mix(in srgb, var(--blood) 45%, var(--line));
+    border-radius: 50%;
+    background: var(--panel2);
+  }
+  ol.steps li b { color: var(--ink); font-weight: 600; }
+  ol.steps li:last-child { padding-bottom: 0; }
+
+  /* ---------- code blocks ---------- */
+  .cmd {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    background: var(--panel2);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    padding: 10px 13px;
+    color: var(--ink);
+    overflow-x: auto;
+    white-space: pre;
+    margin: 0 0 11px;
+  }
+  code.inl {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.88em;
+    background: var(--chip);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 1px 5px;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .path {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12.5px;
+    background: var(--panel2);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--nept);
+    border-radius: 8px;
+    padding: 9px 12px;
+    color: var(--ink);
+    overflow-x: auto;
+    white-space: nowrap;
+    margin: 0 0 8px;
+  }
+
+  /* ---------- tables ---------- */
+  .tw { overflow-x: auto; margin: 0 0 12px; }
+  table.t {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    min-width: 480px;
+  }
+  table.t th {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-align: left;
+    font-weight: 400;
+    padding: 7px 12px;
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+  }
+  table.t td {
+    padding: 9px 12px;
+    border-top: 1px solid var(--line);
+    color: var(--ink-soft);
+    vertical-align: top;
+  }
+  table.t td.nm { color: var(--ink); font-weight: 500; white-space: nowrap; }
+  table.t td.mn,
+  table.t td.c {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12.5px;
+    white-space: nowrap;
+    color: var(--ink);
+  }
+  table.t tr:hover td { background: color-mix(in srgb, var(--ink) 4%, transparent); }
+
+  /* ---------- grade ladder ---------- */
+  .ladder { display: flex; flex-direction: column; gap: 8px; margin: 0 0 14px; }
+  .rung {
+    display: grid;
+    grid-template-columns: 116px 78px 1fr;
+    gap: 12px;
+    align-items: baseline;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--gc);
+    border-radius: 11px;
+    padding: 11px 14px;
+  }
+  .rung .g {
+    font-family: Cinzel, serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--gc);
+  }
+  .rung .w {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .rung .who { font-size: 13.5px; color: var(--ink-soft); }
+  /* boss names link out: solid underline = a written guide, dotted = drop table */
+  .rung a.bl {
+    color: var(--gc);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--gc) 55%, transparent);
+  }
+  .rung a.bl.drop {
+    color: var(--ink);
+    border-bottom-style: dotted;
+    border-bottom-color: var(--line-strong);
+  }
+  .rung a.bl:hover {
+    color: var(--blood);
+    border-bottom-color: var(--blood);
+  }
+  @media (max-width: 620px) {
+    .rung { grid-template-columns: 1fr; gap: 3px; }
+  }
+
+  /* ---------- grade chain (quick tab) ---------- */
+  .chain {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 11px;
+  }
+  .chain span {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11.5px;
+    color: var(--gc);
+    background: color-mix(in srgb, var(--gc) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--gc) 40%, var(--line));
+    border-radius: 7px;
+    padding: 4px 9px;
+  }
+  .chain span + span::before {
+    content: "\2192";
+    color: var(--ink-faint);
+    margin-right: 8px;
+  }
+
+  /* ---------- glossary ---------- */
+  dl.gl { margin: 0; font-size: 14.5px; }
+  dl.gl dt {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    color: var(--ink);
+    margin-top: 12px;
+  }
+  dl.gl dt:first-child { margin-top: 0; }
+  dl.gl dd { margin: 3px 0 0; color: var(--ink-soft); }
+
+  footer {
+    margin-top: auto;
+    padding: 22px 0 26px;
+    text-align: center;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+  footer a { color: var(--alteia); }
+
+/* scrollbars — themed */
+*{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--ink-faint) 55%,transparent) transparent}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--ink-faint) 50%,transparent);border:3px solid transparent;background-clip:content-box;border-radius:999px}
+::-webkit-scrollbar-thumb:hover{background:color-mix(in srgb,var(--ink-soft) 70%,transparent);border:3px solid transparent;background-clip:content-box}
+::-webkit-scrollbar-corner{background:transparent}
+
+/* ---------- side navigation ---------- */
+body{padding-left:206px}
+.sidenav{position:fixed;left:0;top:0;bottom:0;width:206px;z-index:100;display:flex;flex-direction:column;gap:1px;
+  padding:15px 11px 12px;overflow-y:auto;background:var(--panel);border-right:1px solid var(--line)}
+.sidenav .brand{display:flex;align-items:center;gap:7px;font-family:Cinzel,serif;font-weight:700;font-size:17px;
+  color:var(--ink);text-decoration:none;padding:2px 8px 12px}
+.sidenav .brand .a{color:var(--blood)}
+.sidenav .sgrp{font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-faint);padding:14px 9px 5px}
+.sidenav a.sl{font-family:"IBM Plex Mono",monospace;font-size:12.5px;letter-spacing:.02em;color:var(--ink-soft);
+  text-decoration:none;padding:7px 9px;border-radius:8px;white-space:nowrap}
+.sidenav a.sl:hover{color:var(--ink);background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.sidenav a.sl[aria-current="page"]{color:var(--blood);background:color-mix(in srgb,var(--blood) 12%,transparent)}
+.sfoot{margin-top:auto;padding-top:14px;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.sidenav .navtg{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft);background:none;
+  border:1px solid var(--line-strong);border-radius:999px;padding:5px 12px;cursor:pointer}
+.sidenav .navtg:hover{color:var(--ink);border-color:var(--blood-soft)}
+.sidenav .ai-badge{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-faint);padding-left:2px}
+.navtoggle{display:none;position:fixed;top:10px;left:10px;z-index:112;align-items:center;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink);background:var(--panel);
+  border:1px solid var(--line-strong);border-radius:10px;padding:7px 12px;cursor:pointer;box-shadow:var(--shadow)}
+.navtoggle:hover{border-color:var(--blood-soft)}
+.navscrim{position:fixed;inset:0;background:rgba(8,5,12,.55);z-index:99}
+.navscrim[hidden]{display:none}
+.sidenav a.sl:focus-visible,.navtoggle:focus-visible,.sidenav .brand:focus-visible{outline:2px solid var(--blood);outline-offset:2px}
+/* narrow: the bar folds away until the button is pressed */
+@media(max-width:1000px){
+  body{padding-left:0;padding-top:54px}
+  .sidenav{width:236px;left:-236px;transition:left .18s ease;box-shadow:0 0 40px rgba(0,0,0,.4)}
+  .sidenav.open{left:0}
+  .navtoggle{display:inline-flex}
+}
+@media(prefers-reduced-motion:reduce){.sidenav{transition:none}}
+
+.navclose{display:none;position:absolute;top:12px;right:10px;width:30px;height:30px;align-items:center;justify-content:center;
+  font-size:19px;line-height:1;color:var(--ink-faint);background:none;border:1px solid var(--line-strong);border-radius:8px;cursor:pointer}
+.navclose:hover{color:var(--ink);border-color:var(--blood-soft)}
+@media(max-width:1000px){
+  body.navopen .navtoggle{display:none}
+  .sidenav.open .navclose{display:inline-flex}
+  .sidenav{padding-right:46px}
+}
+</style>
+
+<button class="navtoggle" id="navToggle" aria-label="Open navigation" aria-expanded="false" aria-controls="sidenav">☰ <span>Menu</span></button><aside class="sidenav" id="sidenav" aria-label="Site"><button class="navclose" id="navClose" aria-label="Close navigation">×</button><a class="brand" href="index.html"><span class="a">⚔</span> TWRPG</a><a class="sl" href="index.html">Home</a><div class="sgrp">Start here</div><a class="sl" href="newplayers.html" aria-current="page">New Players</a><div class="sgrp">Plan</div><a class="sl" href="builder.html">Build Maker</a><a class="sl" href="mycharacters.html">My Characters</a><div class="sgrp">Look up</div><a class="sl" href="characters.html">Characters</a><a class="sl" href="codex.html">Item Codex</a><a class="sl" href="guides.html">Boss Guides</a><a class="sl" href="boss.html">Boss Drops</a><div class="sgrp">About</div><a class="sl" href="changelogs.html">Change Logs</a><a class="sl" href="credits.html">Credits</a><div class="sfoot"><button class="navtg" data-navtheme aria-label="Toggle theme">◐ Theme</button><span class="ai-badge" title="This site was built with AI">🤖 Built with AI</span></div></aside><div class="navscrim" id="navScrim" hidden></div>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">TWRPG &middot; v0.76a &middot; start here</div>
+    <h1>New <span class="accent">Players</span></h1>
+    <p class="sub">
+      Everything nobody tells you in your first game &mdash; what saving actually does, where
+      the file goes, how to get your character back, and what all those words mean.
+      Plain English, no jargon.
+    </p>
+  </header>
+
+  <div class="modes" role="group" aria-label="Reading level">
+    <div class="mh">Show me the version for&hellip;</div>
+    <button type="button" data-mode-btn="quick" aria-pressed="true">
+      &#9889; Just the basics
+    </button>
+    <button type="button" data-mode-btn="exp" aria-pressed="false">
+      &#9876;&#65039; Experienced in RPG maps
+    </button>
+    <button type="button" data-mode-btn="new" aria-pressed="false">
+      &#127793; New to RPG maps
+    </button>
+  </div>
+
+  <div class="note warnnote">
+    <span class="ic">&#9888;&#65039;</span>
+    <p>
+      <b>If you read one thing, read this.</b> Your character only exists inside a save code.
+      Type <code class="inl">-save</code> in game, <b>often</b>, and keep the text file it
+      makes. If you leave the game without saving, everything from that session is gone
+      &mdash; levels, items, all of it. There is no cloud, no account, no undo.
+    </p>
+  </div>
+
+  <nav data-mode="exp new" class="toc">
+    <div class="tl">Jump to</div>
+    <a href="#what" data-mode="new">What the game is</a>
+    <a href="#first">Your first game</a>
+    <a href="#levels">Levels &amp; stats</a>
+    <a href="#save">Saving</a>
+    <a href="#load">Loading</a>
+    <a href="#items">Items &amp; slots</a>
+    <a href="#grades">Grades</a>
+    <a href="#icons">Icons</a>
+    <a href="#tokens">Tokens</a>
+    <a href="#replay">Save your replay</a>
+    <a href="#bosses">Bosses</a>
+    <a href="#loot">Loot &amp; Wish</a>
+    <a href="#craft">Crafting &amp; farming</a>
+    <a href="#money">Money</a>
+    <a href="#commands">Commands</a>
+    <a href="#mistakes">Common mistakes</a>
+    <a href="#glossary">Glossary</a>
+  </nav>
+
+  <!-- ============ WHAT ============ -->
+  <h2 class="sect" id="what" data-mode="new"><span class="n"></span> What the game is</h2>
+  <p class="lede" data-mode="new">
+    The 30-second version, so the rest of the page makes sense.
+  </p>
+
+  <div class="card" data-mode="new">
+    <p>
+      <b>TWRPG</b> is short for <b>The World RPG</b>. It's a custom map for Warcraft III,
+      not a standalone game &mdash; you open Warcraft III, go to Custom Games, and host or
+      join a TWRPG lobby. Up to <b>10 people</b> play together in one world.
+    </p>
+    <p>
+      You pick <b>one hero</b> out of 37 and keep it forever. You kill monsters, level up,
+      collect items, craft better items out of the ones you collected, and use those to kill
+      bigger bosses &mdash; which drop the parts for even better items. That's the whole loop.
+      There is no ending; the goal is a stronger character.
+    </p>
+    <p>
+      Because it's a Warcraft III map, <b>the game cannot remember you between sessions.</b>
+      That's what the save code exists for, and it's why the save section below is the
+      longest one on this page.
+    </p>
+  </div>
+
+  <!-- ============ FIRST GAME ============ -->
+  <h2 data-mode="exp new" class="sect" id="first"><span class="n"></span> Your first game</h2>
+  <p data-mode="exp new" class="lede">Nothing here is permanent except your hero choice, so don't agonise.</p>
+
+  <div data-mode="exp new" class="card">
+    <ol class="steps">
+      <li data-mode="new">
+        <b>Pick a hero.</b> At the start you choose one of 37 heroes. This is permanent for
+        that character &mdash; if you want a different one, you make a new character later.
+        Browse them all first on the <a href="characters.html">Characters</a> page.
+      </li>
+      <li data-mode="new">
+        <b>Kill things near the starting village.</b> Early areas are level 1&ndash;40 and
+        completely safe to learn in. Monsters give experience and gold.
+      </li>
+      <li>
+        <b>Do the tutorial quests.</b> A <b>fairy follows you around</b> &mdash; that's your
+        quest giver. Press <code class="inl">Q</code> on it and it tells you what to do next
+        and where to go. The quests hand out experience and a few starter materials, and they
+        walk you through the map.
+      </li>
+      <li>
+        <b>Spend your stat points.</b> Every level gives points. Put them into your hero's
+        main attribute &mdash; see the next section.
+      </li>
+      <li>
+        <b>Pick up everything.</b> Materials that look like junk are crafting parts for
+        real gear. Check anything in the <a href="codex.html">Item Codex</a> before dropping it.
+      </li>
+      <li>
+        <b>Type <code class="inl">-save myhero</code> before you leave.</b> Then read the
+        <a href="#save">saving section</a> so you actually keep this character.
+      </li>
+    </ol>
+  </div>
+
+  <div data-mode="exp new" class="note goodnote">
+    <span class="ic">&#128172;</span>
+    <p>
+      <b>Ask in the lobby.</b> TWRPG is co-op, not competitive. Veterans routinely drag new
+      players through bosses far above their level, which is the fastest way to gear up.
+      Say you're new. The community is on the
+      <a href="https://discord.gg/twrpg" target="_blank" rel="noopener">TWRPG Discord</a>.
+    </p>
+  </div>
+
+  <!-- ============ LEVELS ============ -->
+  <h2 data-mode="exp new" class="sect" id="levels"><span class="n"></span> Levels, stats and your main stat</h2>
+  <p data-mode="exp new" class="lede">Which number to grow, and why the others barely matter.</p>
+
+  <div data-mode="exp new" class="card">
+    <h3>Levels</h3>
+    <p>
+      Normal max level is <b>100</b>. Levelling is fast compared to how long gearing takes,
+      so don't stress about it &mdash; you will hit 100 long before you have good items.
+    </p>
+    <p>
+      Past 100, levels are bought, not earned: you trade <b>Soulstones</b> (rare drops from
+      the endgame Arcana bosses) to an NPC at the Mage Tower. Each level from 101 to
+      <b>110</b> costs its own specific Soulstones &mdash; 110 is the real ceiling. That's
+      deep endgame; ignore it for now.
+    </p>
+  </div>
+
+  <div data-mode="exp new" class="card">
+    <h3>The three stats</h3>
+    <p>
+      Every hero has <b>Strength (STR)</b>, <b>Agility (AGI)</b> and
+      <b>Intelligence (INT)</b>, and exactly one of them is its <b>main stat</b>. The main
+      stat is what turns into damage &mdash; the other two do very little for you.
+    </p>
+    <ul class="plain">
+      <li>Put your level-up points into your hero's main stat. That's the whole strategy.</li>
+      <li>
+        A hero's main stat is listed on the <a href="characters.html">Characters</a> page as
+        its <b>primary</b> attribute.
+      </li>
+      <li>
+        Some heroes play differently depending on which stat is highest &mdash; for example a
+        few Paladin and Hermit skills change effect entirely on a STR build versus an INT
+        build. The skill descriptions on the Characters page spell out which parts are
+        main-stat specific.
+      </li>
+      <li>
+        Made a mistake? Resetting stat points is <b>free</b> &mdash; the NPC for it stands in
+        <b>Capital Prius, next to the Recall Stone</b>. Nothing here is permanent, so
+        experiment.
+      </li>
+    </ul>
+  </div>
+
+  <!-- ============ SAVE ============ -->
+  <h2 data-mode="exp new" class="sect" id="save"><span class="n"></span> Saving &mdash; the most important thing on this page</h2>
+  <p data-mode="exp new" class="lede">
+    What <code class="inl">-save</code> actually does, where the file lands, and what's inside it.
+  </p>
+
+  <div data-mode="exp new" class="card">
+    <h3>What <code class="inl">-save</code> does</h3>
+    <p>
+      Type <code class="inl">-save</code> in the game chat. Two things happen:
+    </p>
+    <ul class="plain">
+      <li>
+        The map writes a <b>.txt file onto your computer</b> listing your character and
+        everything it owns.
+      </li>
+      <li>
+        Inside that file are your <b>load codes</b> &mdash; long strings of letters and
+        numbers. Those codes <i>are</i> your character. Nothing else is.
+      </li>
+    </ul>
+    <p>Give the file a name so you can find it again:</p>
+    <div class="cmd">-save myhero</div>
+    <p>
+      Without a name the map invents a random filename, which is how people lose characters.
+      <b>Always give it a name.</b>
+    </p>
+  </div>
+
+  <div data-mode="exp new" class="card">
+    <h3>Where the file goes</h3>
+    <p>On Windows:</p>
+    <div class="path">C:\Users\&lt;your Windows user&gt;\Documents\Warcraft III\CustomMapData\TWRPG\</div>
+    <p>On Mac:</p>
+    <div class="path">~/Library/Application Support/Blizzard/Warcraft III/CustomMapData/TWRPG/</div>
+    <p>
+      Your saves are the <span class="mono">.txt</span> files in that folder. Open one with
+      Notepad or any text editor.
+    </p>
+    <p>
+      <b>Back this folder up.</b> Copy it to a second drive, a cloud folder, anywhere. A
+      Warcraft III reinstall, a Windows reset, or a disk wipe takes every character you own
+      with it.
+    </p>
+  </div>
+
+  <div data-mode="exp new" class="card">
+    <h3>What's inside the file</h3>
+    <p>A save file reads roughly like this:</p>
+    <div class="cmd">User Name : YourBattleTagName
+Played Version : v0.76a
+Compatible Version : v0.62s ~
+Class : Swordsman
+Level : 100
+
+---- Hero Inventory ----
+1. Excalibur
+2. Helm of Everfrost
+&hellip;
+---- Bag ----
+&hellip;
+---- Storage ----
+&hellip;
+
+Load Code 1 : -load AbC123&hellip;
+Load Code 2 : -load XyZ789&hellip;</div>
+    <ul class="plain">
+      <li>
+        <b>User Name</b> is the account the character belongs to. The codes are locked to
+        this name (details in the <a href="#load">loading section</a>).
+      </li>
+      <li>
+        <b>Load Code 1</b> normally carries your hero, level, stats and gold.
+        <b>Load Code 2</b> carries your items. You need both.
+      </li>
+      <li>
+        The item list is there for you to read. The game doesn't use it &mdash; it only reads
+        the codes.
+      </li>
+    </ul>
+  </div>
+
+  <div data-mode="exp new" class="card">
+    <h3>When to save</h3>
+    <ul class="plain">
+      <li><b>After anything good drops.</b> Not "later". Immediately.</li>
+      <li><b>Before you leave a game</b> &mdash; every single time.</li>
+      <li><b>Before a risky boss attempt</b>, so a wipe costs you nothing.</li>
+      <li><b>Every 20&ndash;30 minutes</b> in a long session, out of habit.</li>
+    </ul>
+    <p>
+      Saving costs nothing and takes a second. There is no penalty for saving 40 times in one
+      game. There is a very large penalty for saving zero times.
+    </p>
+  </div>
+
+  <div data-mode="exp new" class="note">
+    <span class="ic">&#128161;</span>
+    <p>
+      <b><code class="inl">-asave</code> and <code class="inl">-aload</code> are your
+      <i>account</i>, not your character.</b> They save and load only the
+      <b>account-bound</b> things &mdash; the Grandmaster Icon and its upgrades, and the rest
+      of what belongs to you rather than to one hero. Your character, level and gear still
+      need plain <code class="inl">-save</code> / <code class="inl">-load</code>; the two
+      pairs are not interchangeable.
+    </p>
+    <p>
+      One warning straight from the patch notes: don't use <code class="inl">-asave</code> to
+      work around gameplay restrictions. It's there to carry your account across games, not to
+      duplicate things.
+    </p>
+  </div>
+
+  <!-- ============ LOAD ============ -->
+  <h2 data-mode="exp new" class="sect" id="load"><span class="n"></span> Loading your character back</h2>
+  <p data-mode="exp new" class="lede">Getting into the next game with the character you had in the last one.</p>
+
+  <div data-mode="exp new" class="card">
+    <h3>The steps</h3>
+    <ol class="steps">
+      <li>Join a TWRPG game and get to the point where you'd pick a hero.</li>
+      <li>
+        Open your save <span class="mono">.txt</span> from the
+        <span class="mono">CustomMapData\TWRPG</span> folder.
+      </li>
+      <li>
+        Copy <b>Load Code 1</b> &mdash; the whole line including the
+        <code class="inl">-load</code> &mdash; and paste it into the game chat. Press enter.
+      </li>
+      <li>Do the same with <b>Load Code 2</b>.</li>
+      <li>Your hero, level, stats, gold and items all come back.</li>
+    </ol>
+    <p>
+      Order matters in practice: code 1 brings the character, code 2 brings the items. If you
+      only paste code 1 you'll get a hero with an empty inventory.
+    </p>
+  </div>
+
+  <div data-mode="exp new" class="card">
+    <h3>Why a code sometimes refuses to load</h3>
+    <ul class="plain">
+      <li>
+        <b>Wrong account name.</b> Codes are tied to the name that saved them. Loading on a
+        different Battle.net account or a renamed account will fail. This is deliberate &mdash;
+        it stops people from copying each other's characters.
+      </li>
+      <li>
+        <b>Typo or truncation.</b> Copy the entire code. One missing character kills it.
+        Don't retype by hand.
+      </li>
+      <li>
+        <b>Too old.</b> Codes work from map version <span class="mono">v0.62s</span> onward.
+        Anything older than that won't load into <span class="mono">v0.76a</span>.
+      </li>
+      <li>
+        <b>Very old codes get adjusted.</b> When max level was cut from 420 to 100, old codes
+        started loading at level&nbsp;&divide;&nbsp;4, and stat points reset so you have to
+        re-spend them. Expect an old character to need a bit of fixing up.
+      </li>
+    </ul>
+  </div>
+
+  <div data-mode="exp new" class="note goodnote">
+    <span class="ic">&#128100;</span>
+    <p>
+      <b>You can read your codes here too.</b> Paste them into
+      <a href="mycharacters.html">My Characters</a> on this site and it decodes them in your
+      browser &mdash; class, level, stats and every item. Nothing is uploaded anywhere. Your
+      gear then ticks itself off the farming list in the
+      <a href="builder.html">Build Maker</a>, so you can see what you still need.
+    </p>
+  </div>
+
+  <!-- ============ ITEMS ============ -->
+  <h2 data-mode="exp new" class="sect" id="items"><span class="n"></span> Items and gear slots</h2>
+  <p data-mode="exp new" class="lede">Five slots. That's the entire equipment system.</p>
+
+  <div data-mode="exp new" class="card">
+    <p>Your character wears exactly five things:</p>
+    <div class="tw">
+      <table class="t">
+        <thead>
+          <tr><th>Slot</th><th>What it does</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="nm">Weapon</td><td>Biggest damage source. Restricted by weapon type &mdash; see below.</td></tr>
+          <tr><td class="nm">Headwear</td><td>Stats, usually defensive or utility.</td></tr>
+          <tr><td class="nm">Armor</td><td>Survivability &mdash; armor, HP, damage reduction.</td></tr>
+          <tr><td class="nm">Wings</td><td>Stats plus movement; often has an active effect.</td></tr>
+          <tr><td class="nm">Accessory</td><td>The flexible slot. Rings, orbs, and most of the interesting effects.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Most endgame gear also requires <b>level 100</b>. Lower-grade pieces have lower
+      requirements, so you gear up in steps as you level.
+    </p>
+  </div>
+
+  <div data-mode="exp new" class="card">
+    <h3>Weapon types</h3>
+    <p>
+      Your hero can only hold certain weapon types. Buying a beautiful staff for a hero that
+      uses guns is a classic first-week mistake.
+    </p>
+    <div class="tw">
+      <table class="t">
+        <thead><tr><th>Type</th><th>Used by</th></tr></thead>
+        <tbody>
+          <tr><td class="nm">Melee</td><td>Swords, axes, close-range heroes.</td></tr>
+          <tr><td class="nm">Bow</td><td>Archer-style heroes.</td></tr>
+          <tr><td class="nm">Gun</td><td>Firearm heroes.</td></tr>
+          <tr><td class="nm">Staff</td><td>Casters.</td></tr>
+          <tr><td class="nm">Bag</td><td>Backpack-style weapons on a few specific heroes.</td></tr>
+          <tr><td class="nm">Shared</td><td>Usable by more than one weapon category.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Each hero's allowed types are listed on the <a href="characters.html">Characters</a>
+      page, and the <a href="builder.html">Build Maker</a> only offers you weapons your hero
+      can actually equip.
+    </p>
+  </div>
+
+  <div data-mode="exp new" class="card">
+    <h3>Specialty items</h3>
+    <p>
+      Some items carry an extra effect <b>only when a specific hero holds them</b> &mdash;
+      an upgraded version of one of that hero's skills. These are listed per hero on the
+      <a href="characters.html">Characters</a> page. They're usually a big deal for that hero
+      and worthless to anyone else.
+    </p>
+  </div>
+
+  <!-- ============ GRADES ============ -->
+  <h2 data-mode="exp new" class="sect" id="grades"><span class="n"></span> Grades &mdash; the power ladder</h2>
+  <p data-mode="exp new" class="lede">
+    Every item belongs to a grade. The grade tells you both how strong it is and which bosses
+    you have to beat to build it.
+  </p>
+
+  <div data-mode="exp new" class="ladder">
+    <div class="rung" style="--gc: var(--ink-faint)">
+      <span class="g">Magic / Rare</span>
+      <span class="w">Starter</span>
+      <span class="who">Early field monsters &mdash; <a class="bl drop" href="boss.html#q=King%20Kong">King Kong</a>, <a class="bl drop" href="boss.html#q=Troll%20Lord">Troll Lord</a>, <a class="bl drop" href="boss.html#q=Hydra">Hydra</a>, <a class="bl drop" href="boss.html#q=Blood%20Wraith">Blood Wraith</a>. Placeholder gear you replace fast.</span>
+    </div>
+    <div class="rung" style="--gc: var(--delt)">
+      <span class="g">Deltirama</span>
+      <span class="w">Early</span>
+      <span class="who">Your first real set. <a class="bl drop" href="boss.html#q=Wings%20of%20Death">Wings of Death</a>, <a class="bl drop" href="boss.html#q=Mage%20Lord">Mage Lord</a>, <a class="bl drop" href="boss.html#q=Wallachia%20Count">Count of Wallachia</a>, <a class="bl drop" href="boss.html#q=Jack%20o%20Lantern">Jack o Lantern</a>, <a class="bl drop" href="boss.html#q=Guardian%20of%20Sea">Guardian of Sea</a>, <a class="bl drop" href="boss.html#q=Avalon">Avalon&rsquo;s angels</a>.</span>
+    </div>
+    <div class="rung" style="--gc: var(--nept)">
+      <span class="g">Neptinos</span>
+      <span class="w">Early&ndash;mid</span>
+      <span class="who"><a class="bl drop" href="boss.html#q=Corruptor%20Rectus">Corruptor Rectus</a>, <a class="bl drop" href="boss.html#q=Turtle%20Lord">Turtle Lord</a>, <a class="bl drop" href="boss.html#q=Demon%20Lord%20Beriel">Demon Lord Beriel</a>, <a class="bl drop" href="boss.html#q=Flame%20Nightmare">Flame Nightmare</a>, <a class="bl drop" href="boss.html#q=Frostspider">Frostspider Lord/Queen</a>, <a class="bl drop" href="boss.html#q=Soul%20of%20Everfrost">Soul of Everfrost</a>, <a class="bl drop" href="boss.html#q=Spirit%20Beast">Spirit Beast</a>.</span>
+    </div>
+    <div class="rung" style="--gc: var(--gnosis)">
+      <span class="g">Gnosis</span>
+      <span class="w">Mid</span>
+      <span class="who"><a class="bl drop" href="boss.html#q=Skeleton%20King%20Desperia">Skeleton King Desperia</a>, <a class="bl drop" href="boss.html#q=Shadow%20Dragon%20Irbert">Shadow Dragon Irbert</a>, <a class="bl drop" href="boss.html#q=Zombie%20Lord">Zombie Lord</a>, <a class="bl drop" href="boss.html#q=Ancient%20Ent">Ancient Ent</a>, <a class="bl drop" href="boss.html#q=Bone%20Dragon">Bone Dragon</a>, <a class="bl drop" href="boss.html#q=Archangel%20Samael">Archangel Samael</a>.</span>
+    </div>
+    <div class="rung" style="--gc: var(--alteia)">
+      <span class="g">Alteia</span>
+      <span class="w">Late</span>
+      <span class="who">The five Alteia bosses: <a class="bl" href="guides.html#deathfiend">Death Fiend</a>, <a class="bl" href="guides.html#valtora">Lightning God Valtora</a>, <a class="bl" href="guides.html#ifrit">Ifrit</a>, <a class="bl" href="guides.html#nereid">Nereid</a>, <a class="bl" href="guides.html#agareth">Underlord Agareth</a>.</span>
+    </div>
+    <div class="rung" style="--gc: var(--arcana)">
+      <span class="g">Arcana</span>
+      <span class="w">End game</span>
+      <span class="who">The five Arcana bosses: <a class="bl" href="guides.html#lazarus">Duke Lazarus</a>, <a class="bl" href="guides.html#gaia">Gaia</a>, <a class="bl" href="guides.html#construct">Arcane Construct</a>, <a class="bl" href="guides.html#styrix">Styrix</a>, <a class="bl" href="guides.html#kamael">Kamael</a>. Best gear in the game.</span>
+    </div>
+  </div>
+
+  <div data-mode="exp new" class="note">
+    <span class="ic">&#128200;</span>
+    <p>
+      <b>Read it as a route, not a rating.</b> To wear Gnosis gear you farm Gnosis bosses; to
+      kill Alteia bosses you generally want Gnosis gear first. Each grade is the ticket to
+      the next one. Everything on the <a href="codex.html">Item Codex</a> is colour-coded by
+      grade, and <a href="boss.html">Boss Drops</a> shows which boss drops what, at what rate.
+    </p>
+    <p>
+      <b>Every boss above is a link.</b> The Alteia and Arcana names open their written guide
+      directly; the rest open their drop table.
+    </p>
+  </div>
+
+  <!-- ============ ICONS ============ -->
+  <h2 data-mode="exp new" class="sect" id="icons"><span class="n"></span> Icons</h2>
+  <p data-mode="exp new" class="lede">The thing new players ask about most. They aren't gear.</p>
+
+  <div data-mode="exp new" class="card">
+    <p>
+      An <b>Icon</b> is a trophy. Killing a particular boss has a small chance to drop that
+      boss's Icon &mdash; Turtle Lord Icon, Zombie Lord Icon, Nereid Icon, and so on. Around
+      thirty of them exist, one per notable boss.
+    </p>
+    <p>Icons do two things:</p>
+    <ul class="plain">
+      <li>
+        <b>They prove you killed the boss.</b> Collecting them is a long-term goal in itself,
+        and having the right ones is how you get the big combined Icons.
+      </li>
+      <li>
+        <b>Some of them buff your drop rates.</b> This is the important part. The
+        <b>Grandmaster Icon</b> raises personal loot drop rate by 50% for Deltirama through
+        Gnosis. The <b>Legend Icon</b> raises it by 50% across Deltirama through Alteia, and
+        also carries a combat proc. Certain boss Icons (Nereid, Ifrit, Valtora, Agareth,
+        Death Fiend) carry that same proc &mdash; roughly a 5% chance on attack or skill cast
+        to trigger Elemental Fury and gain 2% main stat for 30 seconds.
+      </li>
+    </ul>
+    <p>
+      So a Legend Icon is not a decoration. It makes every hour you spend farming meaningfully
+      more productive, which is why it sits behind Soulstones and a pile of other Icons.
+    </p>
+    <p>
+      The Grandmaster Icon and its upgrades are <b>account-bound</b>, not character-bound
+      &mdash; they travel with <code class="inl">-asave</code> /
+      <code class="inl">-aload</code> rather than your character's save code, and they apply
+      to every character on that account.
+    </p>
+    <p>
+      A few Icons can also be bought rather than farmed &mdash; Gold Coins buy field boss
+      Icons at the coin trader, and there's an NPC in Alfon Village that hands certain Icons
+      to players who already hold the Master Icon.
+    </p>
+  </div>
+
+  <!-- ============ TOKENS ============ -->
+  <h2 data-mode="exp new" class="sect" id="tokens"><span class="n"></span> Tokens</h2>
+  <p data-mode="exp new" class="lede">Cosmetics. Absurdly rare cosmetics.</p>
+
+  <div data-mode="exp new" class="card">
+    <p>
+      A <b>Token</b> turns you into the boss it came from &mdash; a costume, a mount, a
+      transformation. Duke Token, Fiend Token, Soul Token, Token of Darkness, and so on.
+      Nearly every boss in the game has one.
+    </p>
+    <p>
+      They are <b>the rarest things in TWRPG</b>. Typical drop chance is
+      <span class="mono">0.005%</span> to <span class="mono">0.01%</span> per kill &mdash;
+      one in ten to twenty thousand. Nobody farms tokens on purpose; they happen to you.
+    </p>
+    <ul class="plain">
+      <li>
+        Tokens are pure cosmetic. They don't make you stronger. They are, however, the
+        loudest possible flex in a lobby.
+      </li>
+      <li>
+        The <b>Crystal Golem Tokens</b> (green, blue, red, white, yellow) are the exception
+        &mdash; they drop far more often (0.1&ndash;2%) and craft together into the
+        Rainbow Crystal Golem Token.
+      </li>
+      <li>
+        A couple are earned rather than dropped, like the Immortal Kitty Token for killing
+        Zombie Lord nine times in one run.
+      </li>
+      <li>
+        Cosmetics you own live in your <b>closet</b>, opened through your storage. They're
+        registered automatically before saving.
+      </li>
+    </ul>
+  </div>
+
+  <!-- ============ REPLAY ============ -->
+  <h2 data-mode="exp new" class="sect" id="replay"><span class="n"></span> Save your replay &mdash; Gnosis and above</h2>
+
+  <div data-mode="exp new" class="note warnnote">
+    <span class="ic">&#127909;</span>
+    <p>
+      <b>Rule: from Gnosis grade upward, if a Token or an Icon drops, save the replay of that
+      game.</b> The map itself prints
+      <span class="mono">"!Warning! Please save a replay of this game."</span> on the highest
+      Icons for exactly this reason.
+    </p>
+    <p>
+      A replay is the only proof the drop ever happened. If the item is lost to a crash, a
+      desync, a bad save, or a bug, the replay is what lets the map's staff verify it and give
+      it back. No replay, no restoration &mdash; and at 0.005% you do not get another one.
+    </p>
+  </div>
+
+  <div data-mode="exp new" class="card">
+    <h3>How to actually keep a replay</h3>
+    <ol class="steps">
+      <li>
+        Warcraft III writes every finished game to
+        <span class="mono">Documents\Warcraft III\Replays\</span> as
+        <span class="mono">LastReplay.w3g</span>.
+      </li>
+      <li>
+        <b>It is overwritten by your next game.</b> That's the trap &mdash; play one more
+        round and your proof is gone.
+      </li>
+      <li>
+        So the moment the drop happens: finish or leave the game, then go rename or copy
+        <span class="mono">LastReplay.w3g</span> to something like
+        <span class="mono">soul-token-2026-09-05.w3g</span>. Reforged's end-of-game screen
+        also has a Save Replay button.
+      </li>
+      <li>
+        Then <code class="inl">-save</code>, keep the code, and post in the
+        <a href="https://discord.gg/twrpg" target="_blank" rel="noopener">TWRPG Discord</a>
+        if something went wrong.
+      </li>
+    </ol>
+    <p>
+      Same habit applies to any drop you'd be devastated to lose &mdash; Soulstones, Coins of
+      Effort, Arcana pieces. It costs you ten seconds.
+    </p>
+  </div>
+
+  <!-- ============ BOSSES ============ -->
+  <h2 data-mode="exp new" class="sect" id="bosses"><span class="n"></span> Bosses</h2>
+  <p data-mode="exp new" class="lede">Three kinds, and they behave very differently.</p>
+
+  <div data-mode="exp new" class="card">
+    <div class="tw">
+      <table class="t">
+        <thead><tr><th>Kind</th><th>How it works</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="nm">Field bosses</td>
+            <td>
+              Stand in the open world and respawn on a timer (a few minutes). Ragnaar,
+              Tentacle Lord, Giant Golem, Mana Ancient. Your bread-and-butter farm.
+            </td>
+          </tr>
+          <tr>
+            <td class="nm">Item bosses</td>
+            <td>
+              Summoned by using a specific summon item at a specific spot. The summon item has
+              a cooldown. Kill it, loot it, wait, do it again.
+            </td>
+          </tr>
+          <tr>
+            <td class="nm">Raid bosses</td>
+            <td>
+              The big scripted fights &mdash; Gnosis, Alteia and Arcana tiers. Once killed
+              they don't come back on their own. They're revived with the
+              <b>Memory Stone</b> instead.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div data-mode="exp new" class="card">
+    <h3>The Memory Stone</h3>
+    <p>
+      Used to revive a boss that's already been killed, so the lobby can fight it again
+      without waiting for a new game.
+    </p>
+  </div>
+
+  <div data-mode="exp new" class="card">
+    <h3>Difficulty scales with the group</h3>
+    <ul class="plain">
+      <li>
+        More players means tougher bosses <b>and</b> better rewards &mdash; more HP per extra
+        member, but also a higher item drop rate and more experience.
+      </li>
+      <li>
+        <b>Hard mode</b> exists on many bosses: a harder version with a better loot chest,
+        which the game labels as coming from Hard Mode.
+      </li>
+      <li>
+        <b>Practice mode</b> lets you learn Alteia-tier fights safely &mdash; the boss deals
+        75% less damage and takes 300% more, but <b>drops nothing</b>. Use it to learn
+        mechanics without wasting a real attempt.
+      </li>
+      <li>
+        A <b>fairy</b> stands at boss entrances &mdash; not the one following you around, a
+        separate one. Click it to inspect what the boss drops and the recipes those drops feed
+        into, and to see how many players are alive inside.
+      </li>
+    </ul>
+    <p>
+      Every Arcana and Alteia fight is written up phase by phase on the
+      <a href="guides.html">Boss Guides</a> page. Read the one you're about to attempt.
+      These fights are lost to unknown mechanics far more often than to low damage.
+    </p>
+  </div>
+
+  <!-- ============ LOOT ============ -->
+  <h2 data-mode="exp new" class="sect" id="loot"><span class="n"></span> Loot, personal loot, and Wish</h2>
+  <p data-mode="exp new" class="lede">Who gets the drop, and how to aim at the one you want.</p>
+
+  <div data-mode="exp new" class="card">
+    <h3>Personal loot</h3>
+    <p>
+      Drops are <b>personal</b>: the game rolls separately for each player, so what you get
+      is yours and nobody can ninja it. Nine other people in the lobby doesn't mean a ninth of
+      the loot.
+    </p>
+    <p>
+      Drop rates are low by design &mdash; a typical equipment drop is well under 1% per kill.
+      Every rate on <a href="boss.html">Boss Drops</a> is the base per-kill chance before
+      Icons, party size and boss modifiers push it up.
+    </p>
+  </div>
+
+  <div data-mode="exp new" class="card">
+    <h3>Loot chests (Arcana and above)</h3>
+    <p>
+      The top bosses don't scatter items on the ground. They leave a <b>loot chest</b> in the
+      middle of the map, lootable by everyone who was in the arena when the fight started
+      &mdash; including people who died during it. The chest also lets you inspect the drops
+      and their recipes.
+    </p>
+  </div>
+
+  <div data-mode="exp new" class="card">
+    <h3>The Wish system</h3>
+    <p>
+      From Alteia tier upward you can make a <b>Wish</b> before the fight, naming one specific
+      item. Then:
+    </p>
+    <ul class="plain">
+      <li><b>The wished item's drop rate doubles.</b></li>
+      <li><b>Nothing else can drop for you.</b> All in on one item.</li>
+      <li>Not wishing keeps every item on the table, but at a heavily reduced rate.</li>
+    </ul>
+    <p>
+      So: wish when you're hunting one specific missing piece, don't wish when you're happy
+      with anything. Use the <a href="builder.html">Build Maker</a> to work out which single
+      item you're actually short of before you commit.
+    </p>
+  </div>
+
+  <!-- ============ CRAFT ============ -->
+  <h2 data-mode="exp new" class="sect" id="craft"><span class="n"></span> Crafting and farming</h2>
+  <p data-mode="exp new" class="lede">Almost nothing good drops finished. You build it.</p>
+
+  <div data-mode="exp new" class="card">
+    <p>
+      Good items are <b>recipes</b>. A weapon might need a lower-tier weapon, two dropped
+      materials, and another crafted item &mdash; which itself has a recipe, which has its
+      own recipe underneath. Trees run several layers deep.
+    </p>
+    <p>This is why farming is planned rather than random:</p>
+    <ul class="plain">
+      <li>
+        Pick the item you want in the <a href="codex.html">Item Codex</a> and expand its craft
+        tree. It shows every raw material at the bottom and which boss drops each one.
+      </li>
+      <li>
+        Or build the whole five-slot set in the <a href="builder.html">Build Maker</a> and let
+        it produce one combined shopping list, sorted by boss.
+      </li>
+      <li>
+        Import your character in <a href="mycharacters.html">My Characters</a> and everything
+        you already own is crossed off that list automatically.
+      </li>
+      <li>
+        Many items have <b>alternative recipes</b> &mdash; a second way to build the same
+        thing out of different parts. If one material is refusing to drop, check whether
+        there's another path.
+      </li>
+    </ul>
+  </div>
+
+  <div data-mode="exp new" class="card">
+    <h3>Mining</h3>
+    <p>
+      Deposits scattered around the world give crafting materials. You need a
+      <b>pickaxe</b>, and better pickaxes mine faster and unlock better deposits:
+    </p>
+    <div class="tw">
+      <table class="t">
+        <thead><tr><th>Pickaxe</th><th>Speed</th><th>Can mine</th></tr></thead>
+        <tbody>
+          <tr><td class="nm">Pickaxe</td><td class="c">every 10s</td><td>Normal deposits</td></tr>
+          <tr><td class="nm">Mithril Pickaxe</td><td class="c">every 8s</td><td>Normal deposits</td></tr>
+          <tr><td class="nm">Abyssal Pickaxe</td><td class="c">every 6s</td><td>+ Giant Deposit</td></tr>
+          <tr><td class="nm">Chaos Pickaxe</td><td class="c">every 4s</td><td>+ Giant and Chaos Deposit</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ MONEY ============ -->
+  <h2 data-mode="exp new" class="sect" id="money"><span class="n"></span> Money and currencies</h2>
+  <p data-mode="exp new" class="lede">Gold is the small one. The coins are what matter.</p>
+
+  <div data-mode="exp new" class="card">
+    <div class="tw">
+      <table class="t">
+        <thead><tr><th>Currency</th><th>What it's for</th></tr></thead>
+        <tbody>
+          <tr><td class="nm">Gold</td><td>Ordinary money from killing things. Consumables, summon items, some NPC purchases.</td></tr>
+          <tr><td class="nm">Prius Silver Coin</td><td>Lowest coin tier. <b>Buys Neptinos items.</b> Traded up at the coin trader in Prius Capital.</td></tr>
+          <tr><td class="nm">Prius Gold Coin</td><td>Mid tier. <b>Buys Gnosis items</b>, plus field boss Icons and the Spirit Beast Icon.</td></tr>
+          <tr><td class="nm">Prius Platinum Coin</td><td>High tier. <b>Buys Alteia items.</b> Also converts into Coins of Effort.</td></tr>
+          <tr><td class="nm">Coin of Effort</td><td>The serious currency. Earned slowly from top-tier loot chests and coin conversion.</td></tr>
+          <tr><td class="nm">Soulstones</td><td>Dropped by Arcana bosses. Spent at the Mage Tower to buy levels 101&ndash;110, and used in top recipes.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      The three Prius coins map straight onto three grades &mdash; <b>Silver buys Neptinos,
+      Gold buys Gnosis, Platinum buys Alteia</b>. That makes coins a way to buy a gear tier
+      outright instead of waiting on drop luck, which is often faster than farming the item
+      you're missing.
+    </p>
+    <p>
+      The main NPCs to know: the <b>coin trader</b>, the <b>Weird Magician</b> (coin and
+      costume exchange), the <b>Mage Tower</b>, and the <b>stat reset NPC by the Recall
+      Stone</b> &mdash; all in <b>Prius Capital</b>. There's also a <b>Hearthstone</b> in
+      Alfon Village and Prius Capital to set your respawn point, which is worth doing on
+      arrival.
+    </p>
+  </div>
+
+  <!-- ============ COMMANDS ============ -->
+  <h2 data-mode="exp new" class="sect" id="commands"><span class="n"></span> Commands worth knowing</h2>
+  <p data-mode="exp new" class="lede">Typed into the normal game chat.</p>
+
+  <div data-mode="exp new" class="card">
+    <div class="tw">
+      <table class="t">
+        <thead><tr><th>Command</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td class="mn">-save &lt;name&gt;</td><td><b>Saves your character</b> to a named .txt file. Do this constantly.</td></tr>
+          <tr><td class="mn">-load &lt;code&gt;</td><td>Loads a character from a save code. Paste code 1, then code 2.</td></tr>
+          <tr><td class="mn">-asave / -aload</td><td>Saves and loads your <b>account</b> &mdash; account-bound items only, like the Grandmaster Icon and its upgrades. Not a substitute for <code class="inl">-save</code>.</td></tr>
+          <tr><td class="mn">-analyze &nbsp;·&nbsp; -a</td><td>Shows detailed info about the unit you have selected. <b>Needs the Power Recorder.</b></td></tr>
+          <tr><td class="mn">-record &nbsp;·&nbsp; -r</td><td>Results of the current or last boss fight &mdash; damage done, and so on. <b>Needs the Power Recorder.</b></td></tr>
+          <tr><td class="mn">-recipe</td><td>Shows the recipe for an item.</td></tr>
+          <tr><td class="mn">-recall</td><td>Recall.</td></tr>
+          <tr><td class="mn">-track &nbsp;·&nbsp; -t</td><td>Tracking display.</td></tr>
+          <tr><td class="mn">-refresh &nbsp;·&nbsp; -rf</td><td>Refreshes the interface when something goes visually wrong.</td></tr>
+          <tr><td class="mn">-skip</td><td>Toggles auto-skipping cinematics. The setting is stored in your save code.</td></tr>
+          <tr><td class="mn">-colorblind</td><td>Toggles colorblind mode.</td></tr>
+          <tr><td class="mn">-convert &lt;name&gt;</td><td>Sets your nickname &mdash; Reforged only, for players without a battletag.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      <b><code class="inl">-analyze</code> and <code class="inl">-record</code> need an item
+      first.</b> Buy the <b>Power Recorder</b> from <b>Jaina</b>, who stands in the
+      <b>top-right corner of the Mage Tower</b> &mdash; and the Mage Tower is at the
+      <b>top-centre of Capital Prius</b>. It costs gold, it's a one-off, and without it those
+      two commands do nothing. Worth buying early: being able to read a boss's stats and see
+      your own damage is how you work out whether your gear is actually the problem.
+    </p>
+    <p>
+      Command lists change between versions. If one doesn't work, check the
+      <a href="changelogs.html">Change Logs</a> or ask on the
+      <a href="https://discord.gg/twrpg" target="_blank" rel="noopener">Discord</a>.
+    </p>
+  </div>
+
+  <!-- ============ MISTAKES ============ -->
+  <h2 class="sect" id="mistakes" data-mode="exp new"><span class="n"></span> <span data-mode="new">Mistakes almost every new player makes</span><span data-mode="exp">Mistakes that cost people items</span></h2>
+
+  <div data-mode="exp new" class="card">
+    <ul class="plain">
+      <li data-mode="new">
+        <b>Not saving.</b> Then losing four hours. This is the number one way people quit
+        TWRPG.
+      </li>
+      <li>
+        <b><code class="inl">-save</code> with no filename</b>, then not being able to find
+        the file among a folder of random names.
+      </li>
+      <li>
+        <b>Not saving the replay</b> when a Token or a high-grade Icon finally drops. See
+        <a href="#replay">Save your replay</a>.
+      </li>
+      <li data-mode="new">
+        <b>Never backing up the CustomMapData folder.</b> One reinstall, every character gone.
+      </li>
+      <li data-mode="new">
+        <b>Dumping stat points into the wrong attribute.</b> Only your main stat really pays.
+      </li>
+      <li>
+        <b>Selling or dropping "junk" materials.</b> Check the
+        <a href="codex.html">Item Codex</a> first &mdash; that grey rock is probably in four
+        recipes.
+      </li>
+      <li data-mode="new">
+        <b>Farming without a target.</b> Decide which item you're building, get its material
+        list, then farm the bosses on that list. Aimless killing is very slow.
+      </li>
+      <li>
+        <b>Walking into an Alteia or Arcana boss blind.</b> Read the
+        <a href="guides.html">guide</a> first, or use Practice Mode.
+      </li>
+      <li>
+        <b>Wishing for the wrong item.</b> A Wish blocks every other drop. Be sure it's the
+        piece you actually need.
+      </li>
+    </ul>
+  </div>
+
+  <!-- ============ GLOSSARY ============ -->
+  <!-- ============ QUICK TAB ============ -->
+  <div class="note goodnote" data-mode="quick">
+    <span class="ic">&#9889;</span>
+    <p>
+      <b>The short version.</b> Four things: what you wear, how you get it, how to aim your
+      luck, and what the words mean. Two minutes. Switch to another tab above when you want
+      the detail.
+    </p>
+  </div>
+
+  <h2 class="sect" id="q-gear" data-mode="quick"><span class="n"></span> Gear</h2>
+
+  <div class="card" data-mode="quick">
+    <p><b>You wear five things.</b> Weapon, Headwear, Armor, Wings, Accessory. That's it.</p>
+    <p>
+      <b>Weapons are restricted.</b> Each hero can only hold certain types &mdash; melee, bow,
+      gun, staff, bag. A staff is useless to a gun hero. The
+      <a href="builder.html">Build Maker</a> only shows you weapons your hero can equip, so
+      use it and you can't get this wrong.
+    </p>
+    <p>
+      <b>Every item has a grade.</b> The grade is its power tier, and it's also the route you
+      take through the game:
+    </p>
+    <div class="chain">
+      <span style="--gc: var(--ink-faint)">Magic / Rare</span>
+      <span style="--gc: var(--delt)">Deltirama</span>
+      <span style="--gc: var(--nept)">Neptinos</span>
+      <span style="--gc: var(--gnosis)">Gnosis</span>
+      <span style="--gc: var(--alteia)">Alteia</span>
+      <span style="--gc: var(--arcana)">Arcana</span>
+    </div>
+    <p>
+      Each grade is dropped by its own set of bosses. You farm one grade to build the gear
+      that lets you kill the next one. Most top gear also needs <b>level 100</b>.
+    </p>
+  </div>
+
+  <h2 class="sect" id="q-recipes" data-mode="quick"><span class="n"></span> Recipes</h2>
+
+  <div class="card" data-mode="quick">
+    <p>
+      <b>Good items don't drop. You build them.</b> A weapon is a recipe: some dropped
+      materials, plus other crafted items, which have recipes of their own. The trees go
+      several layers deep.
+    </p>
+    <p>
+      So <b>keep everything</b>. Materials that look like junk are recipe parts. Check
+      anything before you drop it.
+    </p>
+    <p>
+      <b>Don't farm at random.</b> Pick the item you want, look up what it's made of, then go
+      kill the bosses that drop those parts. That's the whole game loop:
+    </p>
+    <ul class="plain">
+      <li><a href="codex.html">Item Codex</a> &mdash; any item, its full craft tree, and where each part drops.</li>
+      <li><a href="builder.html">Build Maker</a> &mdash; plan all five slots, get one combined farming list.</li>
+      <li><a href="mycharacters.html">My Characters</a> &mdash; paste your save codes and everything you already own is crossed off that list.</li>
+    </ul>
+  </div>
+
+  <h2 class="sect" id="q-wish" data-mode="quick"><span class="n"></span> Wishes</h2>
+
+  <div class="card" data-mode="quick">
+    <p>
+      Before a late boss (<b>Alteia grade and up</b>) you can make a <b>Wish</b> &mdash; you
+      name one specific item you want.
+    </p>
+    <ul class="plain">
+      <li><b>That item's drop chance doubles.</b></li>
+      <li><b>Nothing else can drop for you.</b> It's all or nothing.</li>
+      <li>Not wishing leaves everything on the table, but at a much lower rate.</li>
+    </ul>
+    <p>
+      <b>Wish when you're missing one exact piece.</b> Don't wish when anything would be an
+      upgrade. Work out which piece you're actually short of in the
+      <a href="builder.html">Build Maker</a> first.
+    </p>
+  </div>
+
+  <h2 class="sect" id="glossary"><span class="n"></span> Glossary</h2>
+  <p class="lede">Words you'll see in lobby chat.</p>
+
+  <div class="card">
+    <dl class="gl">
+      <dt>Load code</dt>
+      <dd>The long string that <i>is</i> your character. Produced by <code class="inl">-save</code>, restored with <code class="inl">-load</code>.</dd>
+      <dt>Grade</dt>
+      <dd>An item's power tier: Magic → Rare → Deltirama → Neptinos → Gnosis → Alteia → Arcana.</dd>
+      <dt>Icon</dt>
+      <dd>A boss trophy. Several raise your drop rates; collecting them is a long-term goal.</dd>
+      <dt>Token</dt>
+      <dd>An ultra-rare cosmetic transformation, roughly 0.005% per kill. No power, all bragging.</dd>
+      <dt>Soulstone</dt>
+      <dd>Arcana boss currency. Buys levels 101&ndash;110 and feeds the top recipes.</dd>
+      <dt>Coin of Effort</dt>
+      <dd>High-end currency, converted up from Prius coins or dropped by top loot chests.</dd>
+      <dt>Wish</dt>
+      <dd>Pre-fight declaration on Alteia+ bosses: double rate on one named item, nothing else can drop.</dd>
+      <dt data-mode="new">Personal loot</dt>
+      <dd data-mode="new">Drops are rolled per player. What you get is yours.</dd>
+      <dt>Loot chest</dt>
+      <dd>How Arcana+ bosses hand out loot &mdash; one chest, openable by everyone who started the fight.</dd>
+      <dt>Memory Stone</dt>
+      <dd>Used to revive a boss the lobby has already killed, so it can be fought again.</dd>
+      <dt data-mode="new">Hard mode</dt>
+      <dd data-mode="new">A tougher version of a boss with a better chest.</dd>
+      <dt data-mode="new">Practice mode</dt>
+      <dd data-mode="new">Alteia-tier bosses with damage turned down and no loot. For learning mechanics.</dd>
+      <dt data-mode="new">Main stat</dt>
+      <dd data-mode="new">Your hero's primary attribute (STR, AGI or INT). The one that converts into damage.</dd>
+      <dt>Specialty item</dt>
+      <dd>An item with a bonus effect that only triggers for one specific hero.</dd>
+      <dt>Awakening</dt>
+      <dd>A late upgrade that changes how one of your skills behaves, often differently per main stat.</dd>
+      <dt>Fairy (yours)</dt>
+      <dd>The one following your hero. Your quest giver &mdash; press <code class="inl">Q</code> on it for the next objective and a hint.</dd>
+      <dt>Fairy (boss)</dt>
+      <dd>A different one, standing at boss entrances. Shows drop tables, recipes and how many players are alive inside.</dd>
+    </dl>
+  </div>
+
+  <!-- ============ NEXT ============ -->
+  <h2 class="sect" id="next"><span class="n"></span> Where to go from here</h2>
+
+  <div class="card">
+    <ul class="plain">
+      <li><a href="characters.html"><b>Characters</b></a> &mdash; pick your hero. Skills, combos, main stat, specialty items.</li>
+      <li><a href="mycharacters.html"><b>My Characters</b></a> &mdash; paste your load codes and see your character decoded here.</li>
+      <li><a href="builder.html"><b>Build Maker</b></a> &mdash; plan a five-slot set and get the exact farming list for it.</li>
+      <li><a href="codex.html"><b>Item Codex</b></a> &mdash; every item, its stats, its recipe tree, and where its parts drop.</li>
+      <li><a href="boss.html"><b>Boss Drops</b></a> &mdash; every creature's loot table with per-kill rates.</li>
+      <li><a href="guides.html"><b>Boss Guides</b></a> &mdash; read before your first Alteia or Arcana attempt.</li>
+      <li><a href="https://discord.gg/twrpg" target="_blank" rel="noopener"><b>TWRPG Discord</b></a> &mdash; where the players, the guides and the map's staff actually are.</li>
+    </ul>
+  </div>
+
+  <div class="note warnnote">
+    <span class="ic">&#9888;&#65039;</span>
+    <p>
+      <b>This page describes <span class="mono">v0.76a</span>.</b> Numbers, drop rates and
+      mechanics change between map versions &mdash; the
+      <a href="changelogs.html">Change Logs</a> track what moved. If something here doesn't
+      match your game, the Discord is right and this page is out of date.
+    </p>
+  </div>
+</div>
+
+<footer>
+  Unofficial fan page &middot; not affiliated with the map's authors &middot;
+  data parsed from <span class="mono">twrpgv0.76a_eng.w3x</span> &middot;
+  <a href="https://discord.gg/twrpg" target="_blank" rel="noopener">discord.gg/twrpg</a>
+  &middot; &#129302; Built with AI.
+</footer>
+
+<script>
+/* two reading modes: the experienced tab hides everything marked data-mode="new".
+   Section numbers are CSS counters, so they renumber themselves. */
+(function () {
+  var LS = "twrpg_np_mode";
+  var btns = document.querySelectorAll("[data-mode-btn]");
+  var MODES = ["quick", "exp", "new"];
+  function set(mode, remember) {
+    if (MODES.indexOf(mode) < 0) mode = "quick";
+    MODES.forEach(function (m) {
+      document.body.classList.toggle("mode-" + m, m === mode);
+    });
+    btns.forEach(function (b) {
+      b.setAttribute("aria-pressed", b.dataset.modeBtn === mode ? "true" : "false");
+    });
+    if (remember) { try { localStorage.setItem(LS, mode); } catch (e) {} }
+  }
+  btns.forEach(function (b) {
+    b.addEventListener("click", function () { set(b.dataset.modeBtn, true); });
+  });
+  var saved = null;
+  try { saved = localStorage.getItem(LS); } catch (e) {}
+  // ?mode=… / #… wins over the remembered choice, so links can point at a given tab
+  var m = /(?:\?|&)mode=(quick|exp|new)\b/.exec(location.search)
+       || /^#(quick|exp|new)$/.exec(location.hash);
+  set((m && m[1]) || saved || "quick", false);
+})();
+</script>
+
+<script>
+  document.querySelector("[data-navtheme]").addEventListener("click", () => {
+    const c = document.documentElement.getAttribute("data-theme");
+    const d = c
+      ? c === "dark"
+      : matchMedia("(prefers-color-scheme:dark)").matches;
+    document.documentElement.setAttribute("data-theme", d ? "light" : "dark");
+  });
+</script>
+
+<script>
+/* side nav: a drawer once the viewport is too narrow to keep it open */
+(function(){
+  var nav=document.getElementById('sidenav'),tog=document.getElementById('navToggle'),scrim=document.getElementById('navScrim');
+  if(!nav||!tog)return;
+  function setOpen(on){
+    nav.classList.toggle('open',on);
+    document.body.classList.toggle('navopen',on);
+    // drive the slide inline: one page's stylesheet dropped the .open rule
+    nav.style.left=on?'0px':'';
+    scrim.hidden=!on;
+    tog.setAttribute('aria-expanded',on?'true':'false');
+    if(on&&nav.querySelector('.navclose'))nav.querySelector('.navclose').focus();
+  }
+  tog.addEventListener('click',function(e){e.stopPropagation();setOpen(!nav.classList.contains('open'));});
+  scrim.addEventListener('click',function(){setOpen(false);});
+  var cl=document.getElementById('navClose');
+  if(cl)cl.addEventListener('click',function(){setOpen(false);tog.focus();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')setOpen(false);});
+  addEventListener('resize',function(){if(innerWidth>1000)setOpen(false);});
+})();
+</script>
