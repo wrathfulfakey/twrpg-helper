@@ -165,6 +165,31 @@ details.farmgrp:not([open])>summary::before{content:'\25b8'}
 .acqclr{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);background:none;border:1px solid var(--line-strong);border-radius:999px;padding:3px 9px;cursor:pointer;flex:none}
 .acqclr:hover{color:var(--ink);border-color:var(--blood-soft)}
 .acqnote{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-faint);flex-basis:100%;margin:0}
+.ffilt{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.ffl{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);margin-right:2px}
+.fdd{position:relative}
+.fdd>summary{list-style:none;display:inline-flex;align-items:center;gap:7px;cursor:pointer;background:var(--panel2);border:1px solid var(--line-strong);border-radius:999px;padding:6px 12px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.05em;color:var(--ink);transition:border-color .12s,background .12s,color .12s}
+.fdd>summary::-webkit-details-marker{display:none}
+.fdd>summary:hover{border-color:color-mix(in srgb,var(--bc) 55%,var(--line-strong))}
+.fdd>summary::after{content:"";flex:none;width:0;height:0;margin-left:1px;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;opacity:.5;transition:transform .14s}
+.fdd[open]>summary::after{transform:rotate(180deg)}
+.fdd[open]>summary{border-color:color-mix(in srgb,var(--bc) 55%,var(--line-strong))}
+.fdd>summary>i{flex:none;width:8px;height:8px;border-radius:50%;background:var(--bc)}
+.fdd>summary .c{font-size:9.5px;color:var(--ink-faint);border:1px solid var(--line-strong);border-radius:999px;padding:0 6px}
+.fdd.on>summary{background:color-mix(in srgb,var(--bc) 12%,var(--panel2));border-color:color-mix(in srgb,var(--bc) 45%,var(--line-strong));color:var(--bc)}
+.fdd.on>summary .c{color:var(--bc);border-color:color-mix(in srgb,var(--bc) 40%,var(--line))}
+.fddp{position:absolute;z-index:5;top:calc(100% + 6px);left:0;min-width:216px;max-height:292px;overflow:auto;background:var(--panel);border:1px solid var(--line-strong);border-radius:12px;box-shadow:0 16px 44px rgba(0,0,0,.5);padding:5px}
+.fddh{font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);padding:8px 9px 3px}
+.fopt{display:flex;align-items:center;gap:9px;width:100%;background:none;border:0;border-radius:8px;padding:6px 9px;cursor:pointer;text-align:left;font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink)}
+.fopt>i{flex:none;width:8px;height:8px;border-radius:50%;background:var(--oc)}
+.fopt>.ic{flex:none;width:22px;height:22px;border-radius:5px;font-size:10px}
+.fopt b{flex:1;min-width:0;font-weight:500;color:var(--ink)}
+.fopt b em{display:block;font-family:Spectral,serif;font-style:normal;font-size:10.5px;color:var(--ink-faint);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fopt .c{flex:none;font-size:9.5px;color:var(--ink-faint);border:1px solid var(--line-strong);border-radius:999px;padding:0 6px}
+.fopt:hover{background:color-mix(in srgb,var(--oc) 15%,transparent)}
+.fopt.sel b{color:var(--oc)}
+.fopt.sel .c{color:var(--oc);border-color:color-mix(in srgb,var(--oc) 40%,var(--line))}
+.fopt.sel::after{content:"";flex:none;width:5px;height:9px;margin:-3px 1px 0 0;border:solid var(--oc);border-width:0 2px 2px 0;transform:rotate(45deg)}
 .farmtoth{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);padding:7px 0}
 .farmtot .matrow{padding-left:0}
 .farmtot .mq{font-weight:700;color:var(--ink)}
@@ -783,9 +808,9 @@ function keysForItemMat(root,code){
   return [...out];
 }
 // every leaf position in the current build
-function buildKeys(){
+function buildKeys(list){
   const out=[];
-  for(const sl of SLOTS){const c=state.slots[sl];if(c)nodeKeys([c]).forEach(k=>out.push(k));}
+  for(const c of list||SLOTS.map(sl=>state.slots[sl]).filter(Boolean))nodeKeys([c]).forEach(k=>out.push(k));
   return out;
 }
 const keyMat=k=>k.slice(k.lastIndexOf('>')+1);
@@ -815,9 +840,12 @@ function paintAcq(){
 
 // ---------- farm breakdown popup ----------
 const farmOv=document.getElementById('farm');
+let fSlot='',fBoss='';
 function leaves(code,mult,acc){const n=N[code];if(n&&n.recipe&&n.recipe.length){for(const c of n.recipe)leaves(c.code,mult*(c.qty||1),acc);}else{acc[code]=(acc[code]||0)+mult;}return acc;}
 function openFarm(grade){
-  const codes=SLOTS.map(s=>state.slots[s]).filter(Boolean);
+  fBoss=grade||'';
+  if(fSlot&&!state.slots[fSlot])fSlot='';
+  const codes=SLOTS.filter(s=>!fSlot||s===fSlot).map(s=>state.slots[s]).filter(Boolean);
   const GORD=['Common','Rare','Magic','Deltirama','Neptinos','Gnosis','Alteia','Arcana'];
   const grank=d=>{const i=GORD.indexOf(d);return i<0?GORD.length:i;};
   const gvar=d=>BVAR[d]||'--ink-faint';
@@ -829,7 +857,8 @@ function openFarm(grade){
   const tree=(pathArr,mult)=>{
     const code=pathArr[pathArr.length-1];
     const kids=((N[code]&&N[code].recipe)||[]).map(c=>({code:c.code,q:(c.qty||1)*mult,n:N[c.code],path:pathArr.concat(c.code)})).filter(k=>k.n);
-    const craft=kids.filter(k=>isCraft(k.n));
+    const craft=kids.filter(k=>isCraft(k.n))
+      .sort((a,b)=>grank(a.n.grade)-grank(b.n.grade)||b.q-a.q||a.n.name.localeCompare(b.n.name));
     const drops=kids.filter(k=>!isCraft(k.n))
       .sort((a,b)=>grank(a.n.drop)-grank(b.n.drop)||b.q-a.q||a.n.name.localeCompare(b.n.name));
     return craft.map(k=>rnode(k.path,k.q)).join('')+drops.map(k=>matRow(k.code,k.q,'',[k.path.join('>')])).join('');
@@ -861,11 +890,35 @@ function openFarm(grade){
     return out;
   }
   const pathsByMat={};
-  for(const k of buildKeys())(pathsByMat[keyMat(k)]=pathsByMat[keyMat(k)]||[]).push(k);
+  for(const k of buildKeys(codes))(pathsByMat[keyMat(k)]=pathsByMat[keyMat(k)]||[]).push(k);
   const tot=Object.entries(sum).sort((a,b)=>grank(N[a[0]].drop)-grank(N[b[0]].drop)||b[1]-a[1]||N[a[0]].name.localeCompare(N[b[0]].name));
+  // filters: only offer bosses that actually drop something still on this list, and slots that are filled
+  const dropCount={};
+  for(const [mc] of tot){const d=N[mc]&&N[mc].drop;if(d)dropCount[d]=(dropCount[d]||0)+1;}
+  if(fBoss&&!dropCount[fBoss])fBoss='';
+  grade=fBoss;
+  const slotOpts=SLOTS.filter(s=>state.slots[s]);
+  const bossOpts=GORD.slice(3).filter(b=>dropCount[b]),mobOpts=GORD.slice(0,3).filter(b=>dropCount[b]);
+  const slotIt=fSlot?N[state.slots[fSlot]]:null;
+  const fopt=(kind,v,lab,cur,col,inner)=>`<button class="fopt${v===cur?' sel':''}" data-fpick="${kind}" data-v="${esc(v)}" style="--oc:var(${col})">${inner}<b>${esc(lab)}</b>`
+    +(kind==='boss'&&v?`<span class="c">${dropCount[v]}</span>`:'')+`</button>`;
+  const bgrp=(lab,arr)=>arr.length?`<div class="fddh">${esc(lab)}</div>`+arr.map(b=>fopt('boss',b,b,fBoss,gvar(b),'<i></i>')).join(''):'';
+  const fbar=slotOpts.length?`<div class="ffilt"><span class="ffl">Filter</span>`
+      +`<details class="fdd${fBoss?' on':''}" style="--bc:var(${fBoss?gvar(fBoss):'--ink-faint'})">`
+        +`<summary aria-label="Filter by boss"><i></i>${esc(fBoss||'All bosses')}<span class="c">${fBoss?dropCount[fBoss]:tot.length}</span></summary>`
+        +`<div class="fddp">${fopt('boss','','All bosses',fBoss,'--ink-faint','<i></i>')}${bgrp('Bosses',bossOpts)}${bgrp('Mob tiers',mobOpts)}</div></details>`
+      +`<details class="fdd${fSlot?' on':''}" style="--bc:var(${slotIt?gvar(slotIt.grade):'--ink-faint'})">`
+        +`<summary aria-label="Filter by slot"><i></i>${esc(fSlot||'All slots')}</summary>`
+        +`<div class="fddp">${fopt('slot','','All slots',fSlot,'--ink-faint','<i></i>')}`
+          +slotOpts.map(sl=>{const it=N[state.slots[sl]];
+            return `<button class="fopt${sl===fSlot?' sel':''}" data-fpick="slot" data-v="${esc(sl)}" style="--oc:var(${gvar(it.grade)})">${icon(it.ic,it.name,'sm')}<b>${esc(sl)}<em>${esc(it.name)}</em></b></button>`;}).join('')
+        +`</div></details>`
+      +(fBoss||fSlot?`<button class="acqclr" data-fclear>Reset</button>`:'')+`</div>`:'';
+  const totShown=fBoss?tot.filter(([mc])=>N[mc]&&N[mc].drop===fBoss):tot;
   const totQty=tot.reduce((a,t)=>a+t[1],0);
-  document.getElementById('farmTitle').innerHTML=`Everything to farm — ${totQty} drop${totQty===1?'':'s'} across ${tot.length} material${tot.length===1?'':'s'}`;
-  const totHTML=tot.length?`<div class="farmtot"><div class="farmtoth">All grades, weakest first</div>${tot.map(([mc,q])=>matRow(mc,q,' tot',pathsByMat[mc]||[])).join('')}</div>`:'';
+  document.getElementById('farmTitle').innerHTML=`${fSlot?esc(fSlot):'Everything to farm'} — ${totQty} drop${totQty===1?'':'s'} across ${tot.length} material${tot.length===1?'':'s'}`;
+  const totHTML=tot.length?`<div class="farmtot"><div class="farmtoth">${fBoss?esc(fBoss)+' drops only':'All grades, weakest first'}</div>`
+      +(totShown.length?totShown.map(([mc,q])=>matRow(mc,q,' tot',pathsByMat[mc]||[])).join(''):`<div class="chnone">Nothing from ${esc(fBoss)} in this list.</div>`)+`</div>`:'';
   // a craft step can appear more than once inside one item's tree; the grade tab shows it once,
   // standing for every position, and expands the first of them
   const gradeNode=(root,code,q)=>{
@@ -896,7 +949,7 @@ function openFarm(grade){
     }).join('');
     return blocks||`<div class="chnone">Nothing at ${esc(g)} for this build.</div>`;
   }
-  const allKeys=buildKeys();
+  const allKeys=buildKeys(codes);
   const acqBar=tot.length?`<div class="acqbar" data-codes="${esc(JSON.stringify(allKeys))}">`
       +`<div class="acqp"><i style="width:0"></i></div><span class="acqt"></span>`
       +`<button class="acqclr" data-acqclear>Clear marks</button>`
@@ -905,9 +958,9 @@ function openFarm(grade){
   const on=gp?'2':'0';
   const tab=(i,label,extra)=>`<button class="tab${i===on?' on':''}" data-tab="${i}" role="tab" aria-selected="${i===on}" aria-controls="fpane${i}">${label}${extra||''}</button>`;
   const pane=(i,inner)=>`<div class="tabp" id="fpane${i}" data-pane="${i}" role="tabpanel"${i===on?'':' hidden'}>${inner}</div>`;
-  const bodyHTML=acqBar+(totHTML&&html?`<div class="tabs" role="tablist">`
+  const bodyHTML=fbar+acqBar+(totHTML&&html?`<div class="tabs" role="tablist">`
       +tab('0','Craft trees')
-      +tab('1','Farm list',`<span class="tc">${tot.length}</span>`)
+      +tab('1','Farm list',`<span class="tc">${totShown.length}</span>`)
       +(gp?tab('2',esc(grade),`<span class="tc">${tot.filter(([mc])=>N[mc]&&N[mc].drop===grade).length}</span>`):'')
       +`</div>`+pane('0',html)+pane('1',totHTML)+(gp?pane('2',gp):'')
     :(html+totHTML));
@@ -923,6 +976,15 @@ document.getElementById('farmBody').addEventListener('click',e=>{
   box.querySelectorAll('[data-tab]').forEach(b=>{const on=b===t;b.classList.toggle('on',on);b.setAttribute('aria-selected',on?'true':'false');});
   box.querySelectorAll('[data-pane]').forEach(pn=>{pn.hidden=pn.dataset.pane!==t.dataset.tab;});
 });
+document.getElementById('farmBody').addEventListener('click',e=>{
+  const o=e.target.closest('[data-fpick]');if(!o)return;
+  if(o.dataset.fpick==='slot')fSlot=o.dataset.v;
+  openFarm(o.dataset.fpick==='slot'?fBoss:o.dataset.v);
+});
+// clicking anywhere else shuts an open filter menu, including the other one
+document.addEventListener('click',e=>{
+  document.querySelectorAll('#farmBody .fdd[open]').forEach(d=>{if(!d.contains(e.target))d.open=false;});
+});
 document.getElementById('farmClose').addEventListener('click',closeFarm);
 farmOv.addEventListener('click',e=>{
   if(e.target===farmOv){closeFarm();return;}
@@ -931,6 +993,7 @@ farmOv.addEventListener('click',e=>{
     const row=cb.closest('[data-keys]');
     if(row)toggleAcq(JSON.parse(row.dataset.keys||'[]'));
     return;}
+  if(e.target.closest('[data-fclear]')){fSlot='';openFarm('');return;}
   if(e.target.closest('[data-acqclear]')){
     buildKeys().forEach(k=>ACQ.delete(k));
     // with a character loaded, "clear" means back to what that character owns,
