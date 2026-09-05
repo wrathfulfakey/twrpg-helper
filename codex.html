@@ -120,10 +120,13 @@ footer .mono{font-style:normal;color:var(--ink-soft)}
 .mclose{flex:none;background:none;border:1px solid var(--line-strong);color:var(--ink-soft);border-radius:8px;width:28px;height:28px;cursor:pointer;font-size:15px;line-height:1}
 .mclose:hover{color:var(--ink);border-color:var(--blood-soft)}
 .mbody{padding:18px 18px 20px;max-height:74vh;overflow:auto}
-.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 22px;align-items:start}
-.cols>div{min-width:0}
-.cols .msec:first-child{margin-top:16px}
-@media(max-width:760px){.cols{grid-template-columns:minmax(0,1fr)}}
+.tabs{display:flex;gap:4px;margin-top:18px;border-bottom:1px solid var(--line)}
+.tab{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);background:none;border:0;border-bottom:2px solid transparent;padding:8px 11px;margin-bottom:-1px;cursor:pointer;display:flex;align-items:center;gap:7px}
+.tab:hover{color:var(--ink)}
+.tab.on{color:var(--blood);border-bottom-color:var(--blood)}
+.tab .tc{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.06em;color:var(--ink-faint);border:1px solid var(--line-strong);border-radius:999px;padding:1px 6px}
+.tab.on .tc{color:var(--blood);border-color:color-mix(in srgb,var(--blood) 45%,var(--line))}
+.tabp>.msec:first-child{margin-top:14px}
 .mhead{display:flex;align-items:flex-start;gap:10px;justify-content:flex-start}
 .mhead .gpill{margin-left:auto}
 .mhead .mn{font-family:Cinzel,serif;font-weight:700;font-size:22px;line-height:1.1;color:var(--ink);text-wrap:balance}
@@ -147,15 +150,33 @@ footer .mono{font-style:normal;color:var(--ink-soft)}
 .efl li{margin:1px 0}
 .fx{font-size:13px;font-style:italic;color:var(--ink-soft);line-height:1.45}
 .fx span{display:block;padding-left:14px;text-indent:-14px}
-.comp{display:flex;align-items:center;gap:8px;font-size:13.5px;padding:3px 0;color:var(--ink);width:100%;background:none;border:0;text-align:left;font-family:Spectral,serif}
+.comp{display:flex;align-items:center;gap:8px;font-size:13.5px;padding:3px 6px;border-radius:7px;color:var(--ink);width:100%;background:none;border:0;text-align:left;font-family:Spectral,serif}
 .comp i{width:9px;height:9px;border-radius:50%;flex:none}
 .comp .cn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .comp .q{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-faint);flex:none;padding:0 4px}
 .comp .tag{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;padding:1px 5px;border-radius:4px;border:1px solid var(--line-strong);color:var(--ink-faint);flex:none}
 button.comp{cursor:pointer} button.comp:hover .cn{color:var(--blood);text-decoration:underline}
-button.comp.craft .tag{color:var(--arcana);border-color:color-mix(in srgb,var(--arcana) 50%,var(--line))}
+.comp.craft .tag{color:var(--arcana);border-color:color-mix(in srgb,var(--arcana) 50%,var(--line))}
 button.comp::after{content:"›";color:var(--ink-faint);font-family:"IBM Plex Mono",monospace}
 .comp.leaf{cursor:default}
+.rnode>summary{list-style:none;cursor:pointer}
+.rnode>summary::-webkit-details-marker{display:none}
+.rnode>summary::before{content:'\25b8';color:var(--ink-faint);font-family:"IBM Plex Mono",monospace;font-size:10px;flex:none;width:9px}
+.rnode[open]>summary::before{content:'\25be'}
+.rnode>summary:hover .cn{color:var(--blood)}
+.rkids{margin:1px 0 4px 9px;padding-left:11px;border-left:1px solid var(--line)}
+/* hovering a recipe row — or any material inside it — lights that recipe and its direct contents */
+.rnode>summary:hover{background:color-mix(in srgb,var(--blood) 13%,transparent)}
+.rnode:has(>summary:hover)>.rkids>.comp,
+.rnode:has(>summary:hover)>.rkids>.rnode>summary,
+.rnode:has(>.rkids>.comp:hover)>summary,
+.rnode:has(>.rkids>.comp:hover)>.rkids>.comp,
+.rnode:has(>.rkids>.comp:hover)>.rkids>.rnode>summary{background:color-mix(in srgb,var(--blood) 13%,transparent)}
+.rnode:has(>summary:hover)>.rkids,
+.rnode:has(>.rkids>.comp:hover)>.rkids{border-left-color:color-mix(in srgb,var(--blood) 45%,var(--line))}
+/* the item's own materials sit at the top level, with no recipe row above them */
+.rroot:has(>.comp:hover)>.comp,
+.rroot:has(>.comp:hover)>.rnode>summary{background:color-mix(in srgb,var(--blood) 13%,transparent)}
 .bosses{display:flex;flex-wrap:wrap;gap:6px}
 .tally{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:4px 12px 8px}
 .tally>summary{cursor:pointer;list-style:none;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);padding:7px 0}
@@ -282,10 +303,10 @@ function build(){
 build();
 
 // filters
-let fGrade=GRADES[0].g, fSlot='All', fq='';
+let fGrade='All', fSlot='All', fq='';
 const gradechips=document.getElementById('gradechips'),slotchips=document.getElementById('slotchips');
 function chip(label,active,sc){return `<button class="fchip" role="button" aria-pressed="${active}" data-val="${label}"${sc?` style="--sc:var(${sc})"`:''}>${sc?`<i style="background:var(${sc})"></i>`:''}${label}</button>`;}
-gradechips.innerHTML=`<button class="gtab" role="tab" aria-selected="false" data-val="All" style="--tc:var(--ink-soft)"><span class="tdot"></span>All</button>`+GRADES.map((g,i)=>`<button class="gtab" role="tab" aria-selected="${i===0}" data-val="${g.g}" style="--tc:var(${g.v})"><span class="tdot"></span>${g.g}<span class="twhen">${g.when}</span></button>`).join('');
+gradechips.innerHTML=`<button class="gtab" role="tab" aria-selected="true" data-val="All" style="--tc:var(--ink-soft)"><span class="tdot"></span>All</button>`+GRADES.map(g=>`<button class="gtab" role="tab" aria-selected="false" data-val="${g.g}" style="--tc:var(${g.v})"><span class="tdot"></span>${g.g}<span class="twhen">${g.when}</span></button>`).join('');
 slotchips.innerHTML=chip('All',true)+SLOTS.map(s=>chip(s,false)).join('');
 
 function apply(){
@@ -339,6 +360,15 @@ function comp(c){
   const inner=icon(cn&&cn.ic,c.name,'sm')+`<i style="background:${col}"></i><span class="cn">${esc(c.name)}</span>`+(c.qty>1?`<span class="q">×${c.qty}</span>`:'<span class="q"></span>')+`<span class="tag" ${tagStyle}${title}>${esc(tag)}</span>`;
   return c.craft?`<button class="comp craft" data-code="${c.code}">${inner}</button>`:`<div class="comp leaf">${inner}</div>`;
 }
+// craftable components expand inline to their own materials; raw drops stay clickable leaves
+function isCraft(n){return !!(n&&n.recipe&&n.recipe.length);}
+function recipeTree(code,mult){
+  return byGrade((N[code]&&N[code].recipe)||[]).map(c=>{
+    const cn=N[c.code],q=(c.qty||1)*mult;
+    if(!isCraft(cn))return comp(Object.assign({},c,{qty:q}));
+    return `<details class="rnode"><summary class="comp craft">${icon(cn.ic,cn.name,'sm')}<i style="background:var(--arcana)"></i><span class="cn">${esc(cn.name)}</span>${q>1?`<span class="q">\u00d7${q}</span>`:'<span class="q"></span>'}<span class="tag">craft</span></summary><div class="rkids">${recipeTree(c.code,q)}</div></details>`;
+  }).join('');
+}
 function fx2(n){return (n.fx||[]).map(cleanFx).filter(x=>x&&x!=='—');}
 function dropLine(n){
   const hasMob=n.mobs&&n.mobs.length;
@@ -352,8 +382,20 @@ function dropLine(n){
   else if(tier)suffix=' boss';
   return `<div class="msrc" style="--bc:var(${bc})">${pre} <b>${names}</b>${suffix}.</div>`;
 }
+const slug=s=>String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+function itemHash(code){return '#'+slug(N[code].name)+'-'+code;}
+// accepts #name-CODE, a bare #CODE, or #name-slug on its own
+function codeFromHash(h){
+  h=decodeURIComponent(String(h||'').replace(/^#/,''));if(!h)return null;
+  if(N[h])return h;
+  const tail=h.slice(h.lastIndexOf('-')+1);
+  if(N[tail])return tail;
+  const want=slug(h);
+  return Object.keys(N).find(c=>slug(N[c].name)===want)||null;
+}
 function renderModal(){
   const n=N[stack[stack.length-1]];if(!n)return;
+  history.replaceState(null,'',itemHash(stack[stack.length-1]));
   const gc=n.grade?`var(${GVAR[n.grade]||'--ink-soft'})`:'var(--ink-soft)';
   const meta=[n.slot,n.wtype,n.itype&&!n.slot?n.itype:'',n.lvl?'Lv '+n.lvl:''].filter(Boolean).join(' · ');
   let h=`<div class="mhead">${icon(n.ic,n.name,'lg')}<div><div class="mn" id="mtitle">${esc(n.name)}</div>${meta?`<div class="mmeta">${esc(meta)}</div>`:''}</div>${n.grade?`<span class="gpill" style="--gc:${gc}">${esc(n.grade)}</span>`:''}</div>`;
@@ -373,12 +415,17 @@ function renderModal(){
     .sort((a,b)=>grank(N[a[0]].drop)-grank(N[b[0]].drop)||b[1]-a[1]||N[a[0]].name.localeCompare(N[b[0]].name));
   const totQty=tally.reduce((a,t)=>a+t[1],0);
   let colL='',colR='';
-  if(tally.length>1)colL+=`<div class="msec"><details class="tally"${matchMedia('(min-width:761px)').matches?' open':''}><summary>Total materials needed — ${totQty} drop${totQty===1?'':'s'} across ${tally.length} material${tally.length===1?'':'s'}</summary>${tally.map(([mc,q])=>{const m=N[mc];const bc=(m.drop&&BVAR[m.drop])||'--ink-faint';
-    return `<button class="comp" data-code="${mc}" style="--bc:var(${bc})">${icon(m.ic,m.name,'sm')}<i style="background:var(${bc})"></i><span class="cn">${esc(m.name)}</span><span class="q">×${q}</span>${m.drop?`<span class="tag" style="color:var(${bc});border-color:color-mix(in srgb,var(${bc}) 45%,var(--line))">${esc(m.drop)}</span>`:''}</button>`;}).join('')}</details></div>`;
+  if(tally.length>1)colL+=`<div class="msec"><div class="h">Every raw drop this item costs — ${totQty} drop${totQty===1?'':'s'} across ${tally.length} material${tally.length===1?'':'s'}</div><div class="tally">${tally.map(([mc,q])=>{const m=N[mc];const bc=(m.drop&&BVAR[m.drop])||'--ink-faint';
+    return `<button class="comp" data-code="${mc}" style="--bc:var(${bc})">${icon(m.ic,m.name,'sm')}<i style="background:var(${bc})"></i><span class="cn">${esc(m.name)}</span><span class="q">×${q}</span>${m.drop?`<span class="tag" style="color:var(${bc});border-color:color-mix(in srgb,var(${bc}) 45%,var(--line))">${esc(m.drop)}</span>`:''}</button>`;}).join('')}</div></div>`;
   if(n.alt&&n.alt.length)colR+=`<div class="msec"><div class="h">Also obtainable — exchange / purchase</div>${n.alt.map(c=>`<div class="comp leaf">${icon(null,c.name,'sm')}<i style="background:var(--ink-faint)"></i><span class="cn">${esc(c.name)}</span><span class="q">${c.qty>1?'×'+c.qty:''}</span><span class="tag">exchange</span></div>`).join('')}</div>`;
-  if(n.recipe&&n.recipe.length)colR+=`<div class="msec"><div class="h">Recipe — click a craftable part to expand</div>${byGrade(n.recipe).map(comp).join('')}</div>`;
+  if(n.recipe&&n.recipe.length)colR+=`<div class="msec"><div class="h">Recipe — expand a craftable part to see its materials</div><div class="rroot">${recipeTree(stack[stack.length-1],1)}</div></div>`;
   else if(!n.mat&&!(n.alt&&n.alt.length))colR+=`<div class="msec"><div class="h">Recipe</div><div class="comp leaf"><i style="background:var(--ink-faint)"></i><span class="cn">No recipe — acquired directly.</span></div></div>`;
-  h+=colL&&colR?`<div class="cols"><div>${colL}</div><div>${colR}</div></div>`:(colL+colR);
+  h+=colL&&colR?`<div class="tabs" role="tablist">`
+      +`<button class="tab on" data-tab="0" role="tab" aria-selected="true" aria-controls="pane0">Craft tree</button>`
+      +`<button class="tab" data-tab="1" role="tab" aria-selected="false" aria-controls="pane1">Farm list<span class="tc">${tally.length}</span></button>`
+      +`</div><div class="tabp" id="pane0" data-pane="0" role="tabpanel">${colR}</div>`
+      +`<div class="tabp" id="pane1" data-pane="1" role="tabpanel" hidden>${colL}</div>`
+    :(colR+colL);
   if(n.usedIn&&n.usedIn.length)h+=`<div class="msec"><div class="h">Used to craft — click to open</div>${n.usedIn.slice().sort((x,y)=>x.name.localeCompare(y.name)).map(u=>`<button class="comp craft" data-code="${u.code}">${icon(N[u.code]&&N[u.code].ic,u.name,'sm')}<i style="background:var(--arcana)"></i><span class="cn">${esc(u.name)}</span><span class="q"></span><span class="tag">recipe</span></button>`).join('')}</div>`;
   if(n.bosses&&n.bosses.length)h+=`<div class="msec"><div class="h">Full craft tree — materials by grade</div><div class="bosses">${n.bosses.map(bossChip).join('')}</div></div>`;
   mbody.innerHTML=h;
@@ -386,11 +433,25 @@ function renderModal(){
   mbody.scrollTop=0;
 }
 function openItem(code){if(!N[code])return;if(overlay.hidden){lastFocus=document.activeElement;overlay.hidden=false;document.body.style.overflow='hidden';}stack.push(code);renderModal();document.getElementById('mclose').focus();}
-function closeModal(){overlay.hidden=true;stack=[];document.body.style.overflow='';if(lastFocus)lastFocus.focus();}
+function closeModal(){overlay.hidden=true;stack=[];document.body.style.overflow='';history.replaceState(null,'',location.pathname+location.search);if(lastFocus)lastFocus.focus();}
 document.addEventListener('click',e=>{const t=e.target.closest('[data-code]');if(t){openItem(t.getAttribute('data-code'));return;}const cb=e.target.closest('.crumb');if(cb){stack=stack.slice(0,+cb.getAttribute('data-idx')+1);renderModal();}});
+mbody.addEventListener('click',e=>{
+  const t=e.target.closest('[data-tab]');if(!t)return;
+  mbody.querySelectorAll('[data-tab]').forEach(b=>{const on=b===t;b.classList.toggle('on',on);b.setAttribute('aria-selected',on?'true':'false');});
+  mbody.querySelectorAll('[data-pane]').forEach(pn=>{pn.hidden=pn.dataset.pane!==t.dataset.tab;});
+});
 document.getElementById('mclose').addEventListener('click',closeModal);
 overlay.addEventListener('click',e=>{if(e.target===overlay)closeModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!overlay.hidden)closeModal();});
+function openFromHash(){
+  const c=codeFromHash(location.hash);
+  if(!c){if(!overlay.hidden)closeModal();return;}
+  if(!overlay.hidden&&stack[stack.length-1]===c)return;
+  if(!overlay.hidden){stack=[];overlay.hidden=true;document.body.style.overflow='';}
+  openItem(c);
+}
+window.addEventListener('hashchange',openFromHash);
+openFromHash();
 document.getElementById('tg').addEventListener('click',()=>{const cur=document.documentElement.getAttribute('data-theme');const isDark=cur?cur==='dark':matchMedia('(prefers-color-scheme:dark)').matches;document.documentElement.setAttribute('data-theme',isDark?'light':'dark');});
 </script>
 <script>document.querySelector("[data-navtheme]").addEventListener("click",function(){var c=document.documentElement.getAttribute("data-theme");var d=c?c==="dark":matchMedia("(prefers-color-scheme:dark)").matches;document.documentElement.setAttribute("data-theme",d?"light":"dark");});</script>

@@ -96,6 +96,13 @@ dialog.gm::backdrop{background:rgba(10,7,16,.62);backdrop-filter:blur(3px)}
 .jump{flex:none;display:flex;gap:6px;overflow-x:auto;padding:9px 18px;border-bottom:1px solid var(--line);background:var(--panel)}
 .jump button{flex:none;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.04em;color:var(--ink-soft);background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:4px 10px;cursor:pointer;white-space:nowrap}
 .jump button:hover{color:var(--ac);border-color:var(--ac)}
+.tabs{flex:none;display:flex;gap:4px;padding:0 18px;border-bottom:1px solid var(--line);background:var(--panel)}
+.tab{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);background:none;border:0;border-bottom:2px solid transparent;padding:9px 11px;margin-bottom:-1px;cursor:pointer;display:flex;align-items:center;gap:7px}
+.tab:hover{color:var(--ink)}
+.tab.on{color:var(--ac);border-bottom-color:var(--ac)}
+.tab .tc{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.06em;color:var(--ink-faint);border:1px solid var(--line-strong);border-radius:999px;padding:1px 6px}
+.tab.on .tc{color:var(--ac);border-color:color-mix(in srgb,var(--ac) 45%,var(--line))}
+.tabp>.jump{margin:0 -18px;position:sticky;top:0;z-index:2}
 .gmb{flex:1;min-height:0;overflow-y:auto;padding:0 18px 20px;scroll-behavior:smooth}
 .gs{padding:16px 0;border-bottom:1px solid var(--line)}
 .gs:last-child{border-bottom:0}
@@ -224,6 +231,18 @@ const B=JSON.parse(document.getElementById('bosses').textContent);
 const REALMS=['Arcana','Alteia'];
 const RC={Arcana:'--arcana',Alteia:'--alteia'};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const slug=s=>String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+function bossHash(id){const b=B.find(x=>x.id===id);return b?'#'+slug(b.name):'';}
+// accepts #duke-lazarus, a bare #lazarus, and the older #b=lazarus links
+function idFromHash(h){
+  h=decodeURIComponent(String(h||'').replace(/^#/,''));if(!h)return null;
+  const legacy=h.match(/^b=(.+)$/);if(legacy)h=legacy[1];
+  if(B.some(x=>x.id===h))return h;
+  const tail=h.slice(h.lastIndexOf('-')+1);
+  if(B.some(x=>x.id===tail))return tail;
+  const want=slug(h),hit=B.find(x=>slug(x.name)===want);
+  return hit?hit.id:null;
+}
 const hay=b=>(b.name+' '+b.realm+' '+b.pos+' '+b.summary+' '+(b.keys||[]).join(' ')+' '+b.sections.map(s=>s.h+' '+(s.tag||'')+' '+s.b.map(x=>x.n||'').join(' ')).join(' ')).toLowerCase();
 B.forEach(b=>b._h=hay(b));
 
@@ -278,9 +297,38 @@ function block(x){
   }
 }
 
+// phase-by-phase walkthrough on one tab, the always-on mechanics and spell lists on the other
+const isPhase=h=>/\b(phase|intermission|opening)\b/i.test(h);
+function split(b){
+  const mech=[],ph=[];
+  b.sections.forEach((s,i)=>(isPhase(s.h)?ph:mech).push(i));
+  return {mech:mech,ph:ph};
+}
+function secList(b,list){
+  return (list.length>1?`<div class="jump">${list.map(i=>`<button data-jump="${i}">${esc(b.sections[i].h)}</button>`).join('')}</div>`:'')
+    +list.map(i=>{const s=b.sections[i];return `<section class="gs" id="gs${i}">
+      <div class="gsh"><h3>${esc(s.h)}</h3>${s.tag?`<span class="stag">${esc(s.tag)}</span>`:''}</div>
+      ${s.b.map(block).join('')}
+    </section>`;}).join('');
+}
+function tabsHTML(b){
+  const {mech,ph}=split(b);
+  if(!mech.length||!ph.length)return '';
+  return `<div class="tabs" role="tablist">`
+    +`<button class="tab on" data-tab="0" role="tab" aria-selected="true" aria-controls="gpane0">Mechanics<span class="tc">${mech.length}</span></button>`
+    +`<button class="tab" data-tab="1" role="tab" aria-selected="false" aria-controls="gpane1">Phases<span class="tc">${ph.length}</span></button></div>`;
+}
+function panesHTML(b){
+  const {mech,ph}=split(b);
+  if(!mech.length||!ph.length)return secList(b,b.sections.map((s,i)=>i));
+  return `<div class="tabp" id="gpane0" data-pane="0" role="tabpanel">${secList(b,mech)}</div>`
+    +`<div class="tabp" id="gpane1" data-pane="1" role="tabpanel" hidden>${secList(b,ph)}</div>`;
+}
 const dlg=document.getElementById('dlg');
+let curBoss=null;
 function open(id){
   const b=B.find(x=>x.id===id); if(!b)return;
+  curBoss=id;
   dlg.style.setProperty('--ac','var('+RC[b.realm]+')');
   dlg.innerHTML=`<div class="gmh"><span class="bico">${b.ico}</span><div>
       <h2>${esc(b.name)}</h2>
@@ -288,14 +336,11 @@ function open(id){
       <div class="bmeta"><span class="pill r">${b.realm}</span>${b.pos!==b.realm?`<span class="pill">${esc(b.pos)}</span>`:''}</div>
     </div><button class="xbtn" data-close aria-label="Close">&times;</button></div>
     <p class="srcnote top"><b>Source:</b> posted in the <a href="https://discord.gg/twrpg" target="_blank" rel="noopener">TWRPG Discord</a> #guides channel by <span class="mono">${esc(b.src.who)}</span> on ${esc(b.src.date)} &mdash; it may be outdated, mechanics and numbers can change between map versions.</p>
-    <div class="jump">${b.sections.map((s,i)=>`<button data-jump="${i}">${esc(s.h)}</button>`).join('')}</div>
-    <div class="gmb">${b.sections.map((s,i)=>`<section class="gs" id="gs${i}">
-      <div class="gsh"><h3>${esc(s.h)}</h3>${s.tag?`<span class="stag">${esc(s.tag)}</span>`:''}</div>
-      ${s.b.map(block).join('')}
-    </section>`).join('')}${lootHTML(b.id)}${b.credit?`<p class="credit">${esc(b.credit)}</p>`:''}</div>`;
+    ${tabsHTML(b)}
+    <div class="gmb">${panesHTML(b)}${lootHTML(b.id)}${b.credit?`<p class="credit">${esc(b.credit)}</p>`:''}</div>`;
   if(!dlg.open)dlg.showModal();
   dlg.querySelector('.gmb').scrollTop=0;
-  history.replaceState(null,'','#b='+id);
+  history.replaceState(null,'',bossHash(id));
 }
 
 document.getElementById('list').addEventListener('click',e=>{
@@ -303,11 +348,18 @@ document.getElementById('list').addEventListener('click',e=>{
 });
 dlg.addEventListener('click',e=>{
   if(e.target.closest('[data-close]')){dlg.close();return;}
+  const tb=e.target.closest('[data-tab]');
+  if(tb){
+    dlg.querySelectorAll('[data-tab]').forEach(x=>{const on=x===tb;x.classList.toggle('on',on);x.setAttribute('aria-selected',on?'true':'false');});
+    dlg.querySelectorAll('[data-pane]').forEach(pn=>{pn.hidden=pn.dataset.pane!==tb.dataset.tab;});
+    dlg.querySelector('.gmb').scrollTop=0;
+    return;
+  }
   const j=e.target.closest('[data-jump]');
-  if(j){dlg.querySelector('#gs'+j.dataset.jump).scrollIntoView({block:'start'});return;}
+  if(j){const t=dlg.querySelector('#gs'+j.dataset.jump);if(t)t.scrollIntoView({block:'start'});return;}
   if(e.target===dlg)dlg.close();
 });
-dlg.addEventListener('close',()=>history.replaceState(null,'',location.pathname+location.search));
+dlg.addEventListener('close',()=>{curBoss=null;history.replaceState(null,'',location.pathname+location.search);});
 const lb=document.getElementById('lb');
 function zoom(img){
   const nw=img.naturalWidth||img.width;
@@ -327,6 +379,12 @@ document.querySelector('[data-navtheme]').addEventListener('click',()=>{
 });
 
 renderList('');
-const m=location.hash.match(/b=([a-z]+)/);
-if(m)open(m[1]);
+function openFromHash(){
+  const id=idFromHash(location.hash);
+  if(!id){if(dlg.open)dlg.close();return;}
+  if(dlg.open&&curBoss===id)return;
+  open(id);
+}
+window.addEventListener('hashchange',openFromHash);
+openFromHash();
 </script>
