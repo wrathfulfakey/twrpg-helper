@@ -81,86 +81,6 @@
     display: flex;
     flex-direction: column;
   }
-  .topnav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    background: color-mix(in srgb, var(--panel) 86%, transparent);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--line);
-    padding: 0 clamp(12px, 3vw, 22px);
-    height: 46px;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-  }
-  .topnav .brand {
-    font-family: Cinzel, serif;
-    font-weight: 700;
-    font-size: 15px;
-    color: var(--ink);
-    text-decoration: none;
-    margin-right: 8px;
-    white-space: nowrap;
-  }
-  .topnav .brand .a {
-    color: var(--blood);
-  }
-  .topnav a.nl {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 12.5px;
-    letter-spacing: 0.02em;
-    color: var(--ink-soft);
-    text-decoration: none;
-    padding: 6px 11px;
-    border-radius: 8px;
-    white-space: nowrap;
-  }
-  .topnav a.nl:hover {
-    color: var(--ink);
-    background: color-mix(in srgb, var(--ink) 7%, transparent);
-  }
-  .topnav a.nl[aria-current="page"] {
-    color: var(--blood);
-    background: color-mix(in srgb, var(--blood) 12%, transparent);
-  }
-  .topnav .navsp {
-    flex: 1;
-    min-width: 6px;
-  }
-  .topnav .navtg {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 13px;
-    color: var(--ink-soft);
-    background: none;
-    border: 1px solid var(--line-strong);
-    border-radius: 999px;
-    padding: 4px 10px;
-    cursor: pointer;
-    flex: none;
-  }
-  .topnav .navtg:hover {
-    color: var(--ink);
-    border-color: var(--blood-soft);
-  }
-  .topnav a.nl:focus-visible,
-  .topnav .navtg:focus-visible,
-  .topnav .brand:focus-visible {
-    outline: 2px solid var(--blood);
-    outline-offset: 2px;
-    border-radius: 6px;
-  }
-  @media (max-width: 560px) {
-    .topnav .brand .full {
-      display: none;
-    }
-    .topnav a.nl {
-      padding: 6px 8px;
-      font-size: 11.5px;
-    }
-  }
   .wrap {
     max-width: 980px;
     margin: 0 auto;
@@ -266,95 +186,149 @@
 ::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--ink-faint) 50%,transparent);border:3px solid transparent;background-clip:content-box;border-radius:999px}
 ::-webkit-scrollbar-thumb:hover{background:color-mix(in srgb,var(--ink-soft) 70%,transparent);border:3px solid transparent;background-clip:content-box}
 ::-webkit-scrollbar-corner{background:transparent}
+
+/* ---------- side navigation ---------- */
+body{padding-left:206px}
+.sidenav{position:fixed;left:0;top:0;bottom:0;width:206px;z-index:100;display:flex;flex-direction:column;gap:1px;
+  padding:15px 11px 12px;overflow-y:auto;background:var(--panel);border-right:1px solid var(--line)}
+.sidenav .brand{display:flex;align-items:center;gap:7px;font-family:Cinzel,serif;font-weight:700;font-size:17px;
+  color:var(--ink);text-decoration:none;padding:2px 8px 12px}
+.sidenav .brand .a{color:var(--blood)}
+.sidenav .sgrp{font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-faint);padding:14px 9px 5px}
+.sidenav a.sl{font-family:"IBM Plex Mono",monospace;font-size:12.5px;letter-spacing:.02em;color:var(--ink-soft);
+  text-decoration:none;padding:7px 9px;border-radius:8px;white-space:nowrap}
+.sidenav a.sl:hover{color:var(--ink);background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.sidenav a.sl[aria-current="page"]{color:var(--blood);background:color-mix(in srgb,var(--blood) 12%,transparent)}
+.sfoot{margin-top:auto;padding-top:14px;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.sidenav .navtg{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft);background:none;
+  border:1px solid var(--line-strong);border-radius:999px;padding:5px 12px;cursor:pointer}
+.sidenav .navtg:hover{color:var(--ink);border-color:var(--blood-soft)}
+.sidenav .ai-badge{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-faint);padding-left:2px}
+.navtoggle{display:none;position:fixed;top:10px;left:10px;z-index:112;align-items:center;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink);background:var(--panel);
+  border:1px solid var(--line-strong);border-radius:10px;padding:7px 12px;cursor:pointer;box-shadow:var(--shadow)}
+.navtoggle:hover{border-color:var(--blood-soft)}
+.navscrim{position:fixed;inset:0;background:rgba(8,5,12,.55);z-index:99}
+.navscrim[hidden]{display:none}
+.sidenav a.sl:focus-visible,.navtoggle:focus-visible,.sidenav .brand:focus-visible{outline:2px solid var(--blood);outline-offset:2px}
+/* narrow: the bar folds away until the button is pressed */
+@media(max-width:1000px){
+  body{padding-left:0;padding-top:54px}
+  .sidenav{width:236px;left:-236px;transition:left .18s ease;box-shadow:0 0 40px rgba(0,0,0,.4)}
+  .sidenav.open{left:0}
+  .navtoggle{display:inline-flex}
+}
+@media(prefers-reduced-motion:reduce){.sidenav{transition:none}}
+
+.navclose{display:none;position:absolute;top:12px;right:10px;width:30px;height:30px;align-items:center;justify-content:center;
+  font-size:19px;line-height:1;color:var(--ink-faint);background:none;border:1px solid var(--line-strong);border-radius:8px;cursor:pointer}
+.navclose:hover{color:var(--ink);border-color:var(--blood-soft)}
+@media(max-width:1000px){
+  body.navopen .navtoggle{display:none}
+  .sidenav.open .navclose{display:inline-flex}
+  .sidenav{padding-right:46px}
+}
+
+.sect{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-faint);font-weight:600;margin:34px 0 12px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.sect span{font-family:Spectral,Georgia,serif;font-style:italic;font-size:13.5px;letter-spacing:0;text-transform:none;color:var(--ink-faint);opacity:.85}
+.sect::after{content:"";flex:1;height:1px;background:var(--line);min-width:20px}
+.meta a{color:var(--blood-soft)}
 </style>
 
-<nav class="topnav">
-  <a class="brand" href="index.html"
-    ><span class="a">⚔</span> <span class="full">TWRPG</span></a
-  ><a class="nl" href="index.html" aria-current="page">Home</a
-  ><a class="nl" href="builder.html">Build Maker</a
-  ><a class="nl" href="codex.html">Item Codex</a
-  ><a class="nl" href="boss.html">Boss Drops</a
-  ><a class="nl" href="guides.html">Boss Guides</a
-  ><a class="nl" href="characters.html">Characters</a><a class="nl" href="changelogs.html">Change Logs</a><a class="nl" href="credits.html">Credits</a><span class="navsp"></span
-  ><span class="ai-badge" title="This site was built with AI" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-faint);white-space:nowrap;margin-right:10px">🤖 Built with AI</span
-  ><button class="navtg" data-navtheme aria-label="Toggle theme">◐</button>
-</nav>
+<button class="navtoggle" id="navToggle" aria-label="Open navigation" aria-expanded="false" aria-controls="sidenav">☰ <span>Menu</span></button><aside class="sidenav" id="sidenav" aria-label="Site"><button class="navclose" id="navClose" aria-label="Close navigation">×</button><a class="brand" href="index.html"><span class="a">⚔</span> TWRPG</a><a class="sl" href="index.html" aria-current="page">Home</a><div class="sgrp">Plan</div><a class="sl" href="builder.html">Build Maker</a><a class="sl" href="mycharacters.html">My Characters</a><div class="sgrp">Look up</div><a class="sl" href="characters.html">Characters</a><a class="sl" href="codex.html">Item Codex</a><a class="sl" href="guides.html">Boss Guides</a><a class="sl" href="boss.html">Boss Drops</a><div class="sgrp">About</div><a class="sl" href="changelogs.html">Change Logs</a><a class="sl" href="credits.html">Credits</a><div class="sfoot"><button class="navtg" data-navtheme aria-label="Toggle theme">◐ Theme</button><span class="ai-badge" title="This site was built with AI">🤖 Built with AI</span></div></aside><div class="navscrim" id="navScrim" hidden></div>
 <div class="wrap">
-  <div class="eyebrow">TWRPG · v0.76a · fan toolkit</div>
+  <div class="eyebrow">TWRPG &middot; v0.76a &middot; fan toolkit</div>
   <h1><span class="a">TWRPG</span> Toolkit</h1>
   <p class="lead">
-    Everything datamined straight from the map: every item, recipe, drop rate
-    and boss — wired into tools for planning and sharing hero builds. No
-    account, no server.
+    Everything datamined straight from the map &mdash; every item, recipe, drop rate and
+    boss &mdash; wired into tools for planning gear and tracking what you still have to farm.
+    Paste your <b>-load</b> codes and your actual character comes across, decoded in your
+    own browser. No account, no server, nothing uploaded.
   </p>
 
+  <h3 class="sect">Plan <span>your gear and your farming</span></h3>
   <div class="grid">
     <a class="card" href="builder.html" style="--ac: var(--blood)">
-      <span class="ico">⚒️</span>
+      <span class="ico">&#9874;&#65039;</span>
       <h2>Build Maker</h2>
       <p>
-        Pick any of the 32 heroes, fill five gear slots with grade-filtered
-        items, watch the combined stats, and share the whole build inside a
-        single link.
+        Pick any of the 37 heroes, fill five gear slots with grade-filtered items, and see the
+        combined stats. Every build breaks down into the exact materials to farm, and shares
+        inside a single link.
       </p>
-      <span class="go">Open the planner ›</span>
+      <span class="go">Open the planner &rsaquo;</span>
     </a>
-    <a class="card" href="codex.html" style="--ac: var(--arcana)">
-      <span class="ico">📜</span>
-      <h2>Item Codex</h2>
+    <a class="card" href="mycharacters.html" style="--ac: var(--good, var(--alteia))">
+      <span class="ico">&#128100;</span>
+      <h2>My Characters</h2>
       <p>
-        All 501 epic items across Deltirama → Arcana. Stats, recipes, drop mobs
-        and rates, and a click-through crafting tree for every piece.
+        Import a character from its <b>-load</b> codes: class, level, stats and every item in
+        your inventory, bag and storage. Its gear then ticks itself off your farming list in
+        the Build Maker.
       </p>
-      <span class="go">Browse items ›</span>
+      <span class="go">Import a character &rsaquo;</span>
     </a>
-    <a class="card" href="boss.html" style="--ac: var(--nept)">
-      <span class="ico">👹</span>
-      <h2>Boss Drops</h2>
-      <p>
-        Every farmable creature and its loot table — per-kill drop rates, grade
-        tier, and search by boss or item to find exactly what drops where.
-      </p>
-      <span class="go">See loot tables ›</span>
-    </a>
-    <a class="card" href="guides.html" style="--ac: var(--gnosis)">
-      <span class="ico">📖</span>
-      <h2>Boss Guides</h2>
-      <p>
-        Phase-by-phase writeups for the five Arcana and five Alteia bosses —
-        every mechanic, every instant kill, and what the group has to do about
-        it. Searchable by boss or mechanic.
-      </p>
-      <span class="go">Read the guides ›</span>
-    </a>
+  </div>
+
+  <h3 class="sect">Look up <span>heroes, items and bosses</span></h3>
+  <div class="grid">
     <a class="card" href="characters.html" style="--ac: var(--alteia)">
-      <span class="ico">⚔️</span>
+      <span class="ico">&#9876;&#65039;</span>
       <h2>Characters</h2>
       <p>
-        All 37 heroes: full skill kit, chain and combo mechanics, awakenings,
-        and the specialty items unique to each character.
+        All 37 heroes: full skill kit, chain and combo mechanics, awakenings, and the
+        specialty items unique to each one. Filter by attribute, and see which heroes really
+        use a second stat.
       </p>
-      <span class="go">Open ›</span>
+      <span class="go">Browse heroes &rsaquo;</span>
+    </a>
+    <a class="card" href="codex.html" style="--ac: var(--arcana)">
+      <span class="ico">&#128220;</span>
+      <h2>Item Codex</h2>
+      <p>
+        All 501 epic items across Deltirama &rarr; Arcana. Stats, drop mobs and rates, and a
+        collapsible craft tree for every piece.
+      </p>
+      <span class="go">Browse items &rsaquo;</span>
+    </a>
+    <a class="card" href="guides.html" style="--ac: var(--gnosis)">
+      <span class="ico">&#128214;</span>
+      <h2>Boss Guides</h2>
+      <p>
+        Phase-by-phase writeups for the five Arcana and five Alteia bosses &mdash; every
+        mechanic, every instant kill, and what the group has to do about it.
+      </p>
+      <span class="go">Read the guides &rsaquo;</span>
+    </a>
+    <a class="card" href="boss.html" style="--ac: var(--nept)">
+      <span class="ico">&#128121;</span>
+      <h2>Boss Drops</h2>
+      <p>
+        Every farmable creature and its loot table &mdash; per-kill drop rates and grade tier.
+        Search by boss or by item to find exactly what drops where.
+      </p>
+      <span class="go">See loot tables &rsaquo;</span>
     </a>
   </div>
 
   <div class="meta">
     <div>
-      <b>Data source:</b> parsed from <span>twrpgv0.76a_eng.w3x</span> — items,
+      <b>Data source:</b> parsed from <span>twrpgv0.76a_eng.w3x</span> &mdash; items,
       abilities, recipes and drop tables.
     </div>
     <div>
-      <b>Sharing:</b> builds are encoded in the URL and saved in your browser —
-      nothing is uploaded anywhere.
+      <b>Your data stays here:</b> builds live in the URL, characters and farming progress in
+      this browser's local storage. Nothing is uploaded anywhere.
     </div>
     <div>
-      <b>Note:</b> unofficial fan project, not affiliated with the map's
-      authors.
+      <b>Load codes:</b> decoded locally, keyed to the account name that saved them &mdash;
+      exactly the way the map reads them.
     </div>
     <div>
-      <b>Built with AI:</b> this website was designed and built with the help of
-      AI.
+      <b>Note:</b> unofficial fan project, not affiliated with the map's authors.
+      See <a href="changelogs.html">Change Logs</a> and <a href="credits.html">Credits</a>.
     </div>
   </div>
 </div>
@@ -370,4 +344,27 @@
         : matchMedia("(prefers-color-scheme:dark)").matches;
       document.documentElement.setAttribute("data-theme", d ? "light" : "dark");
     });
+</script>
+
+<script>
+/* side nav: a drawer once the viewport is too narrow to keep it open */
+(function(){
+  var nav=document.getElementById('sidenav'),tog=document.getElementById('navToggle'),scrim=document.getElementById('navScrim');
+  if(!nav||!tog)return;
+  function setOpen(on){
+    nav.classList.toggle('open',on);
+    document.body.classList.toggle('navopen',on);
+    // drive the slide inline: one page's stylesheet dropped the .open rule
+    nav.style.left=on?'0px':'';
+    scrim.hidden=!on;
+    tog.setAttribute('aria-expanded',on?'true':'false');
+    if(on&&nav.querySelector('.navclose'))nav.querySelector('.navclose').focus();
+  }
+  tog.addEventListener('click',function(e){e.stopPropagation();setOpen(!nav.classList.contains('open'));});
+  scrim.addEventListener('click',function(){setOpen(false);});
+  var cl=document.getElementById('navClose');
+  if(cl)cl.addEventListener('click',function(){setOpen(false);tog.focus();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')setOpen(false);});
+  addEventListener('resize',function(){if(innerWidth>1000)setOpen(false);});
+})();
 </script>

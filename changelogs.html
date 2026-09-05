@@ -160,17 +160,7 @@ dialog.lb .lbhint{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-sp
 footer{margin-top:34px;border-top:1px solid var(--line);padding-top:18px;font-size:13px;color:var(--ink-faint);font-style:italic}
 footer .mono{font-style:normal;color:var(--ink-soft)}
 
-.topnav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:4px;background:color-mix(in srgb,var(--panel) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 clamp(12px,3vw,22px);height:46px;flex-wrap:nowrap;overflow-x:auto}
-.topnav .brand{font-family:Cinzel,serif;font-weight:700;font-size:15px;color:var(--ink);text-decoration:none;margin-right:8px;white-space:nowrap}
-.topnav .brand .a{color:var(--blood)}
-.topnav a.nl{font-family:"IBM Plex Mono",monospace;font-size:12.5px;letter-spacing:.02em;color:var(--ink-soft);text-decoration:none;padding:6px 11px;border-radius:8px;white-space:nowrap}
-.topnav a.nl:hover{color:var(--ink);background:color-mix(in srgb,var(--ink) 7%,transparent)}
-.topnav a.nl[aria-current=page]{color:var(--blood);background:color-mix(in srgb,var(--blood) 12%,transparent)}
-.topnav .navsp{flex:1;min-width:6px}
-.topnav .navtg{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink-soft);background:none;border:1px solid var(--line-strong);border-radius:999px;padding:4px 10px;cursor:pointer;flex:none}
-.topnav .navtg:hover{color:var(--ink);border-color:var(--blood-soft)}
-.topnav a.nl:focus-visible,.topnav .navtg:focus-visible,.topnav .brand:focus-visible{outline:2px solid var(--blood);outline-offset:2px;border-radius:6px}
-@media(max-width:560px){.topnav .brand .full{display:none}.topnav a.nl{padding:6px 8px;font-size:11.5px}}
+
 *{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--ink-faint) 55%,transparent) transparent}
 ::-webkit-scrollbar{width:11px;height:11px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -209,8 +199,51 @@ footer .mono{font-style:normal;color:var(--ink-soft)}
 mark{background:color-mix(in srgb,var(--tok) 38%,transparent);color:var(--ink);border-radius:3px;padding:0 2px}
 .empty{color:var(--ink-faint);font-style:italic;font-size:14px;padding:20px 0}
 .secB{--sc:var(--blood)}.secH{--sc:var(--arcana)}.secI{--sc:var(--tok)}.secM{--sc:var(--alteia)}.secE{--sc:var(--tipc)}
+
+/* ---------- side navigation ---------- */
+body{padding-left:206px}
+.sidenav{position:fixed;left:0;top:0;bottom:0;width:206px;z-index:100;display:flex;flex-direction:column;gap:1px;
+  padding:15px 11px 12px;overflow-y:auto;background:var(--panel);border-right:1px solid var(--line)}
+.sidenav .brand{display:flex;align-items:center;gap:7px;font-family:Cinzel,serif;font-weight:700;font-size:17px;
+  color:var(--ink);text-decoration:none;padding:2px 8px 12px}
+.sidenav .brand .a{color:var(--blood)}
+.sidenav .sgrp{font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-faint);padding:14px 9px 5px}
+.sidenav a.sl{font-family:"IBM Plex Mono",monospace;font-size:12.5px;letter-spacing:.02em;color:var(--ink-soft);
+  text-decoration:none;padding:7px 9px;border-radius:8px;white-space:nowrap}
+.sidenav a.sl:hover{color:var(--ink);background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.sidenav a.sl[aria-current="page"]{color:var(--blood);background:color-mix(in srgb,var(--blood) 12%,transparent)}
+.sfoot{margin-top:auto;padding-top:14px;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.sidenav .navtg{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft);background:none;
+  border:1px solid var(--line-strong);border-radius:999px;padding:5px 12px;cursor:pointer}
+.sidenav .navtg:hover{color:var(--ink);border-color:var(--blood-soft)}
+.sidenav .ai-badge{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-faint);padding-left:2px}
+.navtoggle{display:none;position:fixed;top:10px;left:10px;z-index:112;align-items:center;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink);background:var(--panel);
+  border:1px solid var(--line-strong);border-radius:10px;padding:7px 12px;cursor:pointer;box-shadow:var(--shadow)}
+.navtoggle:hover{border-color:var(--blood-soft)}
+.navscrim{position:fixed;inset:0;background:rgba(8,5,12,.55);z-index:99}
+.navscrim[hidden]{display:none}
+.sidenav a.sl:focus-visible,.navtoggle:focus-visible,.sidenav .brand:focus-visible{outline:2px solid var(--blood);outline-offset:2px}
+/* narrow: the bar folds away until the button is pressed */
+@media(max-width:1000px){
+  body{padding-left:0;padding-top:54px}
+  .sidenav{width:236px;left:-236px;transition:left .18s ease;box-shadow:0 0 40px rgba(0,0,0,.4)}
+  .sidenav.open{left:0}
+  .navtoggle{display:inline-flex}
+}
+@media(prefers-reduced-motion:reduce){.sidenav{transition:none}}
+
+.navclose{display:none;position:absolute;top:12px;right:10px;width:30px;height:30px;align-items:center;justify-content:center;
+  font-size:19px;line-height:1;color:var(--ink-faint);background:none;border:1px solid var(--line-strong);border-radius:8px;cursor:pointer}
+.navclose:hover{color:var(--ink);border-color:var(--blood-soft)}
+@media(max-width:1000px){
+  body.navopen .navtoggle{display:none}
+  .sidenav.open .navclose{display:inline-flex}
+  .sidenav{padding-right:46px}
+}
 </style>
-<nav class="topnav"><a class="brand" href="index.html"><span class="a">&#9876;</span> <span class="full">TWRPG</span></a><a class="nl" href="index.html">Home</a><a class="nl" href="builder.html">Build Maker</a><a class="nl" href="codex.html">Item Codex</a><a class="nl" href="boss.html">Boss Drops</a><a class="nl" href="guides.html">Boss Guides</a><a class="nl" href="characters.html">Characters</a><a class="nl" href="changelogs.html" aria-current="page">Change Logs</a><a class="nl" href="credits.html">Credits</a><span class="navsp"></span><span class="ai-badge" title="This site was built with AI" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-faint);white-space:nowrap;margin-right:10px">&#129302; Built with AI</span><button class="navtg" data-navtheme aria-label="Toggle theme">&#9680;</button></nav>
+<button class="navtoggle" id="navToggle" aria-label="Open navigation" aria-expanded="false" aria-controls="sidenav">☰ <span>Menu</span></button><aside class="sidenav" id="sidenav" aria-label="Site"><button class="navclose" id="navClose" aria-label="Close navigation">×</button><a class="brand" href="index.html"><span class="a">⚔</span> TWRPG</a><a class="sl" href="index.html">Home</a><div class="sgrp">Plan</div><a class="sl" href="builder.html">Build Maker</a><a class="sl" href="mycharacters.html">My Characters</a><div class="sgrp">Look up</div><a class="sl" href="characters.html">Characters</a><a class="sl" href="codex.html">Item Codex</a><a class="sl" href="guides.html">Boss Guides</a><a class="sl" href="boss.html">Boss Drops</a><div class="sgrp">About</div><a class="sl" href="changelogs.html" aria-current="page">Change Logs</a><a class="sl" href="credits.html">Credits</a><div class="sfoot"><button class="navtg" data-navtheme aria-label="Toggle theme">◐ Theme</button><span class="ai-badge" title="This site was built with AI">🤖 Built with AI</span></div></aside><div class="navscrim" id="navScrim" hidden></div>
 
 <div class="wrap">
 <header>
@@ -388,4 +421,27 @@ function applyHash() {
 }
 window.addEventListener('hashchange', applyHash);
 if (!applyHash()) toggleRange();
+</script>
+
+<script>
+/* side nav: a drawer once the viewport is too narrow to keep it open */
+(function(){
+  var nav=document.getElementById('sidenav'),tog=document.getElementById('navToggle'),scrim=document.getElementById('navScrim');
+  if(!nav||!tog)return;
+  function setOpen(on){
+    nav.classList.toggle('open',on);
+    document.body.classList.toggle('navopen',on);
+    // drive the slide inline: one page's stylesheet dropped the .open rule
+    nav.style.left=on?'0px':'';
+    scrim.hidden=!on;
+    tog.setAttribute('aria-expanded',on?'true':'false');
+    if(on&&nav.querySelector('.navclose'))nav.querySelector('.navclose').focus();
+  }
+  tog.addEventListener('click',function(e){e.stopPropagation();setOpen(!nav.classList.contains('open'));});
+  scrim.addEventListener('click',function(){setOpen(false);});
+  var cl=document.getElementById('navClose');
+  if(cl)cl.addEventListener('click',function(){setOpen(false);tog.focus();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')setOpen(false);});
+  addEventListener('resize',function(){if(innerWidth>1000)setOpen(false);});
+})();
 </script>

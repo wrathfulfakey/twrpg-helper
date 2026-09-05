@@ -20,23 +20,6 @@ No backend, no database, no build step. Just static HTML files.
 - **Share a build:** the build (hero + item codes + name) is encoded into the URL hash (`#b=…`). The link *is* the data — open it on any device and the exact build reconstructs. Nothing is uploaded.
 - **Personal saves:** stored in the browser via `localStorage` (this device only).
 
-## Deploy to GitHub Pages
-
-1. Create a repo and add these files at its root (keep `.nojekyll` — it stops GitHub from reprocessing the files).
-2. Push:
-   ```bash
-   git init
-   git add .
-   git commit -m "TWRPG toolkit"
-   git branch -M main
-   git remote add origin https://github.com/<you>/<repo>.git
-   git push -u origin main
-   ```
-3. Repo → **Settings → Pages** → Source: `Deploy from a branch`, Branch: `main` / `/ (root)` → Save.
-4. Site goes live at `https://<you>.github.io/<repo>/` in a minute or two.
-
-Sharing and saving work identically on the live site.
-
 ## Notes
 
 - Only external dependency is Google Fonts (loaded via `<link>`); everything else — data included — is inlined, so pages work offline once cached.
