@@ -240,6 +240,15 @@ body{padding-left:206px}
   .sidenav.open .navclose{display:inline-flex}
   .sidenav{padding-right:46px}
 }
+.tipcard{position:fixed;z-index:200;max-width:340px;pointer-events:none;opacity:0;transition:opacity .12s;
+  background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--gc,var(--ink-faint));
+  border-radius:10px;padding:10px 12px;box-shadow:0 12px 30px rgba(0,0,0,.55)}
+.tipcard[data-on]{opacity:1}
+.tipcard .tn{font-family:Cinzel,serif;font-weight:700;font-size:14px;color:var(--ink)}
+.tipcard .tm{font-size:11px;color:var(--ink-faint);margin-top:2px}
+.tipcard .tg{color:var(--gc);font-weight:600}
+.tipcard .ts{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.tipcard .fx{margin-top:7px}
 </style>
 
 <button class="navtoggle" id="navToggle" aria-label="Open navigation" aria-expanded="false" aria-controls="sidenav">☰ <span>Menu</span></button><aside class="sidenav" id="sidenav" aria-label="Site"><button class="navclose" id="navClose" aria-label="Close navigation">×</button><a class="brand" href="index.html"><span class="a">⚔</span> TWRPG</a><a class="sl" href="index.html">Home</a><div class="sgrp">Plan</div><a class="sl" href="builder.html">Build Maker</a><a class="sl" href="mycharacters.html">My Characters</a><div class="sgrp">Look up</div><a class="sl" href="characters.html">Characters</a><a class="sl" href="codex.html" aria-current="page">Item Codex</a><a class="sl" href="guides.html">Boss Guides</a><a class="sl" href="boss.html">Boss Drops</a><div class="sgrp">About</div><a class="sl" href="changelogs.html">Change Logs</a><a class="sl" href="credits.html">Credits</a><div class="sfoot"><button class="navtg" data-navtheme aria-label="Toggle theme">◐ Theme</button><span class="ai-badge" title="This site was built with AI">🤖 Built with AI</span></div></aside><div class="navscrim" id="navScrim" hidden></div>
@@ -293,13 +302,45 @@ const CORE=new Set(['MainStat','INT','STR','AGI','HP']);
 const BUFF=new Set(['SkillDmg%','FinalDmg%','Periodic%','Crit%','CritMult']);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const ICP='public/icons/';
-function icon(file,label,cls){const l=esc(String(label||'?').trim().charAt(0).toUpperCase()||'?');
+function icon(file,label,cls,tip){const l=esc(String(label||'?').trim().charAt(0).toUpperCase()||'?');
   const src=file?ICP+encodeURIComponent(file)+'.webp':ICP+'unknown.webp';
-  return `<span class="ic ${cls||''}" data-l="${l}" aria-hidden="true"><img src="${src}" alt="" loading="lazy" onerror="if(this.dataset.f){this.remove();}else{this.dataset.f=1;this.src='${ICP}unknown.webp';}"></span>`;}
+  return `<span class="ic ${cls||''}" data-l="${l}"${tip?` data-tip="${esc(tip)}"`:''} aria-hidden="true"><img src="${src}" alt="" loading="lazy" onerror="if(this.dataset.f){this.remove();}else{this.dataset.f=1;this.src='${ICP}unknown.webp';}"></span>`;}
 
 const mobLabel=m=>`${m.mob} ${m.chance}%`;
 const mobsFull=arr=>arr.map(mobLabel).join(' / ');
 const cleanFx=s=>s.replace(/[â´∴]/g,'• ').replace(/\s*\*\s*/g,' — ').replace(/\s+/g,' ').trim();
+// hover card for item icons — built on demand from the node data
+function itemTip(code){const n=N[code];if(!n)return '';
+  const st=(n.stats||[]).concat(n.xtra||[]);
+  const fx=(n.pfx||[]).concat(n.afx||[],n.fx||[]).map(cleanFx).filter(x=>x&&x!=='—');
+  const meta=[n.slot||n.itype,n.lvl?'Lv '+n.lvl:''].filter(Boolean).join(' · ');
+  const grade=n.grade?`<b class="tg">${esc(n.grade)}</b>`:'';
+  const tier=n.drop&&n.drop!==n.grade?`<b style="color:var(${BVAR[n.drop]||'--ink-faint'})">${esc(n.drop)}</b>`:'';
+  const src=[tier,n.mobs&&n.mobs.length?esc(mobsFull(n.mobs)):''].filter(Boolean).join(' · ');
+  return `<div class="tn">${esc(n.name)}</div>`
+    +(grade||meta?`<div class="tm">${grade}${grade&&meta?' · ':''}${esc(meta)}</div>`:'')
+    +(src?`<div class="tm">${src}</div>`:'')
+    +(st.length?`<div class="ts">${st.map(statChip).join('')}</div>`:'')
+    +(fx.length?`<div class="fx">${fx.map(f=>`<span>${esc(f)}</span>`).join('')}</div>`:'');}
+let tipEl;
+function hideTip(){if(tipEl)delete tipEl.dataset.on;}
+function showTip(el,code){const h=itemTip(code);if(!h)return;
+  if(!tipEl){tipEl=document.createElement('div');tipEl.className='tipcard';document.body.appendChild(tipEl);}
+  tipEl.innerHTML=h;tipEl.style.left='0px';tipEl.style.top='0px';tipEl.dataset.on='';
+  tipEl.style.setProperty('--gc',`var(${GVAR[N[code].grade]||'--ink-faint'})`);
+  const r=el.getBoundingClientRect(),b=tipEl.getBoundingClientRect();
+  let x=r.right+10,y=r.top-6;
+  if(x+b.width>innerWidth-8)x=Math.max(8,r.left-b.width-10);
+  if(y+b.height>innerHeight-8)y=Math.max(8,innerHeight-b.height-8);
+  tipEl.style.left=x+'px';tipEl.style.top=y+'px';}
+// tree rows carry data-tip; every other item row is identified by its own data-code/-recipe/-choose
+function tipCode(ic){if(ic.dataset.tip)return ic.dataset.tip;
+  const h=ic.closest('[data-code],[data-recipe],[data-choose]');const d=h&&h.dataset;
+  return d&&(d.code||d.recipe||d.choose)||'';}
+document.addEventListener('mouseover',e=>{const ic=e.target.closest&&e.target.closest('.ic');if(!ic)return hideTip();
+  const code=tipCode(ic);if(N[code])showTip(ic,code);else hideTip();});
+document.addEventListener('mouseout',e=>{if(e.target.closest&&e.target.closest('.ic'))hideTip();});
+document.addEventListener('scroll',hideTip,true);
 const statCls=k=>CORE.has(k)?' core':BUFF.has(k)?' buff':'';
 const numOf=v=>parseFloat(String(v).replace(/[^\d.\-]/g,''))||0;
 function weight(n){let w=0;for(const s of n.stats||[]){const x=numOf(s.val);if(s.key==='MainStat')w+=x*3;else if(s.key==='INT')w+=x;else if(s.key==='STR')w+=x*.5;else if(s.key==='AGI')w+=x*.1;else if(s.key==='HP')w+=x*.06;else if(s.key==='SkillDmg%')w+=x*18;else if(s.key==='Crit%')w+=x*5;}return w;}
@@ -390,7 +431,7 @@ function comp(c){
     if(c.boss)tagStyle=`style="color:var(${BVAR[c.boss]});border-color:color-mix(in srgb,var(${BVAR[c.boss]}) 45%,var(--line))"`;
     if(mobs)title=` title="${esc(mobsFull(mobs))}${c.boss?` — ${esc(c.boss)} tier`:''}"`;
   }
-  const inner=icon(cn&&cn.ic,c.name,'sm')+`<i style="background:${col}"></i><span class="cn">${esc(c.name)}</span>`+(c.qty>1?`<span class="q">×${c.qty}</span>`:'<span class="q"></span>')+`<span class="tag" ${tagStyle}${title}>${esc(tag)}</span>`;
+  const inner=icon(cn&&cn.ic,c.name,'sm',c.code)+`<i style="background:${col}"></i><span class="cn">${esc(c.name)}</span>`+(c.qty>1?`<span class="q">×${c.qty}</span>`:'<span class="q"></span>')+`<span class="tag" ${tagStyle}${title}>${esc(tag)}</span>`;
   return c.craft?`<button class="comp craft" data-code="${c.code}">${inner}</button>`:`<div class="comp leaf">${inner}</div>`;
 }
 // craftable components expand inline to their own materials; raw drops stay clickable leaves
@@ -399,7 +440,7 @@ function recipeTree(code,mult){
   return byGrade((N[code]&&N[code].recipe)||[]).map(c=>{
     const cn=N[c.code],q=(c.qty||1)*mult;
     if(!isCraft(cn))return comp(Object.assign({},c,{qty:q}));
-    return `<details class="rnode"><summary class="comp craft">${icon(cn.ic,cn.name,'sm')}<i style="background:var(--arcana)"></i><span class="cn">${esc(cn.name)}</span>${q>1?`<span class="q">\u00d7${q}</span>`:'<span class="q"></span>'}<span class="tag">craft</span></summary><div class="rkids">${recipeTree(c.code,q)}</div></details>`;
+    return `<details class="rnode"><summary class="comp craft">${icon(cn.ic,cn.name,'sm',c.code)}<i style="background:var(--arcana)"></i><span class="cn">${esc(cn.name)}</span>${q>1?`<span class="q">\u00d7${q}</span>`:'<span class="q"></span>'}<span class="tag">craft</span></summary><div class="rkids">${recipeTree(c.code,q)}</div></details>`;
   }).join('');
 }
 function fx2(n){return (n.fx||[]).map(cleanFx).filter(x=>x&&x!=='—');}
