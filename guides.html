@@ -262,6 +262,9 @@ body{padding-left:206px}
 <script>
 const B=JSON.parse(document.getElementById('bosses').textContent);
 const REALMS=['Arcana','Alteia'];
+// community-agreed difficulty order within each realm, easiest first
+const DIFF=['lazarus','gaia','construct','styrix','kamael','deathfiend','valtora','ifrit','nereid','agareth'];
+const drank=b=>{const i=DIFF.indexOf(b.id);return i<0?99:i;};
 const RC={Arcana:'--arcana',Alteia:'--alteia'};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const slug=s=>String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
@@ -286,10 +289,10 @@ function renderList(q){
   const el=document.getElementById('list');
   if(!hits.length){el.innerHTML='<div class="empty">No boss or mechanic matches that.</div>';return;}
   el.innerHTML=REALMS.map(r=>{
-    const list=hits.filter(b=>b.realm===r);
+    const list=hits.filter(b=>b.realm===r).sort((a,b)=>drank(a)-drank(b));
     if(!list.length)return '';
     return `<div class="realm" style="--ac:var(${RC[r]})">
-      <div class="realmh"><h2>${r}</h2><span class="rl"></span><span class="rc">${list.length} boss${list.length>1?'es':''}</span></div>
+      <div class="realmh"><h2>${r}</h2><span class="rl"></span><span class="rc">${list.length} boss${list.length>1?'es':''} &middot; easiest first</span></div>
       <div class="bgrid">${list.map(b=>`<button class="bcard" data-boss="${b.id}" style="--ac:var(${RC[b.realm]})">
         <span class="bh"><span class="bico">${b.ico}</span><span class="bnm">${esc(b.name)}</span></span>
         <p class="bsum">${esc(b.summary)}</p>

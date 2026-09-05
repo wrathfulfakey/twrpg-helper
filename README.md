@@ -12,7 +12,7 @@ No backend, no database, no build step. Just static HTML files.
 | `newplayers.html` | **New Players** — beginner primer: what `-save` does and where the file lands, how to `-load`, gear slots, grades, icons, tokens, bosses, loot/Wish, crafting, currencies, commands, glossary. |
 | `builder.html` | **Build Maker** — pick any of the 32 heroes, fill 5 gear slots (grade-filtered, weapon-type aware), see combined stats + farm list, name it, save locally, and share via link. |
 | `boss.html` | **Boss Drops** — every creature's loot table with per-kill rates and tier; search by boss or item. |
-| `codex.html` | **Item Codex** — all 501 epic items across Deltirama → Arcana, with stats, recipes, drop mobs + rates, and a click-through crafting tree. |
+| `codex.html` | **Item Codex** — all 878 items (584 epic across Deltirama → Arcana, plus rare/magic/normal gear, tokens, icons and materials), with stats, recipes, drop mobs + rates, and a click-through crafting tree. |
 | `guides.html` | **Boss Guides** — phase-by-phase writeups for the 5 Arcana and 5 Alteia bosses, with mechanic GIFs, a searchable list and a per-boss drop table. Images live in `public/guides/`. |
 | `characters.html` | **Characters** — all 37 heroes: skill kit, chain/combo mechanics, awakenings, and specialty items. |
 
