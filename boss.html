@@ -240,6 +240,10 @@ function icon(file,label,cls,tip){const l=esc(String(label||'?').trim().charAt(0
 
 const cleanFx=s=>s.replace(/â´/g,'• ').replace(/\s*\*\s*/g,' — ').replace(/\s+/g,' ').trim();
 // hover card for item icons — built on demand from the node data
+function leafTally(code,mult,acc){const n=N[code];
+  if(n&&n.recipe&&n.recipe.length){for(const c of n.recipe)leafTally(c.code,mult*(c.qty||1),acc);}
+  else if(n){acc[code]=(acc[code]||0)+mult;}
+  return acc;}
 function itemTip(code){const n=N[code];if(!n)return '';
   const st=(n.stats||[]).concat(n.xtra||[]);
   const fx=(n.pfx||[]).concat(n.afx||[],n.fx||[]).map(cleanFx).filter(x=>x&&x!=='—');
@@ -247,9 +251,14 @@ function itemTip(code){const n=N[code];if(!n)return '';
   const grade=n.grade?`<b class="tg">${esc(n.grade)}</b>`:'';
   const tier=n.drop&&n.drop!==n.grade?`<b style="color:var(${BVAR[n.drop]||'--ink-faint'})">${esc(n.drop)}</b>`:'';
   const src=[tier,n.mobs&&n.mobs.length?esc(mobsFull(n.mobs)):''].filter(Boolean).join(' · ');
+  // craftables summarise their tree instead of listing every material
+  const raw=n.recipe&&n.recipe.length?leafTally(code,1,{}):null;
+  const mats=raw?Object.keys(raw).length:0,drops=raw?Object.values(raw).reduce((a,b)=>a+b,0):0;
+  const sum=raw?`Craft · ${n.recipe.length} part${n.recipe.length===1?'':'s'} · ${drops} drop${drops===1?'':'s'} across ${mats} material${mats===1?'':'s'}`:'';
   return `<div class="tn">${esc(n.name)}</div>`
     +(grade||meta?`<div class="tm">${grade}${grade&&meta?' · ':''}${esc(meta)}</div>`:'')
     +(src?`<div class="tm">${src}</div>`:'')
+    +(sum?`<div class="tm">${esc(sum)}</div>`:'')
     +(st.length?`<div class="ts">${st.map(statChip).join('')}</div>`:'')
     +(fx.length?`<div class="fx">${fx.map(f=>`<span>${esc(f)}</span>`).join('')}</div>`:'');}
 let tipEl;

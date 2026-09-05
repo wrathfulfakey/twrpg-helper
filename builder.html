@@ -539,9 +539,14 @@ function itemTip(code){const n=N[code];if(!n)return '';
   const grade=n.grade?`<b class="tg">${esc(n.grade)}</b>`:'';
   const tier=n.drop&&n.drop!==n.grade?`<b style="color:var(${BVAR[n.drop]||'--ink-faint'})">${esc(n.drop)}</b>`:'';
   const src=[tier,n.mobs&&n.mobs.length?esc(mobsFull(n.mobs)):''].filter(Boolean).join(' · ');
+  // craftables summarise their tree instead of listing every material
+  const raw=n.recipe&&n.recipe.length?leaves(code,1,{}):null;
+  const mats=raw?Object.keys(raw).length:0,drops=raw?Object.values(raw).reduce((a,b)=>a+b,0):0;
+  const sum=raw?`Craft · ${n.recipe.length} part${n.recipe.length===1?'':'s'} · ${drops} drop${drops===1?'':'s'} across ${mats} material${mats===1?'':'s'}`:'';
   return `<div class="tn">${esc(n.name)}</div>`
     +(grade||meta?`<div class="tm">${grade}${grade&&meta?' · ':''}${esc(meta)}</div>`:'')
     +(src?`<div class="tm">${src}</div>`:'')
+    +(sum?`<div class="tm">${esc(sum)}</div>`:'')
     +(st.length?`<div class="ts">${st.map(statChip).join('')}</div>`:'')
     +(fx.length?`<div class="fx">${fx.map(f=>`<span>${esc(f)}</span>`).join('')}</div>`:'');}
 let tipEl;
@@ -929,7 +934,7 @@ function openFarm(grade){
   // one collapsible recipe node — shared by the trees and the per-grade tab
   const rnode=(pathArr,q)=>{const code=pathArr[pathArr.length-1],n=N[code],bc=gvar(n.grade),keys=nodeKeys(pathArr);
     const got=keys.length&&keys.every(k=>ACQ.has(k));
-    return `<details class="rnode"><summary class="matrow${got?' got':''}" data-keys="${esc(JSON.stringify(keys))}" style="--bc:var(${bc})">${acqBox(keys)}${icon(n.ic,n.name,'sm')}<span class="mdot"></span><span class="mn2">${esc(n.name)}</span><span class="mq">\u00d7${q}</span><span class="gtag" style="--gc:var(${bc})">${esc(n.grade||'')} recipe</span></summary><div class="rkids">${tree(pathArr,q)}</div></details>`;
+    return `<details class="rnode"><summary class="matrow${got?' got':''}" data-keys="${esc(JSON.stringify(keys))}" style="--bc:var(${bc})">${acqBox(keys)}${icon(n.ic,n.name,'sm',code)}<span class="mdot"></span><span class="mn2">${esc(n.name)}</span><span class="mq">\u00d7${q}</span><span class="gtag" style="--gc:var(${bc})">${esc(n.grade||'')} recipe</span></summary><div class="rkids">${tree(pathArr,q)}</div></details>`;
   };
   let html='';const sum={};
   for(const ic of codes){
@@ -938,7 +943,7 @@ function openFarm(grade){
     for(const mc in lv)sum[mc]=(sum[mc]||0)+lv[mc];
     const it=N[ic];
     {const gk=nodeKeys([ic]),gdone=gk.length&&gk.every(k=>ACQ.has(k));
-    html+=`<details class="farmgrp${gdone?' got':''}"${gdone?'':' open'} data-keys="${esc(JSON.stringify(gk))}"><summary class="fi">${icon(it.ic,it.name,'sm')}<span class="fn">${esc(it.name)}</span><span class="slot">${esc(it.slot||'')}</span><span class="acqpill">Acquired</span></summary>${isCraft(it)?tree([ic],1):matRow(ic,1,'',nodeKeys([ic]))}</details>`;}
+    html+=`<details class="farmgrp${gdone?' got':''}"${gdone?'':' open'} data-keys="${esc(JSON.stringify(gk))}"><summary class="fi">${icon(it.ic,it.name,'sm',ic)}<span class="fn">${esc(it.name)}</span><span class="slot">${esc(it.slot||'')}</span><span class="acqpill">Acquired</span></summary>${isCraft(it)?tree([ic],1):matRow(ic,1,'',nodeKeys([ic]))}</details>`;}
   }
   // intermediate craftables of a given grade: code -> {equipped item -> how many}
   function craftsOfGrade(g){
@@ -1015,7 +1020,7 @@ function openFarm(grade){
     const paths=pathsToCode(root,code),n=N[code],bc=gvar(n.grade);
     const keys=[...new Set(paths.flatMap(pa=>nodeKeys(pa)))];
     const got=keys.length&&keys.every(k=>ACQ.has(k));
-    return `<details class="rnode"><summary class="matrow${got?' got':''}" data-keys="${esc(JSON.stringify(keys))}" style="--bc:var(${bc})">${acqBox(keys)}${icon(n.ic,n.name,'sm')}<span class="mdot"></span><span class="mn2">${esc(n.name)}</span><span class="mq">\u00d7${q}</span><span class="gtag" style="--gc:var(${bc})">${esc(n.grade||'')} recipe</span></summary><div class="rkids">${tree(paths[0]||[root,code],q)}</div></details>`;
+    return `<details class="rnode"><summary class="matrow${got?' got':''}" data-keys="${esc(JSON.stringify(keys))}" style="--bc:var(${bc})">${acqBox(keys)}${icon(n.ic,n.name,'sm',code)}<span class="mdot"></span><span class="mn2">${esc(n.name)}</span><span class="mq">\u00d7${q}</span><span class="gtag" style="--gc:var(${bc})">${esc(n.grade||'')} recipe</span></summary><div class="rkids">${tree(paths[0]||[root,code],q)}</div></details>`;
   };
   // one grade at a time, grouped under the item you are actually building
   function gradePane(g){
@@ -1030,7 +1035,7 @@ function openFarm(grade){
       const it=N[ic];
       const gk=[...new Set(steps.map(([mc])=>keysForItemMat(ic,mc)).concat(drops.map(mc=>keysForItemMat(ic,mc))).flat())];
       const gdone=gk.length&&gk.every(k=>ACQ.has(k));
-      return `<details class="farmgrp${gdone?' got':''}"${gdone?'':' open'} data-keys="${esc(JSON.stringify(gk))}"><summary class="fi">${icon(it.ic,it.name,'sm')}<span class="fn">For ${esc(it.name)}</span><span class="slot">${esc(it.slot||'')}</span><span class="acqpill">Acquired</span></summary>`
+      return `<details class="farmgrp${gdone?' got':''}"${gdone?'':' open'} data-keys="${esc(JSON.stringify(gk))}"><summary class="fi">${icon(it.ic,it.name,'sm',ic)}<span class="fn">For ${esc(it.name)}</span><span class="slot">${esc(it.slot||'')}</span><span class="acqpill">Acquired</span></summary>`
         +(steps.length?`<div class="gsub">Craft \u2014 ${steps.length} ${esc(g)} recipe${steps.length===1?'':'s'}</div>`
           +steps.map(([mc,roots])=>gradeNode(ic,mc,roots.get(ic))).join(''):'')
         +(drops.length?`<div class="gsub">Farm \u2014 ${drops.length} ${esc(shortB(g))} material${drops.length===1?'':'s'}</div>`
