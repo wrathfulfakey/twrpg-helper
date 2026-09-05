@@ -155,6 +155,15 @@ details.farmgrp:not([open])>summary::before{content:'\25b8'}
 .acq:hover{border-color:var(--good)}
 .acq.on{background:var(--good);border-color:var(--good);color:#fff}
 .acq.on::after{content:"\2713"}
+.qsp{width:15px;flex:none}
+.qstep{display:inline-flex;align-items:center;gap:1px;flex:none;font-family:"IBM Plex Mono",monospace;font-size:11px;line-height:1;border:1px solid var(--line-strong);border-radius:999px;background:var(--panel);padding:1px}
+.qstep .qb{width:16px;height:16px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:var(--ink-faint);cursor:pointer;font-size:12px;user-select:none}
+.qstep .qb:hover{background:color-mix(in srgb,var(--good) 22%,transparent);color:var(--ink)}
+.qstep .qb.off{opacity:.3;cursor:default;background:none}
+.qstep .qv{min-width:30px;text-align:center;color:var(--ink-soft)}
+.qstep .qv b{color:var(--ink);font-weight:700}
+.qstep.full{border-color:var(--good);background:color-mix(in srgb,var(--good) 14%,var(--panel))}
+.qstep.full .qv,.qstep.full .qv b{color:var(--good)}
 .got .mn2,.got .cn{text-decoration:line-through;color:var(--ink-faint)}
 .got .ic,.got .mdot,.got .gtag,.got .tag{opacity:.5}
 .gsub{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);margin:9px 0 3px 6px}
@@ -178,7 +187,7 @@ details.farmgrp:not([open])>summary::before{content:'\25b8'}
 .fdd>summary .c{font-size:9.5px;color:var(--ink-faint);border:1px solid var(--line-strong);border-radius:999px;padding:0 6px}
 .fdd.on>summary{background:color-mix(in srgb,var(--bc) 12%,var(--panel2));border-color:color-mix(in srgb,var(--bc) 45%,var(--line-strong));color:var(--bc)}
 .fdd.on>summary .c{color:var(--bc);border-color:color-mix(in srgb,var(--bc) 40%,var(--line))}
-.fddp{position:absolute;z-index:5;top:calc(100% + 6px);left:0;min-width:216px;max-height:292px;overflow:auto;background:var(--panel);border:1px solid var(--line-strong);border-radius:12px;box-shadow:0 16px 44px rgba(0,0,0,.5);padding:5px}
+.fddp{position:absolute;z-index:5;top:calc(100% + 6px);left:0;min-width:248px;max-height:292px;overflow:auto;background:var(--panel);border:1px solid var(--line-strong);border-radius:12px;box-shadow:0 16px 44px rgba(0,0,0,.5);padding:5px}
 .fddh{font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);padding:8px 9px 3px}
 .fopt{display:flex;align-items:center;gap:9px;width:100%;background:none;border:0;border-radius:8px;padding:6px 9px;cursor:pointer;text-align:left;font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink)}
 .fopt>i{flex:none;width:8px;height:8px;border-radius:50%;background:var(--oc)}
@@ -190,6 +199,12 @@ details.farmgrp:not([open])>summary::before{content:'\25b8'}
 .fopt.sel b{color:var(--oc)}
 .fopt.sel .c{color:var(--oc);border-color:color-mix(in srgb,var(--oc) 40%,var(--line))}
 .fopt.sel::after{content:"";flex:none;width:5px;height:9px;margin:-3px 1px 0 0;border:solid var(--oc);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.fopt.tier b{font-weight:700}
+.fopt.mob{padding-left:20px}
+.fopt.mob>i{width:6px;height:6px;opacity:.7}
+.fopt.mob b{font-family:Spectral,serif;font-size:12.5px;color:var(--ink-soft)}
+.fopt.mob:hover b,.fopt.mob.sel b{color:var(--ink)}
+.tab{max-width:230px;overflow:hidden}
 .farmtoth{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);padding:7px 0}
 .farmtot .matrow{padding-left:0}
 .farmtot .mq{font-weight:700;color:var(--ink)}
@@ -722,6 +737,14 @@ const bossChip=b=>`<span class="bchip" style="--bc:var(${BVAR[b.boss]})"><i></i>
 function dropLine(n){const hm=n.mobs&&n.mobs.length;if(!(n.drop||hm))return '';const tier=n.drop,bc=(tier&&BVAR[tier])||'--ink-soft';const names=hm?esc(mobsFull(n.mobs)):esc(tier||'');const pre=n.mat?'Base material — drops from':'Direct drop — from';let suf='';if(hm&&tier&&tier!=='Common')suf=` <span style="color:var(--ink-faint)">(${esc(tier)} tier)</span>`;else if(tier==='Common')suf=' mobs';else if(tier)suf=' boss';return `<div class="msrc" style="--bc:var(${bc})">${pre} <b>${names}</b>${suf}.</div>`;}
 const GORD=['Common','Rare','Magic','Deltirama','Neptinos','Gnosis','Alteia','Arcana'];
 const grank=d=>{const i=GORD.indexOf(d);return i<0?GORD.length:i;};
+// Kill order inside a tier - the game data has no such field, so it lives here. A boss left
+// out of a list sorts alphabetically after the ones named.
+const BOSSORD={
+  Gnosis:['Skeleton King Desperia','Zombie Lord','Ancient Ent','Bone Dragon','Archangel Samael','Shadow Dragon Irbert'],
+  Alteia:['Lightning God Valtora','Ifrit','Nereid','Death Fiend','Underlord Agareth'],
+  Arcana:['Duke Lazarus','Gaia, the Earth Goddess','Arcane Construct','Styrix, the Harvester of Souls','Kamael, the Lightbringer']
+};
+const shortB=m=>String(m).replace(/,.*$/,'');
 const byGrade=arr=>arr.slice().sort((a,b)=>{const na=N[a.code]||{},nb=N[b.code]||{};
   return (a.craft?0:1)-(b.craft?0:1)||grank(na.drop)-grank(nb.drop)||(b.qty||1)-(a.qty||1)||String(a.name).localeCompare(String(b.name));});
 function comp(c){const cn=N[c.code];const col=c.boss?`var(${BVAR[c.boss]})`:(c.craft?'var(--arcana)':'var(--ink-faint)');const mobs=cn&&cn.mobs&&cn.mobs.length?cn.mobs:null;let tag,ts='',ti='';if(c.craft)tag='craft';else{tag=mobs?mobLabel(mobs[0])+(mobs.length>1?` +${mobs.length-1}`:''):(c.boss||'drop');if(c.boss)ts=`style="color:var(${BVAR[c.boss]});border-color:color-mix(in srgb,var(${BVAR[c.boss]}) 45%,var(--line))"`;if(mobs)ti=` title="${esc(mobsFull(mobs))}"`;}const inner=icon(cn&&cn.ic,c.name,'sm',c.code)+`<i style="background:${col}"></i><span class="cn">${esc(c.name)}</span>`+(c.qty>1?`<span class="q">×${c.qty}</span>`:'<span class="q"></span>')+`<span class="tag" ${ts}${ti}>${esc(tag)}</span>`;return c.craft?`<button class="comp craft" data-code="${c.code}">${inner}</button>`:`<div class="comp leaf">${inner}</div>`;}
@@ -780,16 +803,36 @@ document.addEventListener('click',e=>{
 // thing to farm, so ticking one leaves the others alone. Only leaf positions are stored; a
 // recipe row reads as acquired exactly when every leaf beneath it is, which is what makes
 // ticking a recipe fill in its materials.
-// ponytail: a position is met or not — no partial counts. Add quantities if "3 of 5" becomes the ask.
-const ACQ_LS='twrpg_acquired_v3';
-let ACQ=(()=>{try{return new Set(JSON.parse(localStorage.getItem(ACQ_LS)||'[]'));}catch(e){return new Set();}})();
+// A position wanted x3 is three marks, so a row reads "1/3" and you tick off copies as they drop.
+const ACQ_LS='twrpg_acquired_v4';
+let ACQ=(()=>{try{
+  const cur=localStorage.getItem(ACQ_LS);
+  if(cur!==null)return new Set(JSON.parse(cur));
+  const old=JSON.parse(localStorage.getItem('twrpg_acquired_v3')||'[]');   // one mark per position
+  const out=new Set();
+  for(const k of old){const m=pathMult(k.split('>'));for(let i=0;i<m;i++)out.add(k+'#'+i);}
+  return out;
+}catch(e){return new Set();}})();
 function saveAcq(){try{localStorage.setItem(ACQ_LS,JSON.stringify([...ACQ]));}catch(e){}}
 // the leaf positions beneath the node at this path (a leaf is its own single position)
-function nodeKeys(pathArr){
+function leafPaths(pathArr){
   const out=[];
   (function walk(pa){const n=N[pa[pa.length-1]];
     if(n&&n.recipe&&n.recipe.length)n.recipe.forEach(c=>walk(pa.concat(c.code)));
-    else out.push(pa.join('>'));})(pathArr);
+    else out.push(pa);})(pathArr);
+  return out;
+}
+// how many copies this position stands for, from the recipe quantities along its path
+function pathMult(pa){
+  let m=1;
+  for(let i=1;i<pa.length;i++){const par=N[pa[i-1]];const c=((par&&par.recipe)||[]).find(x=>x.code===pa[i]);m*=(c&&c.qty)||1;}
+  return m;
+}
+// one key per copy: "weapon>cloak>feather#0", "...#1", "...#2" for a x3 leaf
+function nodeKeys(pathArr){
+  const out=[];
+  for(const lp of leafPaths(pathArr)){const k=lp.join('>'),m=pathMult(lp);
+    for(let i=0;i<m;i++)out.push(k+'#'+i);}
   return out;
 }
 // every position where `code` sits under `root`, as full paths
@@ -813,7 +856,7 @@ function buildKeys(list){
   for(const c of list||SLOTS.map(sl=>state.slots[sl]).filter(Boolean))nodeKeys([c]).forEach(k=>out.push(k));
   return out;
 }
-const keyMat=k=>k.slice(k.lastIndexOf('>')+1);
+const keyMat=k=>k.slice(k.lastIndexOf('>')+1).split('#')[0];
 function toggleAcq(keys){
   const on=!keys.every(k=>ACQ.has(k));
   keys.forEach(k=>on?ACQ.add(k):ACQ.delete(k));
@@ -821,15 +864,34 @@ function toggleAcq(keys){
 }
 function acqBox(keys){const on=keys.length&&keys.every(k=>ACQ.has(k));
   return `<span class="acq${on?' on':''}" data-acq role="checkbox" aria-checked="${!!on}" tabindex="0" title="Mark as acquired"></span>`;}
+const acqHave=keys=>keys.filter(k=>ACQ.has(k)).length;
+// a material wanted more than once counts up instead of ticking: "1/3 - two left to farm"
+function acqStep(keys){const have=acqHave(keys),need=keys.length;
+  const btn=(d,ch,off)=>`<span class="qb${off?' off':''}" data-qd="${d}" role="button" tabindex="0" aria-label="${d>0?'Add one':'Remove one'}">${ch}</span>`;
+  return `<span class="qstep${have>=need?' full':''}" data-step title="${have} of ${need} acquired">`
+    +btn(-1,'\u2212',!have)+`<span class="qv"><b>${have}</b>/${need}</span>`+btn(1,'+',have>=need)+`</span>`;}
+function stepAcq(keys,d){
+  const k=d>0?keys.find(x=>!ACQ.has(x)):keys.slice().reverse().find(x=>ACQ.has(x));
+  if(!k)return;
+  if(d>0)ACQ.add(k);else ACQ.delete(k);
+  saveAcq();paintAcq();renderTotals();
+}
 // repaint in place, so open recipe branches stay open
 function paintAcq(){
   const box=document.getElementById('farmBody');
+  if(redrawBar)redrawBar();
   box.querySelectorAll('[data-keys]').forEach(r=>{
     const keys=JSON.parse(r.dataset.keys||'[]');
     const got=keys.length>0&&keys.every(k=>ACQ.has(k));
     r.classList.toggle('got',got);
     const cb=r.querySelector('.acq');
     if(cb){cb.classList.toggle('on',got);cb.setAttribute('aria-checked',got);}
+    const st=r.querySelector('[data-step]');
+    if(st){const have=acqHave(keys);
+      st.classList.toggle('full',have>=keys.length);
+      st.querySelector('.qv').innerHTML=`<b>${have}</b>/${keys.length}`;
+      st.setAttribute('title',`${have} of ${keys.length} acquired`);
+      st.querySelectorAll('.qb').forEach(b=>b.classList.toggle('off',+b.dataset.qd>0?have>=keys.length:!have));}
   });
   const bar=box.querySelector('.acqbar');if(!bar)return;
   const keys=JSON.parse(bar.dataset.codes||'[]');
@@ -840,7 +902,7 @@ function paintAcq(){
 
 // ---------- farm breakdown popup ----------
 const farmOv=document.getElementById('farm');
-let fSlot='',fBoss='';
+let fSlot='',fBoss='',redrawBar=null;
 function leaves(code,mult,acc){const n=N[code];if(n&&n.recipe&&n.recipe.length){for(const c of n.recipe)leaves(c.code,mult*(c.qty||1),acc);}else{acc[code]=(acc[code]||0)+mult;}return acc;}
 function openFarm(grade){
   fBoss=grade||'';
@@ -851,7 +913,8 @@ function openFarm(grade){
   const gvar=d=>BVAR[d]||'--ink-faint';
   const matRow=(mc,q,cls,keys)=>{const m=N[mc];const bc=gvar(m.drop);
     keys=keys||[];const got=keys.length&&keys.every(k=>ACQ.has(k));
-    return `<button class="matrow${cls||''}${got?' got':''}" data-code="${mc}" data-keys="${esc(JSON.stringify(keys))}" style="--bc:var(${bc})">${acqBox(keys)}${icon(m.ic,m.name,'sm')}<span class="mdot"></span><span class="mn2">${esc(m.name)}</span><span class="mq">×${q}</span>${m.drop?`<span class="gtag" style="--gc:var(${bc})">${esc(m.drop)}</span>`:''}</button>`;};
+    const many=keys.length>1;
+    return `<button class="matrow${cls||''}${got?' got':''}" data-code="${mc}" data-keys="${esc(JSON.stringify(keys))}" style="--bc:var(${bc})">${many?'<span class="qsp"></span>':acqBox(keys)}${icon(m.ic,m.name,'sm')}<span class="mdot"></span><span class="mn2">${esc(m.name)}</span>${many?acqStep(keys):`<span class="mq">×${q}</span>`}${m.drop?`<span class="gtag" style="--gc:var(${bc})">${esc(m.drop)}</span>`:''}</button>`;};
   // one level of the recipe: craftable components collapse open to their own materials, raw drops are leaves
   const isCraft=n=>!!(n&&n.recipe&&n.recipe.length);
   const tree=(pathArr,mult)=>{
@@ -861,7 +924,7 @@ function openFarm(grade){
       .sort((a,b)=>grank(a.n.grade)-grank(b.n.grade)||b.q-a.q||a.n.name.localeCompare(b.n.name));
     const drops=kids.filter(k=>!isCraft(k.n))
       .sort((a,b)=>grank(a.n.drop)-grank(b.n.drop)||b.q-a.q||a.n.name.localeCompare(b.n.name));
-    return craft.map(k=>rnode(k.path,k.q)).join('')+drops.map(k=>matRow(k.code,k.q,'',[k.path.join('>')])).join('');
+    return craft.map(k=>rnode(k.path,k.q)).join('')+drops.map(k=>matRow(k.code,k.q,'',nodeKeys(k.path))).join('');
   };
   // one collapsible recipe node — shared by the trees and the per-grade tab
   const rnode=(pathArr,q)=>{const code=pathArr[pathArr.length-1],n=N[code],bc=gvar(n.grade),keys=nodeKeys(pathArr);
@@ -875,7 +938,7 @@ function openFarm(grade){
     for(const mc in lv)sum[mc]=(sum[mc]||0)+lv[mc];
     const it=N[ic];
     {const gk=nodeKeys([ic]),gdone=gk.length&&gk.every(k=>ACQ.has(k));
-    html+=`<details class="farmgrp${gdone?' got':''}"${gdone?'':' open'} data-keys="${esc(JSON.stringify(gk))}"><summary class="fi">${icon(it.ic,it.name,'sm')}<span class="fn">${esc(it.name)}</span><span class="slot">${esc(it.slot||'')}</span><span class="acqpill">Acquired</span></summary>${isCraft(it)?tree([ic],1):matRow(ic,1,'',[ic])}</details>`;}
+    html+=`<details class="farmgrp${gdone?' got':''}"${gdone?'':' open'} data-keys="${esc(JSON.stringify(gk))}"><summary class="fi">${icon(it.ic,it.name,'sm')}<span class="fn">${esc(it.name)}</span><span class="slot">${esc(it.slot||'')}</span><span class="acqpill">Acquired</span></summary>${isCraft(it)?tree([ic],1):matRow(ic,1,'',nodeKeys([ic]))}</details>`;}
   }
   // intermediate craftables of a given grade: code -> {equipped item -> how many}
   function craftsOfGrade(g){
@@ -892,29 +955,56 @@ function openFarm(grade){
   const pathsByMat={};
   for(const k of buildKeys(codes))(pathsByMat[keyMat(k)]=pathsByMat[keyMat(k)]||[]).push(k);
   const tot=Object.entries(sum).sort((a,b)=>grank(N[a[0]].drop)-grank(N[b[0]].drop)||b[1]-a[1]||N[a[0]].name.localeCompare(N[b[0]].name));
-  // filters: only offer bosses that actually drop something still on this list, and slots that are filled
-  const dropCount={};
-  for(const [mc] of tot){const d=N[mc]&&N[mc].drop;if(d)dropCount[d]=(dropCount[d]||0)+1;}
-  if(fBoss&&!dropCount[fBoss])fBoss='';
+  // filters - each tier heads the bosses that still drop something on this list.
+  // Counts move every time a copy is ticked off, so they are recomputed on each repaint
+  // and a boss whose drops are all acquired stops being offered.
+  const stillNeeded=mc=>(pathsByMat[mc]||[]).some(k=>!ACQ.has(k));
+  const isTier=v=>GORD.includes(v);
+  const counts=()=>{const tier={},mob={},mt={};let left=0;
+    for(const [mc] of tot){const n=N[mc];if(!n||!stillNeeded(mc))continue;left++;
+      if(n.drop)tier[n.drop]=(tier[n.drop]||0)+1;
+      for(const m of n.mobs||[]){mob[m.mob]=(mob[m.mob]||0)+1;
+        const t=mt[m.mob]=mt[m.mob]||{};if(n.drop)t[n.drop]=(t[n.drop]||0)+1;}}
+    return {tier,mob,mt,left};};
+  const stale=()=>{if(!fBoss)return false;const c=counts();return !(isTier(fBoss)?c.tier[fBoss]:c.mob[fBoss]);};
+  if(stale())fBoss='';
   grade=fBoss;
+  const matchB=mc=>{const n=N[mc];return !fBoss||(isTier(fBoss)?n.drop===fBoss:(n.mobs||[]).some(m=>m.mob===fBoss));};
   const slotOpts=SLOTS.filter(s=>state.slots[s]);
-  const bossOpts=GORD.slice(3).filter(b=>dropCount[b]),mobOpts=GORD.slice(0,3).filter(b=>dropCount[b]);
   const slotIt=fSlot?N[state.slots[fSlot]]:null;
-  const fopt=(kind,v,lab,cur,col,inner)=>`<button class="fopt${v===cur?' sel':''}" data-fpick="${kind}" data-v="${esc(v)}" style="--oc:var(${col})">${inner}<b>${esc(lab)}</b>`
-    +(kind==='boss'&&v?`<span class="c">${dropCount[v]}</span>`:'')+`</button>`;
-  const bgrp=(lab,arr)=>arr.length?`<div class="fddh">${esc(lab)}</div>`+arr.map(b=>fopt('boss',b,b,fBoss,gvar(b),'<i></i>')).join(''):'';
-  const fbar=slotOpts.length?`<div class="ffilt"><span class="ffl">Filter</span>`
-      +`<details class="fdd${fBoss?' on':''}" style="--bc:var(${fBoss?gvar(fBoss):'--ink-faint'})">`
-        +`<summary aria-label="Filter by boss"><i></i>${esc(fBoss||'All bosses')}<span class="c">${fBoss?dropCount[fBoss]:tot.length}</span></summary>`
-        +`<div class="fddp">${fopt('boss','','All bosses',fBoss,'--ink-faint','<i></i>')}${bgrp('Bosses',bossOpts)}${bgrp('Mob tiers',mobOpts)}</div></details>`
-      +`<details class="fdd${fSlot?' on':''}" style="--bc:var(${slotIt?gvar(slotIt.grade):'--ink-faint'})">`
-        +`<summary aria-label="Filter by slot"><i></i>${esc(fSlot||'All slots')}</summary>`
-        +`<div class="fddp">${fopt('slot','','All slots',fSlot,'--ink-faint','<i></i>')}`
-          +slotOpts.map(sl=>{const it=N[state.slots[sl]];
-            return `<button class="fopt${sl===fSlot?' sel':''}" data-fpick="slot" data-v="${esc(sl)}" style="--oc:var(${gvar(it.grade)})">${icon(it.ic,it.name,'sm')}<b>${esc(sl)}<em>${esc(it.name)}</em></b></button>`;}).join('')
-        +`</div></details>`
-      +(fBoss||fSlot?`<button class="acqclr" data-fclear>Reset</button>`:'')+`</div>`:'';
-  const totShown=fBoss?tot.filter(([mc])=>N[mc]&&N[mc].drop===fBoss):tot;
+  const barHTML=()=>{
+    const {tier:dropCount,mob:mobCount,mt:mobTiers,left:leftCount}=counts();
+    // a boss that drops across tiers is listed once, under whichever tier it feeds most
+    const tierOf=mob=>{const t=mobTiers[mob]||{};let best='',bn=-1;
+      for(const g in t)if(t[g]>bn||(t[g]===bn&&grank(g)>grank(best))){best=g;bn=t[g];}return best;};
+    const bossesOf=t=>Object.keys(mobCount).filter(m=>tierOf(m)===t).sort((a,b)=>{
+      const o=BOSSORD[t]||[],oa=o.indexOf(a),ob=o.indexOf(b);
+      return (oa<0?99:oa)-(ob<0?99:ob)||a.localeCompare(b);});
+    const bcount=v=>isTier(v)?dropCount[v]:mobCount[v];
+    const fopt=(v,lab,count,col,cls)=>`<button class="fopt ${cls}${v===fBoss?' sel':''}" data-fpick="boss" data-v="${esc(v)}" title="${esc(v||lab)}" style="--oc:var(${col})"><i></i><b>${esc(lab)}</b>${count?`<span class="c">${count}</span>`:''}</button>`;
+    const tierGrp=t=>`<div class="fddh" style="color:var(${gvar(t)})">${esc(t)}</div>`
+      +fopt(t,'All '+t,dropCount[t],gvar(t),'tier')
+      +bossesOf(t).map(m=>fopt(m,shortB(m),mobCount[m],gvar(t),'mob')).join('');
+    const tiersShown=GORD.slice(3).concat(GORD.slice(0,3)).filter(t=>dropCount[t]);
+    return slotOpts.length?`<div class="ffilt"><span class="ffl">Filter</span>`
+        +`<details class="fdd${fBoss?' on':''}" style="--bc:var(${fBoss?gvar(isTier(fBoss)?fBoss:tierOf(fBoss)):'--ink-faint'})">`
+          +`<summary aria-label="Filter by boss" title="${esc(fBoss||'')}"><i></i>${esc(fBoss?shortB(fBoss):'All bosses')}<span class="c">${fBoss?bcount(fBoss):leftCount}</span></summary>`
+          +`<div class="fddp">${fopt('','All bosses',leftCount,'--ink-faint','tier')}`
+            +(tiersShown.length?tiersShown.map(tierGrp).join(''):`<div class="fddh">Nothing left to farm</div>`)+`</div></details>`
+        +`<details class="fdd${fSlot?' on':''}" style="--bc:var(${slotIt?gvar(slotIt.grade):'--ink-faint'})">`
+          +`<summary aria-label="Filter by slot"><i></i>${esc(fSlot||'All slots')}</summary>`
+          +`<div class="fddp"><button class="fopt tier${fSlot?'':' sel'}" data-fpick="slot" data-v="" style="--oc:var(--ink-faint)"><i></i><b>All slots</b></button>`
+            +slotOpts.map(sl=>{const it=N[state.slots[sl]];
+              return `<button class="fopt${sl===fSlot?' sel':''}" data-fpick="slot" data-v="${esc(sl)}" style="--oc:var(${gvar(it.grade)})">${icon(it.ic,it.name,'sm')}<b>${esc(sl)}<em>${esc(it.name)}</em></b></button>`;}).join('')
+          +`</div></details>`
+        +(fBoss||fSlot?`<button class="acqclr" data-fclear>Reset</button>`:'')+`</div>`:'';};
+  const fbar=barHTML();
+  // ticking a copy can empty a boss out; redraw the bar in place, or re-render if the
+  // boss being filtered on is the one that just went
+  redrawBar=()=>{const el=document.querySelector('#farmBody .ffilt');if(!el)return;
+    if(stale()){openFarm(fBoss);return;}
+    el.outerHTML=barHTML();};
+  const totShown=fBoss?tot.filter(([mc])=>matchB(mc)):tot;
   const totQty=tot.reduce((a,t)=>a+t[1],0);
   document.getElementById('farmTitle').innerHTML=`${fSlot?esc(fSlot):'Everything to farm'} — ${totQty} drop${totQty===1?'':'s'} across ${tot.length} material${tot.length===1?'':'s'}`;
   const totHTML=tot.length?`<div class="farmtot"><div class="farmtoth">${fBoss?esc(fBoss)+' drops only':'All grades, weakest first'}</div>`
@@ -929,10 +1019,10 @@ function openFarm(grade){
   };
   // one grade at a time, grouped under the item you are actually building
   function gradePane(g){
-    const crafts=craftsOfGrade(g);
+    const crafts=isTier(g)?craftsOfGrade(g):new Map();
     const blocks=codes.map(ic=>{
       const lv=leaves(ic,1,{});
-      const drops=Object.keys(lv).filter(mc=>N[mc]&&N[mc].drop===g)
+      const drops=Object.keys(lv).filter(mc=>N[mc]&&N[mc].drop&&matchB(mc))
         .sort((a,b)=>lv[b]-lv[a]||N[a].name.localeCompare(N[b].name));
       const steps=[...crafts.entries()].filter(([,roots])=>roots.has(ic))
         .sort((a,b)=>N[a[0]].name.localeCompare(N[b[0]].name));
@@ -943,11 +1033,11 @@ function openFarm(grade){
       return `<details class="farmgrp${gdone?' got':''}"${gdone?'':' open'} data-keys="${esc(JSON.stringify(gk))}"><summary class="fi">${icon(it.ic,it.name,'sm')}<span class="fn">For ${esc(it.name)}</span><span class="slot">${esc(it.slot||'')}</span><span class="acqpill">Acquired</span></summary>`
         +(steps.length?`<div class="gsub">Craft \u2014 ${steps.length} ${esc(g)} recipe${steps.length===1?'':'s'}</div>`
           +steps.map(([mc,roots])=>gradeNode(ic,mc,roots.get(ic))).join(''):'')
-        +(drops.length?`<div class="gsub">Farm \u2014 ${drops.length} ${esc(g)} material${drops.length===1?'':'s'}</div>`
+        +(drops.length?`<div class="gsub">Farm \u2014 ${drops.length} ${esc(shortB(g))} material${drops.length===1?'':'s'}</div>`
           +drops.map(mc=>matRow(mc,lv[mc],'',keysForItemMat(ic,mc))).join(''):'')
         +`</details>`;
     }).join('');
-    return blocks||`<div class="chnone">Nothing at ${esc(g)} for this build.</div>`;
+    return blocks||`<div class="chnone">Nothing from ${esc(shortB(g))} for this build.</div>`;
   }
   const allKeys=buildKeys(codes);
   const acqBar=tot.length?`<div class="acqbar" data-codes="${esc(JSON.stringify(allKeys))}">`
@@ -961,7 +1051,7 @@ function openFarm(grade){
   const bodyHTML=fbar+acqBar+(totHTML&&html?`<div class="tabs" role="tablist">`
       +tab('0','Craft trees')
       +tab('1','Farm list',`<span class="tc">${totShown.length}</span>`)
-      +(gp?tab('2',esc(grade),`<span class="tc">${tot.filter(([mc])=>N[mc]&&N[mc].drop===grade).length}</span>`):'')
+      +(gp?tab('2',esc(shortB(grade)),`<span class="tc">${totShown.length}</span>`):'')
       +`</div>`+pane('0',html)+pane('1',totHTML)+(gp?pane('2',gp):'')
     :(html+totHTML));
   document.getElementById('farmBody').innerHTML=bodyHTML||`<div class="chnone">Nothing to farm — fill a slot first.</div>`;
@@ -969,7 +1059,7 @@ function openFarm(grade){
   farmOv.hidden=false;document.body.style.overflow='hidden';
 
 }
-function closeFarm(){farmOv.hidden=true;if(rOv.hidden&&chooser.hidden&&heroOv.hidden&&savedOv.hidden)document.body.style.overflow='';}
+function closeFarm(){farmOv.hidden=true;redrawBar=null;if(rOv.hidden&&chooser.hidden&&heroOv.hidden&&savedOv.hidden)document.body.style.overflow='';}
 document.getElementById('farmBody').addEventListener('click',e=>{
   const t=e.target.closest('[data-tab]');if(!t)return;
   const box=document.getElementById('farmBody');
@@ -988,6 +1078,11 @@ document.addEventListener('click',e=>{
 document.getElementById('farmClose').addEventListener('click',closeFarm);
 farmOv.addEventListener('click',e=>{
   if(e.target===farmOv){closeFarm();return;}
+  const qb=e.target.closest('[data-qd]');
+  if(qb){e.preventDefault();e.stopPropagation();
+    const row=qb.closest('[data-keys]');
+    if(row)stepAcq(JSON.parse(row.dataset.keys||'[]'),+qb.dataset.qd);
+    return;}
   const cb=e.target.closest('[data-acq]');
   if(cb){e.preventDefault();e.stopPropagation();
     const row=cb.closest('[data-keys]');
@@ -1006,8 +1101,14 @@ farmOv.addEventListener('click',e=>{
   const dc=e.target.closest('[data-code]');if(dc){e.stopPropagation();rFromFarm=true;openRecipe(dc.dataset.code);}
 });
 document.getElementById('farmBody').addEventListener('keydown',e=>{
+  if(e.key!==' '&&e.key!=='Enter')return;
+  const qb=e.target.closest('[data-qd]');
+  if(qb){e.preventDefault();
+    const row=qb.closest('[data-keys]');
+    if(row)stepAcq(JSON.parse(row.dataset.keys||'[]'),+qb.dataset.qd);
+    return;}
   const cb=e.target.closest('[data-acq]');
-  if(cb&&(e.key===' '||e.key==='Enter')){e.preventDefault();
+  if(cb){e.preventDefault();
     const row=cb.closest('[data-keys]');
     if(row)toggleAcq(JSON.parse(row.dataset.keys||'[]'));}
 });
@@ -1195,10 +1296,14 @@ function markOwned(ch){
   const left=Object.assign({},ownedCounts(ch));   // item code -> how many the character holds
   let marked=0;
   for(const pa of allPositions()){
-    const code=pa[pa.length-1];
-    if(left[code]>0){
-      left[code]--;
-      for(const k of nodeKeys(pa))if(!ACQ.has(k)){ACQ.add(k);marked++;}
+    const code=pa[pa.length-1],cap=pathMult(pa);
+    const take=Math.min(left[code]||0,cap);       // holding 1 of a x3 position settles a third of it
+    if(take>0){
+      left[code]-=take;
+      for(const lp of leafPaths(pa)){
+        const k=lp.join('>'),units=Math.round(pathMult(lp)/cap*take);
+        for(let i=0;i<units;i++)if(!ACQ.has(k+'#'+i)){ACQ.add(k+'#'+i);marked++;}
+      }
     }
   }
   saveAcq();renderTotals();
